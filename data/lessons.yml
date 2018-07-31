@@ -1,0 +1,238 @@
+lessons:
+  - title: '<span class="fake-header-table">Core principles</span>'
+  - title: "Markets and measurement I"
+    date: "January 8 (M)"
+    reading: "01-reading"
+    class: "01-class"
+  
+  - title: "Markets and measurement II"
+    date: "January 10 (W)"
+    reading: "02-reading"
+    class: "02-class"
+  
+  - title: "Lab 1"
+    date: "January 12 (F)"
+    class: "01-lab"
+  
+  - title: "*No class; Martin Luther King Jr. Day*"
+    date: "January 15 (M)"
+  
+  - title: "Scarcity and productivity I"
+    date: "January 17 (W)"
+    reading: "03-reading"
+    class: "03-class"
+  
+  - title: "Lab 2"
+    date: "January 19 (F)"
+    
+  - title: "⊞ **Problem set 1 due**"
+    assignment: "01-problem-set"
+  
+  - title: "*No class; I'm out of town*"
+    date: "January 22 (M)"
+  
+  - title: "Scarcity and productivity II"
+    date: "January 24 (W)"
+    reading: "04-reading"
+    class: "04-class"
+  
+  - title: "Social interactions and incentives I (replaces Lab 3)"
+    date: "January 26 (F)"
+    reading: "05-reading"
+    class: "05-class"
+  
+  - title: "⊞ **Problem set 2 due**"
+    assignment: "02-problem-set"
+  
+  - title: "Social interactions and incentives II"
+    date: "January 29 (M)"
+    reading: "06-reading"
+    class: "06-class"
+  
+  - title: "Incentives and human behavior"
+    date: "January 31 (W)"
+    reading: "07-reading"
+    class: "07-class"
+  
+  - title: "Lab 4"
+    date: "February 2 (F)"
+    class: "04-lab"
+  
+  - title: "Firms and labor I"
+    date: "February 5 (M)"
+    reading: "08-reading"
+    class: "08-class"
+  
+  - title: "Firms and labor II"
+    date: "February 7 (W)"
+    reading: "09-reading"
+    class: "09-class"
+  
+  - title: "Lab 5"
+    date: "February 9 (F)"
+    class: "05-lab"
+    
+  - title: "⊞ **Problem set 3 due**"
+    assignment: "03-problem-set"
+  
+  - title: "Firms and customers I"
+    date: "February 12 (M)"
+    reading: "10-reading"
+    class: "10-class"
+
+  - title: "Firms and customers II"
+    date: "February 14 (W)"
+    reading: "11-reading"
+    class: "11-class"
+  
+  - title: "Lab 6"
+    date: "February 16 (F)"
+    
+  - title: "⊞ **Problem set 4 due**"
+    assignment: "04-problem-set"
+  
+  - title: "*No class; Presidents' Day*"
+    date: "February 19 (M)"
+
+  - title: "Firms and customers III"
+    date: "February 20 (T)"
+    reading: "11a-reading"
+    class: "11a-class"
+  
+  - title: "Firms and markets I"
+    date: "February 21 (W)"
+    reading: "12-reading"
+    class: "12-class"
+  
+  - title: "Lab 7"
+    date: "February 23 (F)"
+  
+  - title: "Firms and markets II"
+    date: "February 26 (M)"
+    reading: "13-reading"
+    class: "13-class"
+  
+  - title: "Markets and macroeconomics"
+    date: "February 28 (W)"
+    reading: "14-reading"
+    class: "14-class"
+  
+  - title: "Lab 8 (*review session*)"
+    date: "March 2 (F)"
+  
+  - title: "⊞ **Problem set 5 due**"
+    assignment: "05-problem-set"
+  
+  - title: '<span class="fake-header-table">Justifying policies</span>'
+  - title: "Institutions I"
+    date: "March 5 (M)"
+    reading: "15-reading"
+    class: "15-class"
+  
+  - title: "Institutions II"
+    date: "March 7 (W)"
+    reading: "16-reading"
+    class: "16-class"
+  
+  - title: "Lab 9 (*just kidding, no lab because of the midterm*)"
+    date: "March 9 (F)"
+  
+  - title: "⊞ **Midterm 1 due by 11:59 PM**"
+  
+  - title: "Government institutions I"
+    date: "March 12 (M)"
+    reading: "17-reading"
+    class: "17-class"
+  
+  - title: "Government institutions II"
+    date: "March 14 (W)"
+    reading: "18-reading"
+    class: "18-class"
+  
+  - title: "Lab 10 (*just kidding, no lab because this is fake spring break*)"
+    date: "March 16 (F)"
+  
+  - title: "When governments go wrong"
+    date: "March 19 (M)"
+    reading: "19-reading"
+    class: "19-class"
+  
+  - title: "Institutional alternatives"
+    date: "March 21 (W)"
+    reading: "20-reading"
+    class: "20-class"
+  
+  - title: "Lab 11"
+    date: "March 23 (F)"
+    class: "11-lab"
+    
+  - title: "⊞ **Problem set 6 due**"
+    assignment: "06-problem-set"
+  
+  - title: '<span class="fake-header-table">Evaluating and implementing policies</span>'
+  - title: "Cost-benefit analysis I"
+    date: "March 26 (M)"
+    reading: "21-reading"
+    class: "21-class"
+  
+  - title: "Cost-benefit analysis II"
+    date: "March 28 (W)"
+    reading: "22-reading"
+    class: "22-class"
+
+  - title: "⊞ **Sign up for an economic briefing**"
+  
+  - title: "Lab 12"
+    date: "March 30 (F)"
+    class: "12-lab"
+  
+  - title: "⊞ **Midterm 2 due by 11:59 PM**"
+  
+  - title: "Cost-benefit analysis III"
+    date: "April 2 (M)"
+    reading: "23-reading"
+    class: "23-class"
+  
+  - title: "Other policy analysis methods"
+    date: "April 4 (W)"
+    reading: "24-reading"
+    class: "24-class"
+  
+  - title: "Lab 13"
+    date: "April 6 (F)"
+
+  - title: "⊞ **Problem set 7 due**"
+    assignment: "07-problem-set"
+  
+  - title: "Policy analysis and formation I"
+    date: "April 9 (M)"
+    reading: "25-reading"
+    class: "25-class"
+  
+  - title: "Policy analysis and formation II"
+    date: "April 11 (W)"
+    reading: "26-reading"
+    class: "26-class"
+    
+  - title: "⊞ **Complete economic briefing**"
+  
+  - title: "Lab 14"
+    date: "April 13 (F)"
+
+  - title: "⊞ **Problem set 8 due**"
+    assignment: "08-problem-set"
+  
+  - title: "Politics and institutions"
+    date: "April 16 (M)"
+    reading: "27-reading"
+    class: "27-class"
+  
+  - title: "Markets, public policy, and public administration"
+    date: "April 18 (W)"
+    reading: "28-reading"
+    class: "28-class"
+    
+  - title: '<span class="fake-header-table">Final</span>'
+  - title: "**Final project due** (submit online by 11:59 PM)"
+    date: "April 25 (W)"
+    assignment: "final-project"

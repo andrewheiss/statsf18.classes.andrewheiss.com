@@ -1,0 +1,165 @@
+---
+title: Syllabus
+slug: syllabus
+citeproc: false
+bibliography: ../static/bib/references.bib
+csl: ../static/bib/chicago-syllabus-no-bib.csl
+stuff-to-add: >-
+  Things to learn how to calculate
+  GDP
+  Nominal vs. real
+  Inflation
+  Gini coefs
+---
+
+```{r load-libraries, message=FALSE, warning=FALSE, include=FALSE}
+library(dplyr)
+library(tibble)
+library(pander)
+```
+
+[^courseinfo]
+
+[^courseinfo]: {-}
+  `r blogdown::shortcode("courseinfo")`
+
+# Course objectives
+
+By the end of this course, you will (1) be literate in fundamental economic principles, (2) understand the limits of economic theory and free markets, (3) justify government and nonprofit intervention in the economy, and (4) make informed policy recommendations by analyzing and evaluating public sector policies. Specifically, you'll be able to:
+
+- Understand the principles of microeconomics, public economics, and behavioral economics
+- Explain social phenomena using economic vocabulary and reasoning
+- Predict how individuals respond to incentives
+- Evaluate the costs, benefits, and long-term consequences of public and nonprofit sector policies
+- Justify government intervention in the free market and identify when public policies have been unethical or failures
+- Propose and argue for public and nonprofit sector policies
+
+Given these objectives, this course fulfills three of the four learning outcomes for BYU's [Master of Public Administration (MPA)](https://marriottschool.byu.edu/mpa/) program:
+
+- **Quantitative Analysis**: BYU MPA graduates are skilled at evaluating programs and policies. They know how to gather data, correctly analyze it, and employ the analysis to recommend policy and programmatic action in public service organizations.
+- **Public Service Values**: BYU MPA graduates demonstrate an understanding of, passion for, and commitment to public service values, including reverence for the dignity and worth of all people and dedication to ethical governance.
+- **Communication**: BYU MPA graduates effectively convey verbal and written information with the polish and professionalism appropriate for the public service context. They listen to and promote understanding among people with diverse viewpoints.
+
+
+# Course materials
+
+There are two official textbooks for the class:
+
+- [@core-econ] [[*free*](http://www.core-econ.org/the-economy/); $47 at [Amazon](https://www.amazon.com/Economy-Economics-Changing-World/dp/0198810245) if you really want a paper version, but then there are no online activities, videos, or other resources]
+- [@Wheelan:2010] [$3 used, $11 new at [Amazon](https://www.amazon.com/Naked-Economics-Undressing-Science-Revised/dp/0393337642/); you need the 2010 edition]
+
+CORE's *The Economy* is a special new project that aims to make economics education accessible to all, replacing textbooks that cost hundreds of dollars with an open source textbook complete with videos and quizzes and other online resources. It's even been [lauded by The Economist](https://www.economist.com/news/finance-and-economics/21729443-students-are-forced-grapple-real-world-very-beginning-their). 
+
+[**Register for a student account at the CORE website.**](http://www.core-econ.org/register/)
+
+In addition to these books, I will assign miscellaneous articles and chapters as needed. Please check the readings column on [the schedule](/schedule/) every day for complete details of what to read.
+
+Finally, you'll need to listen to at least one economics-related podcast episode every week. We will spend the first few minutes of every class session discussing current events or recent research related to micro, public, or behavioral economics, and podcasts are one of the best ways to do this.^[You can listen as you commute, wash the dishes, fold your laundry, eat breakfast, or work on homework for other classes!]
+
+Here are some of the best ones—subscribe to 3–4 of these:[^podcasts]
+
+- [Planet Money](https://www.npr.org/podcasts/510289/planet-money)
+- [The Indicator](https://www.npr.org/sections/money/567724614/the-indicator)
+- [The Weeds](https://itunes.apple.com/us/podcast/voxs-the-weeds/id1042433083?mt=2)
+- [Freakonomics Radio](https://itunes.apple.com/us/podcast/freakonomics-radio/id354668519?mt=2)
+- [50 Things that Made the Modern Economy](http://www.bbc.co.uk/programmes/p04b1g3c/episodes/downloads)
+- [EconTalk](http://www.econtalk.org/)
+- [The Uncertain Hour](https://www.marketplace.org/topics/uncertain-hour)
+- [The Impact](https://www.vox.com/the-impact)
+
+And these shows are excellent, but not always econ/policy-focused (but they're definitely worth checking out, especially if you're interested in behavioral economics and psychology):
+
+- [Hidden Brain](https://www.npr.org/podcasts/510308/hidden-brain)
+- [Stuff Mom Never Told You](https://www.stuffmomnevertoldyou.com/podcasts)
+- [Invisibilia](https://www.npr.org/podcasts/510307/invisibilia)
+- [Rationally Speaking](http://rationallyspeakingpodcast.org/)
+
+[^podcasts]: You can listen to all these shows on your computer, but it's best to listen on your smartphone. 
+
+    On iOS, you can use Apple's built-in Podcasts app, or download a third-party app like [Overcast](https://overcast.fm/) (my personal favorite). 
+    
+    On Android, you can use… something, probably.
+
+
+# Course policies
+
+**Be nice. Be honest. Don't cheat.**
+
+We will also follow the [full list of Marriott School and BYU classroom policies](https://marriottschool.byu.edu/policies/classroom/).
+
+
+## Counseling and Psychological Services (CAPS)
+
+Life at BYU can be complicated and challenging. You might feel overwhelmed, experience anxiety or depression, or struggle with relationships or family responsibilities. [Counseling and Psychological Services (CAPS)](https://caps.byu.edu/) provides free, *confidential* support for students who are struggling with mental health and emotional challenges. The CAPS office is staffed by professional psychologists who are attuned to the needs of all types of college students. Please do not hesitate to contact CAPS for assistance—getting help is a smart and courageous thing to do.
+
+
+## Basic needs security
+
+If you have difficulty affording groceries or accessing sufficient food to eat every day, or if you lack a safe and stable place to live, and you believe this may affect your performance in this course, please contact the [Dean of Students](https://deanofstudents.byu.edu/) for support. Please also consider speaking with your local LDS bishop regarding Church welfare assistance *regardless of whether or not you are LDS*. Additionally, please talk to me if you are comfortable in doing so. This will enable me to provide any resources that I might possess.
+
+
+## Class conduct and expectations
+
+On the second day of class, we came up iwth rules, expectations, and policies for things like technology in the classroom, attendance, participation, late work, etc. Here's what we decided:
+
+- Late work will result in a loss of 10% of the total points each day it's late, with a maximum penalty of 50%.
+- If you need extra accommodations becase of catastrophe or other extenuating circumstances, talk to me.
+- Participate in class. Just do it.
+- Come to class whenever possible; make up missed work and get help from your classmates, the TAs, or me if you have to miss a session.
+- Use technology responsibly. Don't distract others.
+
+
+# Assignments and grades
+
+You can find descriptions and instructions of all assignments on the [assignments page](/assignments/).
+
+## Assignments
+
+```{r assignments-grades, include=FALSE}
+assignments <- tribble(
+  ~Points, ~Assignment,
+  230     , "Preparation (≈ 8.5 × 28)",
+  8 * 40  , "Problem sets (8 × 40)",
+  30      , "Economic briefing",
+  150     , "Midterm 1",
+  150     , "Midterm 2",
+  300     , "Final project"
+) %>%
+  mutate(Percent = Points / sum(Points),
+         Percent = scales::percent(Percent))
+
+grading <- tribble(
+  ~Grade, ~Range, ~Grade1, ~Range1,
+  "A",  "93–100%", "C",  "73–76%",
+  "A−", "90–92%", "C−", "70–72%",
+  "B+", "87–89%", "D+", "67–69%",
+  "B",  "83–86%", "D",  "63–66%",
+  "B−", "80–82%", "D−", "60–62%",
+  "C+", "77–79%", "F",  "< 60%"
+)
+```
+
+```{r show-assignments-table, echo=FALSE, results="asis"}
+assignments_total = data_frame(Assignment = "Total",
+                              Points = sum(assignments$Points),
+                              Percent = NA)
+
+bind_rows(assignments, assignments_total) %>% 
+  select(Assignment, Points, Percent) %>% 
+  pandoc.table(justify = "lcc", missing = "—")
+```
+
+## Grades
+
+```{r show-grades-table, echo=FALSE, results="asis"}
+grading %>%
+  pandoc.table(justify = "lclc", 
+               col.names = c("Grade", "Range", "Grade", "Range"))
+```
+
+# Dinosaurs
+
+[^dinosaur] Once you have read this entire syllabus and [the assignments page](/assignments/), please [click here](mailto:andrew_heiss@byu.edu) and e-mail me a picture of a dinosaur. For real. Brownie points if you send a picture of a cat or dog dressed as a dinosaur. Triple chocolate brownie points if it's animated.
+
+[^dinosaur]: {-}
+  ![Cat vs. dinosaur](https://media.giphy.com/media/9b2bBsgIOPrzi/giphy.gif)

@@ -1,0 +1,8 @@
+---
+title: "Schedule"
+slug: schedule
+---
+
+Readings should be completed ***before*** each class session. Deadlines and instructions for submitting the assignments are on the individual assignment pages.
+
+`r blogdown::shortcode("schedule")`

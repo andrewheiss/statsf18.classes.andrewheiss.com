@@ -1,0 +1,71 @@
+---
+title: "Assignments"
+slug: assignments
+---
+
+# Preparation
+
+You will get the most out of this class if you (1) attend class, (2) complete all the readings, and (3) engage^[Take detailed notes, watch the videos and supplementary content, work through the examples given in the textbook, have vivid dreams about them, etc.]  with the readings.^[Also (4) ask for help from me or the TAs!]
+
+To encourage attendance and preparation, I'm borrowing and adapting Dr. Thompson's system from his OB class that you just finished: regular self-reporting backed by the honor system. 
+
+At the beginning of every class, I will post a quiz on Learning Suite with the following questions:
+
+1. Are you here in class today?
+    - Yes (*1.5 points*)
+    - No (*0 points*)
+2. How much of today's reading did you finish?
+    - 100% (*4 points*)
+    - 75–99% (*3 points*)
+    - 50–74% (*2 points*)
+    - 11–49% (*1 points*)
+    - 0–10% (*0 points*)
+3. How well did you read?
+    - I was engaged and read carefully (*3 points*)
+    - I was fairly engaged and read fairly carefully (*2 points*)
+    - I skimmed it (*1 points*)
+    - I didn't read it at all (*0 points*)
+
+Each day is worth 8.5 points. *It is unlikely that you'll score an 8.5 every day.*^[But it would be amazing if you did!] I will shift the distribution of everyone's final preparation score up at the end of the course.^[That means that if you could solve the collective action problem of getting everyone to not read or attend class, the average would be super low and I'd have to bump your scores way up, but don't do that, obviously.]
+
+
+# Problem sets
+
+To practice solving microeconomic problems, you will complete a series of 9 problem sets. Many of the questions on these assignments will come from *The Economy*, some will come from previous courses, and others will come from my head.
+
+**You must turn in at least 8 of the 9 problem sets**. You need to show that you made a good faith effort to work each question. The problem sets will **not** be graded. I or the TAs will check one or two of the questions in detail and provide feedback, and we will go over the answers in class after the assignment is due.
+
+You may (and should!) work together on the problem sets, but you must turn in your own answers.
+
+
+# Talk like an economist
+
+One of the objectives of this class is to "explain social phenomena using economic vocabulary and reasoning", or in less jargony language, be able to talk like an economist. 
+
+There are two assignments that will help with this:
+
+## Listen to podcasts
+
+The [course materials section of the syllabus](/syllabus/#course-materials) explains that you need to listen to at least one episode of an economics- or policy-related podcast every week. We will discuss current economic and policy events and research at the beginning of every class, and these podcasts will be an excellent source of material for these discussions.
+
+You will not need to report what you listen to. I trust that you'll do it. So just do it.
+
+## Present a brief economic briefing
+
+Near the end of the semester, you will prepare a 5-minute brief where you use economic concepts to explain some pattern or behavior you have observed in your own environment. These do not need to be big issues, but they do need to be real. Being creative is a bonus.^[Don't just explain how supply and demand change for a certain product or whatever—look for a Freakonomics-type question to answer, like [why the McRib follows a strange schedule](https://www.theawl.com/2011/11/a-conspiracy-of-hogs-the-mcrib-as-arbitrage/) (don't do that one, though, obviously).]
+
+You will present your brief to me in my office between April 2–6. I will post a signup sheet on March 26. You have 5 minutes to present, and then you will have up to 5 minutes of follow up questions from me.
+
+
+# Midterms
+
+There will be two midterm exams covering (1) the core principles of public economics and (2) justifications for public intervention in markets. You will take these exams online through Learning Suite. The exams will be timed, but you can use notes and readings and [the Google](https://www.youtube.com/watch?v=AQ45fO1uiOQ). You must take the exams on your own though, and not talk to anyone about them.
+
+
+# Final project
+
+At the end of the course, you will demonstrate your knowledge of public economics and new-found expertise in cost-benefit analysis by completing a final project.
+
+Project details will be posted later once I settle on the best form for it.
+
+There is no final exam. This project is your final exam.
