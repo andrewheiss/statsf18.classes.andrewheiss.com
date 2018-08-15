@@ -1,5 +1,7 @@
 # MPA 612: Economic Decision-Making for Managers
 
+[![Join the chat at https://gitter.im/byustatsf18/Lobby](https://badges.gitter.im/byustatsf18/Lobby.svg)](https://gitter.im/byustatsf18/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## Theme
 
 This site uses my custom [`ath-tufte-hugo` theme](https://github.com/andrewheiss/ath-tufte-hugo) as a submodule.
