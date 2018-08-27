@@ -1,0 +1,8 @@
+---
+title: "Example questions for Exam 1"
+date: "2018-09-27"
+editor_options: 
+  chunk_output_type: console
+---
+
+An example of the questions you'll have in Exam 1 will go here two weeks before the exam.

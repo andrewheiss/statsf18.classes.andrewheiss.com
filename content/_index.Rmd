@@ -1,10 +1,13 @@
 ---
-title: "Economic Decision-Making for Managers"
+title: "Data Science for Public Management"
 author: "Andrew Heiss"
 ---
 
-^[{-} `r blogdown::shortcode("courseinfo")`] <span class="newthought">This site contains</span> the syllabus, schedule, and assignments for MPA 612: Economic Decision-Making for Managers, held during Winter 2018 at Brigham Young University.
+^[{-} `r blogdown::shortcode("courseinfo")`] <span class="newthought">This site contains</span> the syllabus, schedule, and assignments for MPA 630: Data Science and Statistics for Public Management, held during Fall 2018 at Brigham Young University.
 
-By the end of this course, you will (1) be literate in fundamental economic principles, (2) understand the limits of economic theory and free markets, (3) justify government and nonprofit intervention in the economy, and (4) make informed policy recommendations by analyzing and evaluating public sector policies.
+By the end of this course, you will (1) be data literate and (2) be able to answer your own questions with statistical and data scientific tools.
 
-![](/images/the-economy.png)
+
+[![](/images/ds-flowchart.png)](/images/ds-flowchart.png)
+
+<small>The data science flowchart, adapted from [ModernDive](https://moderndive.com/) and [R for Data Science](http://r4ds.had.co.nz/)</small>

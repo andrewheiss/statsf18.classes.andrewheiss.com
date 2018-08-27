@@ -1,0 +1,19 @@
+---
+title: "Correlation and basic regression"
+date: "2018-10-11"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+---
+
+# Required
+
+- <i class="fas fa-book"></i> [6.1–6.4 in *ModernDive*](https://moderndive.com/6-regression.html) [@IsmayKim:2018]
+- <i class="fas fa-laptop-code"></i> "Introduction to modeling," chapter 1 in Albert Kim's [*Modeling with Data in the Tidyverse* course on DataCamp](https://www.datacamp.com/courses/modeling-with-data-in-the-tidyverse)
+- <i class="fas fa-laptop-code"></i> "Modeling with basic regression," chapter 2 in Albert Kim's [*Modeling with Data in the Tidyverse* course on DataCamp](https://www.datacamp.com/courses/modeling-with-data-in-the-tidyverse)
+
+
+# Highly recommended
+
+- <i class="fas fa-book"></i> 7.1–7.3 in *OpenIntro Statistics* [@DiezBarrCetinkaya-Rundel:2017]
+    - This one is more mathy than you're used to. Don't read it as in depth as you do with *ModernDive*. Also, take advantage of the accompanying videos.

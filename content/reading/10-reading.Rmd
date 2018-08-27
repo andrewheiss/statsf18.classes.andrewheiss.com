@@ -1,0 +1,17 @@
+---
+title: "Bootstrapping and confidence intervals"
+date: "2018-11-08"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+---
+
+# Required
+
+- <i class="fas fa-book"></i> [9.1–9.8 in *ModernDive*](https://moderndive.com/9-confidence-intervals.html) [@IsmayKim:2018]
+- <i class="fas fa-laptop-code"></i> "Bootstrapping for estimating a parameter," chapter 1 in Mine Çetinkaya-Rundel's [*Inference for Numerical Data* course on DataCamp](https://www.datacamp.com/courses/inference-for-numerical-data)
+
+
+# Recommended
+
+- <i class="fas fa-laptop-code"></i> "Confidence intervals," chapter 4 in Jo Hardin's [*Foundations of Inference* course on DataCamp](https://www.datacamp.com/courses/foundations-of-inference)

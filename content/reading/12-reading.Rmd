@@ -1,0 +1,14 @@
+---
+title: "Inference and regression"
+date: "2018-11-29"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+---
+
+# Required
+
+- <i class="fas fa-book"></i> [11.1–11.3 in *ModernDive*](https://moderndive.com/11-inference-for-regression.html) [@IsmayKim:2018]
+- <i class="fas fa-book"></i> 7.4 in *OpenIntro Statistics* [@DiezBarrCetinkaya-Rundel:2017]
+    - Take advantage of the accompanying video!
+- Other readings TBD

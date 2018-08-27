@@ -1,0 +1,18 @@
+---
+title: "Multiple regression"
+date: "2018-10-18"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+---
+
+# Required
+
+- <i class="fas fa-book"></i> [7.1–7.4 in *ModernDive*](https://moderndive.com/7-multiple-regression.html) [@IsmayKim:2018]
+- <i class="fas fa-laptop-code"></i> "Modeling with multiple regression," chapter 3 in Albert Kim's [*Modeling with Data in the Tidyverse* course on DataCamp](https://www.datacamp.com/courses/modeling-with-data-in-the-tidyverse)
+
+
+# Highly recommended
+
+- <i class="fas fa-book"></i> 8.1 in *OpenIntro Statistics* [@DiezBarrCetinkaya-Rundel:2017]
+    - This one is more mathy than you're used to. Don't read it as in depth as you do with *ModernDive*. Also, take advantage of the accompanying videos.

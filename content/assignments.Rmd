@@ -5,9 +5,9 @@ slug: assignments
 
 # Preparation
 
-You will get the most out of this class if you (1) attend class, (2) complete all the readings, and (3) engage^[Take detailed notes, watch the videos and supplementary content, work through the examples given in the textbook, have vivid dreams about them, etc.]  with the readings.^[Also (4) ask for help from me or the TAs!]
+<span class="newthought">You will get the most out of this class</span> if you (1) attend class, (2) complete all the readings, and (3) engage^[Take detailed notes, work through the example code and try to understand it, have vivid dreams about statistics, etc.]  with the readings.^[Also (4) ask for help!]
 
-To encourage attendance and preparation, I'm borrowing and adapting Dr. Thompson's system from his OB class that you just finished: regular self-reporting backed by the honor system. 
+To encourage attendance and preparation, I use an honor-system-based self-reporting system. 
 
 At the beginning of every class, I will post a quiz on Learning Suite with the following questions:
 
@@ -25,47 +25,64 @@ At the beginning of every class, I will post a quiz on Learning Suite with the f
     - I was fairly engaged and read fairly carefully (*2 points*)
     - I skimmed it (*1 points*)
     - I didn't read it at all (*0 points*)
+4. How closely did you follow along with the example code included in the readings?
+    - I worked through all the code and tried to understand what was going on (*2 points*)
+    - I copied and pasted the code but didn't make a good effort to understand it (*1 point*)
+    - I didn't do anything with the code in the readings (*0 points*)
 
-Each day is worth 8.5 points. *It is unlikely that you'll score an 8.5 every day.*^[But it would be amazing if you did!] I will shift the distribution of everyone's final preparation score up at the end of the course.^[That means that if you could solve the collective action problem of getting everyone to not read or attend class, the average would be super low and I'd have to bump your scores way up, but don't do that, obviously.]
+Each day is worth 10.5 points. *It is unlikely that you'll score a 10.5 every day.*^[But it would be amazing if you did!] I will shift the distribution of everyone's final preparation score up at the end of the course.
 
 
 # Problem sets
 
-To practice solving microeconomic problems, you will complete a series of 9 problem sets. Many of the questions on these assignments will come from *The Economy*, some will come from previous courses, and others will come from my head.
+<span class="newthought">To practice writing R code</span> and answering statistical questions with data science tools, you will complete a series of 7 problem sets. You need to show that you made a good faith effort to work each question. The problem sets will be graded using a check system:
 
-**You must turn in at least 8 of the 9 problem sets**. You need to show that you made a good faith effort to work each question. The problem sets will **not** be graded. I or the TAs will check one or two of the questions in detail and provide feedback, and we will go over the answers in class after the assignment is due.
+- ✔+: ^[{-} *110% in gradebook*] Problem set is 100% completed. Every question was attempted and answered, and most answers are correct. Document is clean and easy to follow. Work is exceptional. I will not assign these often.
+- ✔: ^[{-} *90% in gradebook*] Problem set is 70–99% complete and most answers are correct. This is the expected level of performance.
+- ✔−: ^[{-} *50% in gradebook*] Problem set is less than 70% complete and/or most answers are incorrect. This indicates that you need to improve next time. I will hopefully not asisgn these often.
 
-You may (and should!) work together on the problem sets, but you must turn in your own answers.
+I will rescale everyone's problem set grades at the end of the semester.
 
-
-# Talk like an economist
-
-One of the objectives of this class is to "explain social phenomena using economic vocabulary and reasoning", or in less jargony language, be able to talk like an economist. 
-
-There are two assignments that will help with this:
-
-## Listen to podcasts
-
-The [course materials section of the syllabus](/syllabus/#course-materials) explains that you need to listen to at least one episode of an economics- or policy-related podcast every week. We will discuss current economic and policy events and research at the beginning of every class, and these podcasts will be an excellent source of material for these discussions.
-
-You will not need to report what you listen to. I trust that you'll do it. So just do it.
-
-## Present a brief economic briefing
-
-Near the end of the semester, you will prepare a 5-minute brief where you use economic concepts to explain some pattern or behavior you have observed in your own environment. These do not need to be big issues, but they do need to be real. Being creative is a bonus.^[Don't just explain how supply and demand change for a certain product or whatever—look for a Freakonomics-type question to answer, like [why the McRib follows a strange schedule](https://www.theawl.com/2011/11/a-conspiracy-of-hogs-the-mcrib-as-arbitrage/) (don't do that one, though, obviously).]
-
-You will present your brief to me in my office between April 2–6. I will post a signup sheet on March 26. You have 5 minutes to present, and then you will have up to 5 minutes of follow up questions from me.
+You may (and should!) work together on the problem sets, but you must turn in your own answers. You cannot work in groups of more than five.
 
 
-# Midterms
+# Code-through
 
-There will be two midterm exams covering (1) the core principles of public economics and (2) justifications for public intervention in markets. You will take these exams online through Learning Suite. The exams will be timed, but you can use notes and readings and [the Google](https://www.youtube.com/watch?v=AQ45fO1uiOQ). You must take the exams on your own though, and not talk to anyone about them.
+<span class="newthought">The objectives of this class include</span> "Be curious and confident with data," "Feel comfortable with R," and "Communicate the results of your analyses in accessible language." To help you with this, you will write a code-through tutorial of some statistical, data scientific, or data-based principle or example.
+
+One of the reasons R is so popular is because the R community is exceptionally generous and open and sharing.^[So are Python and other modern open source languages too.] The internet is full of tutorials and code-throughs where people explain how to do something interesting with R.
+
+You will write one code-through or tutorial during the semester on a topic of your choice. Complete details for the assignment (along with a lot of examples to look at) will be given later. You will complete this on your own, but you can get help from your team (but you can't all write about the same topic).
+
+The [R-Weekly e-mail newsletter](https://rweekly.org/) includes dozens of these every week, and [Mara Averick](https://twitter.com/dataandme) (chief tidyverse advocate at RStudio) regularly tweets out links to different posts as well. Here are some others examples to give you a jist of what you'll be doing:^[{-} Yours won't be nearly as complicated as these, by the way. Nor do they need to be. You'll illustrate and explain something simple.]
+
+- [The Greatest Twitter Scheme of All Time?](https://www.garrickadenbuie.com/blog/2018/08/24/greatest-twitter-scheme/)
+- [Mapping Fall Foliage with sf](https://rud.is/b/2017/09/18/mapping-fall-foliage-with-sf/)
+- [Exploring Minard's 1812 plot with ggplot2](https://www.andrewheiss.com/blog/2017/08/10/exploring-minards-1812-plot-with-ggplot2/)
+- [Animations in R](https://www.infoworld.com/video/89987/r-tip-animations-in-r)
+- [Drone sightings in the US, visualized](https://www.andrewheiss.com/blog/2016/04/03/drone-sightings-in-the-us-visualized/)
+- [Quickly play with Polity IV and OECD data (and see the danger of US democracy)](https://www.andrewheiss.com/blog/2017/08/26/quickly-play-with-polity-iv-and-oecd-data-and-see-the-danger-of-us-democracy/)
+
+This assignment will also be graded using the same check system from the problem sets.
+
+
+# Exams
+
+<span class="newthought">There will be three exams</span> covering (1) data wrangling and tidying, (2) modeling, and (3) statistical inference. 
+
+You will take these exams on paper in class. The exams are designed to take an hour at most. The exams are closed book and closed internet, but you can use a one-page cheatsheet (doublesided) with whatever information you feel would be helpful. 
+
+I will post examples of exam questions prior to the actual exams.
 
 
 # Final project
 
-At the end of the course, you will demonstrate your knowledge of public economics and new-found expertise in cost-benefit analysis by completing a final project.
+<span class="newthought">At the end of the course,</span> you will demonstrate your knowledge of modern data science tools and statistical analysis by completing a final project.
 
-Project details will be posted later once I settle on the best form for it.
+Project details will be posted later once I settle on the best form for it. This much is certain so far:
+
+- You will complete the project as a team. 
+- You will use some sort of real-world, public management-related data to answer some sort of research question.
+- It will be so much fun!
 
 There is no final exam. This project is your final exam.

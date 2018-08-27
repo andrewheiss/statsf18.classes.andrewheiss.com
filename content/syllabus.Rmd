@@ -25,14 +25,18 @@ library(pander)
 
 # Course objectives
 
-By the end of this course, you will (1) be literate in fundamental economic principles, (2) understand the limits of economic theory and free markets, (3) justify government and nonprofit intervention in the economy, and (4) make informed policy recommendations by analyzing and evaluating public sector policies. Specifically, you'll be able to:
+<span class="newthought">By the end of this course,</span> you will (1) be data literate and (2) be able to answer your own questions with statistical and data scientific tools.
 
-- Understand the principles of microeconomics, public economics, and behavioral economics
-- Explain social phenomena using economic vocabulary and reasoning
-- Predict how individuals respond to incentives
-- Evaluate the costs, benefits, and long-term consequences of public and nonprofit sector policies
-- Justify government intervention in the free market and identify when public policies have been unethical or failures
-- Propose and argue for public and nonprofit sector policies
+Specifically, you'll be able to:
+
+- Be curious and confident with data
+- Feel comfortable with R
+- Tidy and wrangle data imperturbably
+- Find patterns in data with appropriate graphs and visualizations
+- Pose and test insightful hypotheses
+- Accurately interpret results from basic inferential statistical analyses
+- Understand the assumptions and limitations of statistical procedures
+- Communicate the results of your analyses in accessible language
 
 Given these objectives, this course fulfills three of the four learning outcomes for BYU's [Master of Public Administration (MPA)](https://marriottschool.byu.edu/mpa/) program:
 
@@ -41,89 +45,125 @@ Given these objectives, this course fulfills three of the four learning outcomes
 - **Communication**: BYU MPA graduates effectively convey verbal and written information with the polish and professionalism appropriate for the public service context. They listen to and promote understanding among people with diverse viewpoints.
 
 
+# Course philosophy
+
+<span class="newthought">Classical statistics classes</span> spend substantial time covering probability theory, null hypothesis testing, and other statistical tests first developed hundreds of years ago. Some classes don't use software or actual real data and instead live in the world of mathematical proofs. They can be math-heavy and full of often unintuitive concepts and equations. 
+
+In this class, we will take the opposite approach. We *begin* with data and learn how to tidy, wrangle, manipulate, and visualize it with code. Later in the semester we turn to more classical topics like inference and statistical modeling, but continue to keep the focus on data as we do so. 
+
+In other words, there's way less of this:
+
+$$
+f(x) = \dfrac{1}{\sqrt{2\pi}} e^{-\frac12 x^2}
+$$
+
+And way more of this:
+
+```{r code-example, eval=FALSE}
+summary_monthly_temp <- weather %>% 
+  group_by(month) %>% 
+  summarize(mean = mean(temp), 
+            std_dev = sd(temp))
+```
+
+Over the last decade there has been a revolution in statistical and scientific computing. Open source languages like R and Python have overtaken older (and expensive!) corporate software packages like SAS and SPSS, and there are now thousands of books and blog posts and other online resources with excellent tutorials about how to analyze pretty much any kind of data. 
+
+This class will expose you to [R](https://cran.r-project.org/)—one of the most popular, sought-after, and in-demand statistical programming languages. Armed with the foundation of R skills you'll learn in this class, you'll know enough to be able to find how to analyze any sort of data-based question in the future.
+
+
 # Course materials
 
-There are two official textbooks for the class:
+<span class="newthought">There are no formal physical textbooks for the class.</span> We will only use (free!) online resources.
 
-- [@core-econ] [[*free*](http://www.core-econ.org/the-economy/); $47 at [Amazon](https://www.amazon.com/Economy-Economics-Changing-World/dp/0198810245) if you really want a paper version, but then there are no online activities, videos, or other resources]
-- [@Wheelan:2010] [$3 used, $11 new at [Amazon](https://www.amazon.com/Naked-Economics-Undressing-Science-Revised/dp/0393337642/); you need the 2010 edition]
+## Books
 
-CORE's *The Economy* is a special new project that aims to make economics education accessible to all, replacing textbooks that cost hundreds of dollars with an open source textbook complete with videos and quizzes and other online resources. It's even been [lauded by The Economist](https://www.economist.com/news/finance-and-economics/21729443-students-are-forced-grapple-real-world-very-beginning-their). 
+- [^md] [**ModernDive**](https://moderndive.com/): ModernDive will be our primary textbook. Please take the time to read the assigned chapters in depth and complete the Learning Checks when possible. 
 
-[**Register for a student account at the CORE website.**](http://www.core-econ.org/register/)
+- [^r4ds] [**R for Data Science**](http://r4ds.had.co.nz/): Some of your readings will also come from the free R for Data Science book. Please take the time to read this book carefully as well and walk through the examples in RStudio.
 
-In addition to these books, I will assign miscellaneous articles and chapters as needed. Please check the readings column on [the schedule](/schedule/) every day for complete details of what to read.
+- [^os] [**OpenIntro Statistics**](https://www.openintro.org/stat/textbook.php?stat_book=os): A few of your readings will also come from the free OpenIntro Statistics book.
 
-Finally, you'll need to listen to at least one economics-related podcast episode every week. We will spend the first few minutes of every class session discussing current events or recent research related to micro, public, or behavioral economics, and podcasts are one of the best ways to do this.^[You can listen as you commute, wash the dishes, fold your laundry, eat breakfast, or work on homework for other classes!]
+[^md]: {-} Chester Ismay and Albert Y. Kim, *ModernDive: An Introduction to Statistical and Data Sciences via R*, version 0.4.0 (2018). [**FREE** [online](https://moderndive.com/)]
 
-Here are some of the best ones—subscribe to 3–4 of these:[^podcasts]
+[^r4ds]: {-} Hadley Wickham and Garrett Grolemund, *R for Data Science: Import, Tidy, Transform, Visualize, and Model Data* (Sebastopol, California: O’Reilly Media, 2017). [**FREE** [online](http://r4ds.had.co.nz/); $13 used, $18 new at [Amazon](https://www.amazon.com/R-Data-Science-Hadley-Wickham/dp/1491910399/)]
 
-- [Planet Money](https://www.npr.org/podcasts/510289/planet-money)
-- [The Indicator](https://www.npr.org/sections/money/567724614/the-indicator)
-- [The Weeds](https://itunes.apple.com/us/podcast/voxs-the-weeds/id1042433083?mt=2)
-- [Freakonomics Radio](https://itunes.apple.com/us/podcast/freakonomics-radio/id354668519?mt=2)
-- [50 Things that Made the Modern Economy](http://www.bbc.co.uk/programmes/p04b1g3c/episodes/downloads)
-- [EconTalk](http://www.econtalk.org/)
-- [The Uncertain Hour](https://www.marketplace.org/topics/uncertain-hour)
-- [The Impact](https://www.vox.com/the-impact)
-
-And these shows are excellent, but not always econ/policy-focused (but they're definitely worth checking out, especially if you're interested in behavioral economics and psychology):
-
-- [Hidden Brain](https://www.npr.org/podcasts/510308/hidden-brain)
-- [Stuff Mom Never Told You](https://www.stuffmomnevertoldyou.com/podcasts)
-- [Invisibilia](https://www.npr.org/podcasts/510307/invisibilia)
-- [Rationally Speaking](http://rationallyspeakingpodcast.org/)
-
-[^podcasts]: You can listen to all these shows on your computer, but it's best to listen on your smartphone. 
-
-    On iOS, you can use Apple's built-in Podcasts app, or download a third-party app like [Overcast](https://overcast.fm/) (my personal favorite). 
+[^os]: {-} David M. Diez, Christopher D. Barr, and Mine Çetinkaya-Rundel, *OpenIntro Statistics* (3rd edition, 2017). [**FREE** [online](https://www.openintro.org/stat/textbook.php?stat_book=os); $15 new at [Amazon](https://www.amazon.com/dp/1943450048/)]
     
-    On Android, you can use… something, probably.
+There will also occasionally be additional articles and videos to read and watch. When this happens, links to these other resources will be included on the reading page for that week.
+
+I also highly recommend subscribing to the [R Weekly newsletter](https://rweekly.org/). This e-mail is sent every Monday and is full of helpful tutorials about how to do stuff with R.
+
+## DataCamp
+
+We will use [DataCamp](https://www.datacamp.com/home)—a collection of interactive videos and tutorials available online—to supplement your readings. These tutorials will give you additional practice with R and will be essential to understanding the material (especially in the first half of the course). 
+
+I will assign specific excerpts from DataCamp courses as part of your readings, but by being in this class, you have access to the entire DataCamp course library for the next six months. If you ever feel bored, adventurous, or both, check out other courses and learn even more! Importantly, you do not have to purchase any services or classes from DataCamp.
+
+I will enroll you in our class DataCamp group using the e-mail address you have registered with BYU. You will then receive an e-mail from DataCamp with a link to register on their site.
+
+## R and RStudio
+
+You will do all of your analysis with the open source (and free!) programming language [R](https://cran.r-project.org/). You will use [RStudio](https://www.rstudio.com/) as the main program to access R. Think of R as an engine and RStudio as a car dashboard—R handles all the calculations and the actual statistics, while RStudio provides a nice interface for running R code.
+
+R is free, but it can sometimes be a pain to install and configure. To make life easier, you can (and should!) use the free [RStudio.cloud](http://rstudio.cloud/) service, which lets you run a full instance of RStudio in your web browser. This means you won't have to install anything on your computer to get started with R! We will have a shared class workspace in RStudio.cloud that will let you quickly copy templates for labs and problem sets.
+
+RStudio.cloud is convenient, but it can be slow and it is not designed to be able to handle larger datasets or more complicated analysis. Over the course of the semester, you'll probably want to get around to installing R, RStudio, and other R packages on your computer and wean yourself off of RStudio.cloud. This isn't necessary, but it's helpful.
+
+You can find instructions for installing R, RStudio, and all the tidyverse packages here.
+
+## Online help and Gitter
+
+Data science and statistical programming can be difficult. Computers are stupid and little errors in your code can cause hours of headache (even if you've been doing this stuff for years!).
+
+Fortunately there are tons of online resources to help you with this. Two of the most important are [StackOverflow](https://stackoverflow.com/) (a Q&A site with hundreds of thousands of answers to all sorts of programming questions) and [RStudio Community](https://community.rstudio.com/) (a forum specifically designed for people using RStudio and the tidyverse (i.e. you)).
+
+Additionally, we have a class chatroom at [Gitter](https://gitter.im/byustatsf18/) where anyone in the class can ask questions and anyone can answer. Ask questions about the readings, Learning Checks, lectures, or problem sets [in the class Gitter](https://gitter.im/byustatsf18/). I will monitor the chatroom regularly, and you should also all do so as well. You'll likely have similar questions as your peers, and you'll likely be able to answer other peoples' questions too.
 
 
 # Course policies
 
-**Be nice. Be honest. Don't cheat.**
+<span class="newthought">Be nice. Be honest. Don't cheat.</span>
 
 We will also follow the [full list of Marriott School and BYU classroom policies](https://marriottschool.byu.edu/policies/classroom/).
 
-
 ## Counseling and Psychological Services (CAPS)
 
-Life at BYU can be complicated and challenging. You might feel overwhelmed, experience anxiety or depression, or struggle with relationships or family responsibilities. [Counseling and Psychological Services (CAPS)](https://caps.byu.edu/) provides free, *confidential* support for students who are struggling with mental health and emotional challenges. The CAPS office is staffed by professional psychologists who are attuned to the needs of all types of college students. Please do not hesitate to contact CAPS for assistance—getting help is a smart and courageous thing to do.
-
+Life at BYU can be complicated and challenging. You might feel overwhelmed, experience anxiety or depression, or struggle with relationships or family responsibilities. [Counseling and Psychological Services (CAPS)](https://caps.byu.edu/) provides free, *confidential* support for students who are struggling with mental health and emotional challenges. The CAPS office is staffed by professional psychologists who are attuned to the needs of all types of college and professional students. Please do not hesitate to contact CAPS for assistance—getting help is a smart and courageous thing to do.
 
 ## Basic needs security
 
 If you have difficulty affording groceries or accessing sufficient food to eat every day, or if you lack a safe and stable place to live, and you believe this may affect your performance in this course, please contact the [Dean of Students](https://deanofstudents.byu.edu/) for support. Please also consider speaking with your local LDS bishop regarding Church welfare assistance *regardless of whether or not you are LDS*. Additionally, please talk to me if you are comfortable in doing so. This will enable me to provide any resources that I might possess.
 
-
 ## Class conduct and expectations
 
-On the second day of class, we came up iwth rules, expectations, and policies for things like technology in the classroom, attendance, participation, late work, etc. Here's what we decided:
+On the first day of class, we will come up with rules, expectations, and policies for things like technology in the classroom, attendance, participation, late work, etc. I will put what we decide here once we decide it.
 
-- Late work will result in a loss of 10% of the total points each day it's late, with a maximum penalty of 50%.
-- If you need extra accommodations becase of catastrophe or other extenuating circumstances, talk to me.
-- Participate in class. Just do it.
-- Come to class whenever possible; make up missed work and get help from your classmates, the TAs, or me if you have to miss a session.
-- Use technology responsibly. Don't distract others.
+## Laptops
+
+This is a computer-heavy course and each class session will require extensive laptop use. Occasionally I may ask that laptops be closed for some in-class activities, you will be expected to use your computer. Please note that this is different from the laptop policy in other Romney Institute classes. Use your computer responsibly in class.
+
+## Teams
+
+This class is team-based. In-class activities will be done largely in teams. Your problem sets will be turned in individually, but you can (and should!) work on them together in your assigned teams. Your final project will be completed and turned in as a team.
+
+Please follow all the best practices you learned in Organizational Behavior to ensure that your team works well and that there is no free riding.
 
 
 # Assignments and grades
 
-You can find descriptions and instructions of all assignments on the [assignments page](/assignments/).
+<span class="newthought">You can find descriptions</span> for all the assignments on the [assignments page](/assignments/).
 
-## Assignments
 
 ```{r assignments-grades, include=FALSE}
 assignments <- tribble(
   ~Points, ~Assignment,
-  230     , "Preparation (≈ 8.5 × 28)",
-  8 * 40  , "Problem sets (8 × 40)",
-  30      , "Economic briefing",
-  150     , "Midterm 1",
-  150     , "Midterm 2",
-  300     , "Final project"
+  150     , "Preparation (≈ 8.5 × 14)",
+  7 * 40  , "Problem sets (7 × 40)",
+  50      , "Code-through",
+  100     , "Exam 1",
+  100     , "Exam 2",
+  100     , "Exam 3",
+  250     , "Final project"
 ) %>%
   mutate(Percent = Points / sum(Points),
          Percent = scales::percent(Percent))
@@ -149,7 +189,7 @@ bind_rows(assignments, assignments_total) %>%
   pandoc.table(justify = "lcc", missing = "—")
 ```
 
-## Grades
+\
 
 ```{r show-grades-table, echo=FALSE, results="asis"}
 grading %>%
@@ -157,9 +197,9 @@ grading %>%
                col.names = c("Grade", "Range", "Grade", "Range"))
 ```
 
-# Dinosaurs
+# Red pandas
 
-[^dinosaur] Once you have read this entire syllabus and [the assignments page](/assignments/), please [click here](mailto:andrew_heiss@byu.edu) and e-mail me a picture of a dinosaur. For real. Brownie points if you send a picture of a cat or dog dressed as a dinosaur. Triple chocolate brownie points if it's animated.
+[^panda] <span class="newthought">Once you have read</span> this entire syllabus and [the assignments page](/assignments/), please [click here](mailto:andrew_heiss@byu.edu) and e-mail me a picture of a red panda. For real. Brownie points if it's animated.
 
-[^dinosaur]: {-}
-  ![Cat vs. dinosaur](https://media.giphy.com/media/9b2bBsgIOPrzi/giphy.gif)
+[^panda]: {-}
+  ![Hungry red panda](https://media.giphy.com/media/r7Nbr97FsXxXG/giphy.gif)

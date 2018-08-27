@@ -1,0 +1,12 @@
+---
+title: "Wrapping up and going beyond the basics"
+date: "2018-12-13"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+---
+
+# Required
+
+- <i class="fas fa-book"></i> [12.1–12.2 in *ModernDive*](https://moderndive.com/12-thinking-with-data.html) [@IsmayKim:2018]
+- Other readings TBD

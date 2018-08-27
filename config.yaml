@@ -1,7 +1,7 @@
 baseURL: "https://statsf18.classes.andrewheiss.com/"
 languageCode: en-us
-title: Public Management Economics
-theme: ath-tufte-hugo
+title: Data Science for Public Management
+theme: "ath-tufte-hugo_18-19"
 googleAnalytics: ""
 ignoreFiles:
   - \.Rmd$
@@ -27,6 +27,12 @@ menu:
     - name: Reference
       url: /reference/
       weight: 4
+    - name: RStudio.cloud
+      url: "https://rstudio.cloud"
+      weight: 5
+    - name: Class chat
+      url: "https://gitter.im/byustatsf18/"
+      weight: 6
 # Disable taxonomies
 taxonomies:
   tag: ""
@@ -34,40 +40,40 @@ taxonomies:
   category: ""
 params:
   author: Andrew Heiss
-  thumbnail: /images/econ_meta.png
+  thumbnail: /images/stats_meta.png
   instructor: 
     name: Dr. Andrew Heiss
     email: andrew_heiss@byu.edu
     url: "https://www.andrewheiss.com"
     twitter: andrewheiss
     github: andrewheiss
-    office: 773 TNRB
+    office: 639 TNRB
   course:
-    number: MPA 612
-    semester: Winter 2018
-    days: "MW; F (lab)"
-    time: "9:30–10:45 AM (§1); 8:00–9:15 AM (§2); 12:30–1:45 PM (lab)"
-    location: "170 TNRB (§1); 230 TNRB (§2); 230 TNRB (lab)"
+    number: MPA 630
+    semester: Fall 2018
+    days: "Th"
+    time: "7:35–9:45 PM"
+    location: "417 SLC"
     twitter: andrewheiss
-    dates: "January 9–April 19, 2018"
-    github: "andrewheiss/econw18.classes.andrewheiss.com"
-    copyrightYear: "2017–2018"
+    dates: "September 6–December13, 2018"
+    github: "andrewheiss/statsf18.classes.andrewheiss.com"
+    copyrightYear: "2018"
     contactDetails: >-
       Office hours: Mondays from 1:30–2:30 PM. [Sign up for other times here.](https://calendly.com/andrewheiss/meeting/)<br><br>E-mail is the best way to get in contact with me—I will respond to all course-related e-mails within 24 hours (*really*).
   university: 
     name: Brigham Young University
     url: "https://www.byu.edu"
   school:
-    name: Romney Institute of Public Management
+    name: Romney Institute of Public Service and Ethics
     url: "https://marriottschool.byu.edu/mpa/"
   description: "Understand and use economic reasoning to evaluate public policy and managerial decisions"
-  primaryColor: "#5E81AC"
-  secondaryColor: "#BF616A"
+  primaryColor: "#D46600"
+  secondaryColor: "#F6E03F"
   credits: >-
-    supply/demand curve icon by Andrew Heiss. [nord color scheme](https://github.com/arcticicestudio/nord) from [Arctic Ice Studio](http://arcticicestudio.com/).
+    Hex icon by Andrew Heiss. Color scheme adapted from [October Roads](http://www.colourlovers.com/palette/582235/October_Roads).<br>Course content adapted in part from [MATH 116 (Albert Kim)](https://rudeboybert.github.io/MATH116/), [STA 199 (Mine Çetinkaya-Rundel)](https://www2.stat.duke.edu/courses/Spring18/Sta199/), [SOC 301 (Chester Ismay)](https://ismayc.github.io/soc301_s2017/), and [CONJ 620 (Alison Presmanes Hill)](https://apreshill.github.io/ohsu-basic-stats/).
   logo:
-    url: /images/econ_hires.png
-    alt: Economic decision-making for managers
+    url: /images/stats_hires.png
+    alt: Data Science for Public Management
   meta:
     twitterSite: "@andrewheiss"
     twitterCreator: "@andrewheiss"

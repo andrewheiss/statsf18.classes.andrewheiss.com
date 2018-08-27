@@ -1,0 +1,20 @@
+---
+title: "Regression diagnostics and predictions"
+date: "2018-10-25"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+stuff-to-add: >-
+  23.3 in r4ds?
+---
+
+# Required
+
+- <i class="fas fa-book"></i> 8.2–8.3 in *OpenIntro Statistics* [@DiezBarrCetinkaya-Rundel:2017]
+    - Take advantage of the accompanying videos!
+- Other readings TBD
+
+
+# Highly recommened
+
+- <i class="fas fa-laptop-code"></i> "Model Assessment and Selection," chapter 4 in Albert Kim's [*Modeling with Data in the Tidyverse* course on DataCamp](https://www.datacamp.com/courses/modeling-with-data-in-the-tidyverse)

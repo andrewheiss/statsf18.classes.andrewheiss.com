@@ -1,0 +1,14 @@
+---
+title: "Sampling"
+date: "2018-11-01"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+stuff-to-add: >-
+  Something on political polling
+---
+
+# Required
+
+- <i class="fas fa-book"></i> [8.1–8.5 in *ModernDive*](https://moderndive.com/8-sampling.html) [@IsmayKim:2018]
+- Other readings TBD

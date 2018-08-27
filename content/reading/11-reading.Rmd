@@ -1,0 +1,20 @@
+---
+title: "Hypothesis testing"
+date: "2018-11-15"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+---
+
+# Required
+
+- <i class="fas fa-book"></i> [10.1–10.9 in *ModernDive*](https://moderndive.com/10-hypothesis-testing.html) [@IsmayKim:2018]
+- <i class="fas fa-laptop-code"></i> "Introduction to ideas of inference," chapter 1 in Jo Hardin's [*Foundations of Inference* course on DataCamp](https://www.datacamp.com/courses/foundations-of-inference)
+
+
+# Highly recommended
+
+These are two complete examples of how to pose hypotheses and make inferences based on data. You should try to work through one of them:
+
+- <i class="fas fa-laptop-code"></i> "Completing a randomization test: gender discrimination," chapter 2 in Jo Hardin's [*Foundations of Inference* course on DataCamp](https://www.datacamp.com/courses/foundations-of-inference)
+- <i class="fas fa-laptop-code"></i> "Hypothesis testing errors: opportunity cost," chapter 3 in Jo Hardin's [*Foundations of Inference* course on DataCamp](https://www.datacamp.com/courses/foundations-of-inference)

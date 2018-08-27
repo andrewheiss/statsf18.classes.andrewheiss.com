@@ -1,0 +1,15 @@
+---
+title: "Science communication"
+date: "2018-12-06"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+---
+
+# Required
+
+- <i class="fab fa-youtube"></i> Ben Wellington, ["Making data mean more through storytelling"](https://www.youtube.com/watch?v=6xsvGYIxJok)
+- <i class="fab fa-vimeo"></i> Jonathan Schwabish, ["Better Data Communication,"](https://vimeo.com/230757062) National Bureau of Economic Research
+- <i class="fab fa-youtube"></i> Adam Kanouse, ["The Story in Data Storytelling"](https://www.youtube.com/watch?v=na7h_qv9vL0)
+- <i class="fas fa-external-link-square-alt"></i> Brent Dykes, [Data Storytelling: The Essential Data Science Skill Everyone Needs](https://www.forbes.com/sites/brentdykes/2016/03/31/data-storytelling-the-essential-data-science-skill-everyone-needs/#6640ab7352ad)^[Make sure you read both pages.]
+- <i class="fas fa-external-link-square-alt"></i> Joseph Barber, [Do You Have Mysterious Dragons in Your Research?](https://www.insidehighered.com/advice/2015/01/26/essay-talking-about-your-research)

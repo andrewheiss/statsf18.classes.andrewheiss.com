@@ -12,6 +12,74 @@ stuff-to-add: >-
   Gini coefs
 ---
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+</style>
 
 
 <p><span><label for="sn-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="marginnote">
@@ -19,14 +87,17 @@ stuff-to-add: >-
 <br />
 </span></span></p>
 <h2 id="course-objectives">Course objectives</h2>
-<p>By the end of this course, you will (1) be literate in fundamental economic principles, (2) understand the limits of economic theory and free markets, (3) justify government and nonprofit intervention in the economy, and (4) make informed policy recommendations by analyzing and evaluating public sector policies. Specifically, you’ll be able to:</p>
+<p><span class="newthought">By the end of this course,</span> you will (1) be data literate and (2) be able to answer your own questions with statistical and data scientific tools.</p>
+<p>Specifically, you’ll be able to:</p>
 <ul>
-<li>Understand the principles of microeconomics, public economics, and behavioral economics</li>
-<li>Explain social phenomena using economic vocabulary and reasoning</li>
-<li>Predict how individuals respond to incentives</li>
-<li>Evaluate the costs, benefits, and long-term consequences of public and nonprofit sector policies</li>
-<li>Justify government intervention in the free market and identify when public policies have been unethical or failures</li>
-<li>Propose and argue for public and nonprofit sector policies</li>
+<li>Be curious and confident with data</li>
+<li>Feel comfortable with R</li>
+<li>Tidy and wrangle data imperturbably</li>
+<li>Find patterns in data with appropriate graphs and visualizations</li>
+<li>Pose and test insightful hypotheses</li>
+<li>Accurately interpret results from basic inferential statistical analyses</li>
+<li>Understand the assumptions and limitations of statistical procedures</li>
+<li>Communicate the results of your analyses in accessible language</li>
 </ul>
 <p>Given these objectives, this course fulfills three of the four learning outcomes for BYU’s <a href="https://marriottschool.byu.edu/mpa/">Master of Public Administration (MPA)</a> program:</p>
 <ul>
@@ -34,61 +105,65 @@ stuff-to-add: >-
 <li><strong>Public Service Values</strong>: BYU MPA graduates demonstrate an understanding of, passion for, and commitment to public service values, including reverence for the dignity and worth of all people and dedication to ethical governance.</li>
 <li><strong>Communication</strong>: BYU MPA graduates effectively convey verbal and written information with the polish and professionalism appropriate for the public service context. They listen to and promote understanding among people with diverse viewpoints.</li>
 </ul>
+<h2 id="course-philosophy">Course philosophy</h2>
+<p><span class="newthought">Classical statistics classes</span> spend substantial time covering probability theory, null hypothesis testing, and other statistical tests first developed hundreds of years ago. Some classes don’t use software or actual real data and instead live in the world of mathematical proofs. They can be math-heavy and full of often unintuitive concepts and equations.</p>
+<p>In this class, we will take the opposite approach. We <em>begin</em> with data and learn how to tidy, wrangle, manipulate, and visualize it with code. Later in the semester we turn to more classical topics like inference and statistical modeling, but continue to keep the focus on data as we do so.</p>
+<p>In other words, there’s way less of this:</p>
+<p><span class="math display">\[
+f(x) = \dfrac{1}{\sqrt{2\pi}} e^{-\frac12 x^2}
+\]</span></p>
+<p>And way more of this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">summary_monthly_temp &lt;-<span class="st"> </span>weather <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(temp), </a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">            <span class="dt">std_dev =</span> <span class="kw">sd</span>(temp))</a></code></pre></div>
+<p>Over the last decade there has been a revolution in statistical and scientific computing. Open source languages like R and Python have overtaken older (and expensive!) corporate software packages like SAS and SPSS, and there are now thousands of books and blog posts and other online resources with excellent tutorials about how to analyze pretty much any kind of data.</p>
+<p>This class will expose you to <a href="https://cran.r-project.org/">R</a>—one of the most popular, sought-after, and in-demand statistical programming languages. Armed with the foundation of R skills you’ll learn in this class, you’ll know enough to be able to find how to analyze any sort of data-based question in the future.</p>
 <h2 id="course-materials">Course materials</h2>
-<p>There are two official textbooks for the class:</p>
+<p><span class="newthought">There are no formal physical textbooks for the class.</span> We will only use (free!) online resources.</p>
+<h3 id="books">Books</h3>
 <ul>
-<li><span class="citation">The CORE Team, <em>The Economy: Economics for a Changing World</em> (Oxford: Oxford University Press, 2017), <a href="http://www.core-econ.org/the-economy/" class="uri">http://www.core-econ.org/the-economy/</a>.</span> [<a href="http://www.core-econ.org/the-economy/"><em>free</em></a>; $47 at <a href="https://www.amazon.com/Economy-Economics-Changing-World/dp/0198810245">Amazon</a> if you really want a paper version, but then there are no online activities, videos, or other resources]</li>
-<li><span class="citation">Charles Wheelan, <em>Naked Economics: Undressing the Dismal Science</em>, 2nd ed. (New York: W. W. Norton &amp; Company, 2010).</span> [$3 used, $11 new at <a href="https://www.amazon.com/Naked-Economics-Undressing-Science-Revised/dp/0393337642/">Amazon</a>; you need the 2010 edition]</li>
+<li><p><span><label for="sn-2" class="margin-toggle">&#8853;</label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="marginnote"> Chester Ismay and Albert Y. Kim, <em>ModernDive: An Introduction to Statistical and Data Sciences via R</em>, version 0.4.0 (2018). [<strong>FREE</strong> <a href="https://moderndive.com/">online</a>]<br />
+<br />
+</span></span> <a href="https://moderndive.com/"><strong>ModernDive</strong></a>: ModernDive will be our primary textbook. Please take the time to read the assigned chapters in depth and complete the Learning Checks when possible.</p></li>
+<li><p><span><label for="sn-3" class="margin-toggle">&#8853;</label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="marginnote"> Hadley Wickham and Garrett Grolemund, <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em> (Sebastopol, California: O’Reilly Media, 2017). [<strong>FREE</strong> <a href="http://r4ds.had.co.nz/">online</a>; $13 used, $18 new at <a href="https://www.amazon.com/R-Data-Science-Hadley-Wickham/dp/1491910399/">Amazon</a>]<br />
+<br />
+</span></span> <a href="http://r4ds.had.co.nz/"><strong>R for Data Science</strong></a>: Some of your readings will also come from the free R for Data Science book. Please take the time to read this book carefully as well and walk through the examples in RStudio.</p></li>
+<li><p><span><label for="sn-4" class="margin-toggle">&#8853;</label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="marginnote"> David M. Diez, Christopher D. Barr, and Mine Çetinkaya-Rundel, <em>OpenIntro Statistics</em> (3rd edition, 2017). [<strong>FREE</strong> <a href="https://www.openintro.org/stat/textbook.php?stat_book=os">online</a>; $15 new at <a href="https://www.amazon.com/dp/1943450048/">Amazon</a>]<br />
+<br />
+</span></span> <a href="https://www.openintro.org/stat/textbook.php?stat_book=os"><strong>OpenIntro Statistics</strong></a>: A few of your readings will also come from the free OpenIntro Statistics book.</p></li>
 </ul>
-<p>CORE’s <em>The Economy</em> is a special new project that aims to make economics education accessible to all, replacing textbooks that cost hundreds of dollars with an open source textbook complete with videos and quizzes and other online resources. It’s even been <a href="https://www.economist.com/news/finance-and-economics/21729443-students-are-forced-grapple-real-world-very-beginning-their">lauded by The Economist</a>.</p>
-<p><a href="http://www.core-econ.org/register/"><strong>Register for a student account at the CORE website.</strong></a></p>
-<p>In addition to these books, I will assign miscellaneous articles and chapters as needed. Please check the readings column on <a href="/schedule/">the schedule</a> every day for complete details of what to read.</p>
-<p>Finally, you’ll need to listen to at least one economics-related podcast episode every week. We will spend the first few minutes of every class session discussing current events or recent research related to micro, public, or behavioral economics, and podcasts are one of the best ways to do this.<span><label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">You can listen as you commute, wash the dishes, fold your laundry, eat breakfast, or work on homework for other classes!<br />
-<br />
-</span></span></p>
-<p>Here are some of the best ones—subscribe to 3–4 of these:<span><label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">You can listen to all these shows on your computer, but it’s best to listen on your smartphone.<br />
-<br />
-On iOS, you can use Apple’s built-in Podcasts app, or download a third-party app like <a href="https://overcast.fm/">Overcast</a> (my personal favorite).<br />
-<br />
-On Android, you can use… something, probably.<br />
-<br />
-</span></span></p>
-<ul>
-<li><a href="https://www.npr.org/podcasts/510289/planet-money">Planet Money</a></li>
-<li><a href="https://www.npr.org/sections/money/567724614/the-indicator">The Indicator</a></li>
-<li><a href="https://itunes.apple.com/us/podcast/voxs-the-weeds/id1042433083?mt=2">The Weeds</a></li>
-<li><a href="https://itunes.apple.com/us/podcast/freakonomics-radio/id354668519?mt=2">Freakonomics Radio</a></li>
-<li><a href="http://www.bbc.co.uk/programmes/p04b1g3c/episodes/downloads">50 Things that Made the Modern Economy</a></li>
-<li><a href="http://www.econtalk.org/">EconTalk</a></li>
-<li><a href="https://www.marketplace.org/topics/uncertain-hour">The Uncertain Hour</a></li>
-<li><a href="https://www.vox.com/the-impact">The Impact</a></li>
-</ul>
-<p>And these shows are excellent, but not always econ/policy-focused (but they’re definitely worth checking out, especially if you’re interested in behavioral economics and psychology):</p>
-<ul>
-<li><a href="https://www.npr.org/podcasts/510308/hidden-brain">Hidden Brain</a></li>
-<li><a href="https://www.stuffmomnevertoldyou.com/podcasts">Stuff Mom Never Told You</a></li>
-<li><a href="https://www.npr.org/podcasts/510307/invisibilia">Invisibilia</a></li>
-<li><a href="http://rationallyspeakingpodcast.org/">Rationally Speaking</a></li>
-</ul>
+<p>There will also occasionally be additional articles and videos to read and watch. When this happens, links to these other resources will be included on the reading page for that week.</p>
+<p>I also highly recommend subscribing to the <a href="https://rweekly.org/">R Weekly newsletter</a>. This e-mail is sent every Monday and is full of helpful tutorials about how to do stuff with R.</p>
+<h3 id="datacamp">DataCamp</h3>
+<p>We will use <a href="https://www.datacamp.com/home">DataCamp</a>—a collection of interactive videos and tutorials available online—to supplement your readings. These tutorials will give you additional practice with R and will be essential to understanding the material (especially in the first half of the course).</p>
+<p>I will assign specific excerpts from DataCamp courses as part of your readings, but by being in this class, you have access to the entire DataCamp course library for the next six months. If you ever feel bored, adventurous, or both, check out other courses and learn even more! Importantly, you do not have to purchase any services or classes from DataCamp.</p>
+<p>I will enroll you in our class DataCamp group using the e-mail address you have registered with BYU. You will then receive an e-mail from DataCamp with a link to register on their site.</p>
+<h3 id="r-and-rstudio">R and RStudio</h3>
+<p>You will do all of your analysis with the open source (and free!) programming language <a href="https://cran.r-project.org/">R</a>. You will use <a href="https://www.rstudio.com/">RStudio</a> as the main program to access R. Think of R as an engine and RStudio as a car dashboard—R handles all the calculations and the actual statistics, while RStudio provides a nice interface for running R code.</p>
+<p>R is free, but it can sometimes be a pain to install and configure. To make life easier, you can (and should!) use the free <a href="http://rstudio.cloud/">RStudio.cloud</a> service, which lets you run a full instance of RStudio in your web browser. This means you won’t have to install anything on your computer to get started with R! We will have a shared class workspace in RStudio.cloud that will let you quickly copy templates for labs and problem sets.</p>
+<p>RStudio.cloud is convenient, but it can be slow and it is not designed to be able to handle larger datasets or more complicated analysis. Over the course of the semester, you’ll probably want to get around to installing R, RStudio, and other R packages on your computer and wean yourself off of RStudio.cloud. This isn’t necessary, but it’s helpful.</p>
+<p>You can find instructions for installing R, RStudio, and all the tidyverse packages here.</p>
+<h3 id="online-help-and-gitter">Online help and Gitter</h3>
+<p>Data science and statistical programming can be difficult. Computers are stupid and little errors in your code can cause hours of headache (even if you’ve been doing this stuff for years!).</p>
+<p>Fortunately there are tons of online resources to help you with this. Two of the most important are <a href="https://stackoverflow.com/">StackOverflow</a> (a Q&amp;A site with hundreds of thousands of answers to all sorts of programming questions) and <a href="https://community.rstudio.com/">RStudio Community</a> (a forum specifically designed for people using RStudio and the tidyverse (i.e. you)).</p>
+<p>Additionally, we have a class chatroom at <a href="https://gitter.im/byustatsf18/">Gitter</a> where anyone in the class can ask questions and anyone can answer. Ask questions about the readings, Learning Checks, lectures, or problem sets <a href="https://gitter.im/byustatsf18/">in the class Gitter</a>. I will monitor the chatroom regularly, and you should also all do so as well. You’ll likely have similar questions as your peers, and you’ll likely be able to answer other peoples’ questions too.</p>
 <h2 id="course-policies">Course policies</h2>
-<p><strong>Be nice. Be honest. Don’t cheat.</strong></p>
+<p><span class="newthought">Be nice. Be honest. Don’t cheat.</span></p>
 <p>We will also follow the <a href="https://marriottschool.byu.edu/policies/classroom/">full list of Marriott School and BYU classroom policies</a>.</p>
 <h3 id="counseling-and-psychological-services-caps">Counseling and Psychological Services (CAPS)</h3>
-<p>Life at BYU can be complicated and challenging. You might feel overwhelmed, experience anxiety or depression, or struggle with relationships or family responsibilities. <a href="https://caps.byu.edu/">Counseling and Psychological Services (CAPS)</a> provides free, <em>confidential</em> support for students who are struggling with mental health and emotional challenges. The CAPS office is staffed by professional psychologists who are attuned to the needs of all types of college students. Please do not hesitate to contact CAPS for assistance—getting help is a smart and courageous thing to do.</p>
+<p>Life at BYU can be complicated and challenging. You might feel overwhelmed, experience anxiety or depression, or struggle with relationships or family responsibilities. <a href="https://caps.byu.edu/">Counseling and Psychological Services (CAPS)</a> provides free, <em>confidential</em> support for students who are struggling with mental health and emotional challenges. The CAPS office is staffed by professional psychologists who are attuned to the needs of all types of college and professional students. Please do not hesitate to contact CAPS for assistance—getting help is a smart and courageous thing to do.</p>
 <h3 id="basic-needs-security">Basic needs security</h3>
 <p>If you have difficulty affording groceries or accessing sufficient food to eat every day, or if you lack a safe and stable place to live, and you believe this may affect your performance in this course, please contact the <a href="https://deanofstudents.byu.edu/">Dean of Students</a> for support. Please also consider speaking with your local LDS bishop regarding Church welfare assistance <em>regardless of whether or not you are LDS</em>. Additionally, please talk to me if you are comfortable in doing so. This will enable me to provide any resources that I might possess.</p>
 <h3 id="class-conduct-and-expectations">Class conduct and expectations</h3>
-<p>On the second day of class, we came up iwth rules, expectations, and policies for things like technology in the classroom, attendance, participation, late work, etc. Here’s what we decided:</p>
-<ul>
-<li>Late work will result in a loss of 10% of the total points each day it’s late, with a maximum penalty of 50%.</li>
-<li>If you need extra accommodations becase of catastrophe or other extenuating circumstances, talk to me.</li>
-<li>Participate in class. Just do it.</li>
-<li>Come to class whenever possible; make up missed work and get help from your classmates, the TAs, or me if you have to miss a session.</li>
-<li>Use technology responsibly. Don’t distract others.</li>
-</ul>
+<p>On the first day of class, we will come up with rules, expectations, and policies for things like technology in the classroom, attendance, participation, late work, etc. I will put what we decide here once we decide it.</p>
+<h3 id="laptops">Laptops</h3>
+<p>This is a computer-heavy course and each class session will require extensive laptop use. Occasionally I may ask that laptops be closed for some in-class activities, you will be expected to use your computer. Please note that this is different from the laptop policy in other Romney Institute classes. Use your computer responsibly in class.</p>
+<h3 id="teams">Teams</h3>
+<p>This class is team-based. In-class activities will be done largely in teams. Your problem sets will be turned in individually, but you can (and should!) work on them together in your assigned teams. Your final project will be completed and turned in as a team.</p>
+<p>Please follow all the best practices you learned in Organizational Behavior to ensure that your team works well and that there is no free riding.</p>
 <h2 id="assignments-and-grades">Assignments and grades</h2>
-<p>You can find descriptions and instructions of all assignments on the <a href="/assignments/">assignments page</a>.</p>
-<h3 id="assignments">Assignments</h3>
+<p><span class="newthought">You can find descriptions</span> for all the assignments on the <a href="/assignments/">assignments page</a>.</p>
 <table style="width:64%;">
 <colgroup>
 <col width="37%" />
@@ -104,43 +179,49 @@ On Android, you can use… something, probably.<br />
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Preparation (≈ 8.5 × 28)</td>
-<td align="center">230</td>
-<td align="center">19.5%</td>
+<td align="left">Preparation (≈ 8.5 × 14)</td>
+<td align="center">150</td>
+<td align="center">14.6%</td>
 </tr>
 <tr class="even">
-<td align="left">Problem sets (8 × 40)</td>
-<td align="center">320</td>
-<td align="center">27.1%</td>
+<td align="left">Problem sets (7 × 40)</td>
+<td align="center">280</td>
+<td align="center">27.2%</td>
 </tr>
 <tr class="odd">
-<td align="left">Economic briefing</td>
-<td align="center">30</td>
-<td align="center">2.5%</td>
+<td align="left">Code-through</td>
+<td align="center">50</td>
+<td align="center">4.9%</td>
 </tr>
 <tr class="even">
-<td align="left">Midterm 1</td>
-<td align="center">150</td>
-<td align="center">12.7%</td>
+<td align="left">Exam 1</td>
+<td align="center">100</td>
+<td align="center">9.7%</td>
 </tr>
 <tr class="odd">
-<td align="left">Midterm 2</td>
-<td align="center">150</td>
-<td align="center">12.7%</td>
+<td align="left">Exam 2</td>
+<td align="center">100</td>
+<td align="center">9.7%</td>
 </tr>
 <tr class="even">
+<td align="left">Exam 3</td>
+<td align="center">100</td>
+<td align="center">9.7%</td>
+</tr>
+<tr class="odd">
 <td align="left">Final project</td>
-<td align="center">300</td>
-<td align="center">25.4%</td>
+<td align="center">250</td>
+<td align="center">24.3%</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Total</td>
-<td align="center">1180</td>
+<td align="center">1030</td>
 <td align="center">—</td>
 </tr>
 </tbody>
 </table>
-<h3 id="grades">Grades</h3>
+<p><br />
+</p>
 <table style="width:49%;">
 <colgroup>
 <col width="11%" />
@@ -195,8 +276,8 @@ On Android, you can use… something, probably.<br />
 </tr>
 </tbody>
 </table>
-<h2 id="dinosaurs">Dinosaurs</h2>
-<p><span><label for="sn-4" class="margin-toggle">&#8853;</label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="marginnote">
-<img src="https://media.giphy.com/media/9b2bBsgIOPrzi/giphy.gif" alt="Cat vs. dinosaur" /><br />
+<h2 id="red-pandas">Red pandas</h2>
+<p><span><label for="sn-5" class="margin-toggle">&#8853;</label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="marginnote">
+<img src="https://media.giphy.com/media/r7Nbr97FsXxXG/giphy.gif" alt="Hungry red panda" /><br />
 <br />
-</span></span> Once you have read this entire syllabus and <a href="/assignments/">the assignments page</a>, please <a href="mailto:andrew_heiss@byu.edu">click here</a> and e-mail me a picture of a dinosaur. For real. Brownie points if you send a picture of a cat or dog dressed as a dinosaur. Triple chocolate brownie points if it’s animated.</p>
+</span></span> <span class="newthought">Once you have read</span> this entire syllabus and <a href="/assignments/">the assignments page</a>, please <a href="mailto:andrew_heiss@byu.edu">click here</a> and e-mail me a picture of a red panda. For real. Brownie points if it’s animated.</p>

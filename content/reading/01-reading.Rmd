@@ -1,0 +1,12 @@
+---
+title: "Data science, statistics, and public management"
+date: "2018-09-06"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
+---
+
+# Required
+
+- <i class="fab fa-youtube"></i> DJ Patil, ["What Makes a Radical and Revolutionary Technology?](https://www.youtube.com/watch?v=UOoMzaWOQJA) ^[DJ Patil is the former Chief Data Scientist of the United States under President Obama. He gave this forum address at BYU on February 13, 2018.]
+- <i class="fas fa-book"></i> 1.1–1.5 in *The Economy* [@IsmayKim:2018]
