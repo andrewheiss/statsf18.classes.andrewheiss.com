@@ -54,7 +54,7 @@ params:
   course:
     number: MPA 630
     semester: Fall 2018
-    days: "Th"
+    days: "Thursdays"
     time: "7:35–9:45 PM"
     location: "417 SLC"
     twitter: andrewheiss
