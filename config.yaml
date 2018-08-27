@@ -30,9 +30,12 @@ menu:
     - name: RStudio.cloud
       url: "https://rstudio.cloud"
       weight: 5
+    - name: DataCamp
+      url: "https://www.datacamp.com/enterprise/byu-mpa-630-fall-2018/"
+      weight: 6
     - name: Class chat
       url: "https://gitter.im/byustatsf18/"
-      weight: 6
+      weight: 7
 # Disable taxonomies
 taxonomies:
   tag: ""
