@@ -1,9 +1,11 @@
 lessons:
+  - title: '<span class="fake-header-table">Working with data</span>'
+    header: True
+
   - title: "Data science, statistics, and public administration"
     date: "September 6 (I & II)"
     reading: "01-reading"
 
-  - title: '<span class="fake-header-table">Working with data</span>'
   - title: "Data visualization"
     date: "September 13 (I & II)"
     reading: "02-reading"
@@ -32,6 +34,8 @@ lessons:
     assignment: "02-problem-set"
   
   - title: '<span class="fake-header-table">Modeling</span>'
+    header: True
+
   - title: "Correlation and basic regression"
     date: "October 11 (I & II)"
     reading: "06-reading"
@@ -59,6 +63,8 @@ lessons:
     date: "November 1 (I)"
 
   - title: '<span class="fake-header-table">Inference</span>'
+    header: True
+
   - title: "Sampling"
     date: "November 1 (II)"
     reading: "09-reading"
@@ -87,11 +93,13 @@ lessons:
     date: "December 6 (I)"
   
   - title: '<span class="fake-header-table">Communication & beyond</span>'
+    header: True
+
   - title: "Science communication"
     date: "December 6 (II)"
     reading: "13-reading"
 
-  - title: "Code-through due (*this is a Friday*)"
+  - title: "**Code-through due** (*this is a Friday*)"
     date: "December 7"
     assignment: "code-through"
   
@@ -104,6 +112,8 @@ lessons:
     assignment: "07-problem-set"
 
   - title: '<span class="fake-header-table">Final</span>'
+    header: True
+
   - title: "**Final project due** (submit online by 11:59 PM)"
     date: "December 19"
     assignment: "final-project"

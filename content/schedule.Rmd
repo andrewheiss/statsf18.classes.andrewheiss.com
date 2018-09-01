@@ -5,12 +5,14 @@ slug: schedule
 
 Here's your roadmap for the semester!
 
-- <i class="fas fa-book-reader"></i> Readings should be completed ***before*** each class session. 
+- <i class="fas fa-book-reader"></i> Readings should be completed ***before*** each class session
 - <i class="fas fa-laptop-code"></i> Assignments are due by 11:59 PM on the day they are due
 - <i class="fas fa-university"></i></a> Class materials (slides, in-class activities, etc.) will be added on the day of class
 
 Occasionally problem sets are due on the day of an exam.[^sorry] Since problem sets are technically not due until midnight, and exams are done in class, this means those problem sets will be due after the exam. However, the problem sets are designed to help you with the exams, so it's probably wise to do them *before* midnight on those days.
 
 [^sorry]: I'm so sorry! :(
+
+---
 
 `r blogdown::shortcode("schedule")`
