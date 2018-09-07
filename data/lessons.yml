@@ -5,6 +5,7 @@ lessons:
   - title: "Data science, statistics, and public administration"
     date: "September 6 (I & II)"
     reading: "01-reading"
+    class: "01-class"
 
   - title: "Data visualization"
     date: "September 13 (I & II)"

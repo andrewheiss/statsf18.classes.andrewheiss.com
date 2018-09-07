@@ -1,0 +1,92 @@
+---
+title: "Data science, statistics, and public administration"
+date: "2018-09-06"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# Slides
+
+[Download the slides from today's lecture](/slides/MPA-630_2018-09-06.pdf).
+
+<figure>
+[![First slide](/images/slides/slides_2018-09-06.png)](/slides/MPA-630_2018-09-06.pdf)
+</figure>
+
+
+# R code
+
+The introductory R script [is here](/files/super-quick-intro.R).
+
+The R Markdown file we played with [is here](/files/airport-birds.Rmd).
+
+
+# Clearest and muddiest things
+
+Go to [this form](https://goo.gl/forms/PlPwZGhMOdU9mKfC3) and answer these three questions:
+
+1. What was the muddiest thing from class today? What are you still wondering about?
+2. What was the clearest thing from class today? 
+3. What was the most exciting thing you learned?
+
+I'll compile the questions and send out answers after class.
+
+
+```{r slide-stuff, eval=FALSE, include=FALSE}
+library(ggplot2)
+library(dplyr)
+
+source(here::here("lib", "graphics.R"))
+
+guesses <- data_frame(guess = c(35, 35.476, 36.6, 35, 34, 36, 32, 38, 36, 
+                                34, 35, 38, 31, 33, 36, 33, 30, 32, 34, 34, 
+                                0, 57, 33, 31, 39, 35, 34, 40, 33, 33, 34, 
+                                28, 31, 34, 37, 36, 35))
+
+avg_guess <- mean(guesses$guess)
+days_old <- 12405
+years_old <- days_old / 365.25
+days_off <- (avg_guess - years_old) * 365.25
+
+ggplot(guesses, aes(x = guess)) + 
+  geom_histogram(binwidth = 1, fill = ds_green) +
+  geom_vline(xintercept = avg_guess,
+             color = ds_red, size = 1) +
+  annotate(geom = "label", x = avg_guess, y = 0.5,
+           label = round(avg_guess, 4), size = 4) +
+  labs(x = "Guessed age", y = "Number of guesses") +
+  theme_ds(14)
+
+
+excitement <- data_frame(excitement = c(7, 8, 2, 4, 8, 3, 7, 4, 4, 8, 8, 2, 
+                                        10, 4, 7, 6, 2, 6, 2, 4, 5, 8, 4, 4, 
+                                        5, 3, 5, 4, 10, 7, 5, 8, 3, 5, 6, 5, 9))
+
+ggplot(excitement, aes(x = excitement)) + 
+  geom_histogram(binwidth = 1, fill = ds_orange) +
+  scale_x_continuous(breaks = 1:10) +
+  expand_limits(x = c(1, 10)) +
+  labs(x = "Excitement", y = "Count") +
+  theme_ds(18) +
+  theme(panel.grid.minor = element_blank())
+
+
+comfort <- data_frame(comfort = c(6, 8, 1, 4, 5, 2, 1, 1, 4, 6, 3, 4, 3, 2, 
+                                  1, 3, 2, 6, 1, 2, 2, 2, 3, 2, 2, 3, 2, 3, 
+                                  9, 3, 1, 5, 1, 2, 2, 3, 1))
+
+ggplot(comfort, aes(x = comfort)) + 
+  geom_histogram(binwidth = 1, fill = ds_red) +
+  scale_x_continuous(breaks = 1:10) +
+  expand_limits(x = c(1, 10)) +
+  labs(x = "Comfort with computer programming", y = "Count") +
+  theme_ds(18) +
+  theme(panel.grid.minor = element_blank())
+```
