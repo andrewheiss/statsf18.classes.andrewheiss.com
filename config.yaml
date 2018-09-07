@@ -73,7 +73,7 @@ params:
   primaryColor: "#D46600"
   secondaryColor: "#F6E03F"
   credits: >-
-    Hex icon by Andrew Heiss. Color scheme adapted from [October Roads](http://www.colourlovers.com/palette/582235/October_Roads).<br>Course content adapted in part from [MATH 116 (Albert Kim)](https://rudeboybert.github.io/MATH116/), [STA 199 (Mine Çetinkaya-Rundel)](https://www2.stat.duke.edu/courses/Spring18/Sta199/), [SOC 301 (Chester Ismay)](https://ismayc.github.io/soc301_s2017/), and [CONJ 620 (Alison Presmanes Hill)](https://apreshill.github.io/ohsu-basic-stats/).
+    Hex icon by Andrew Heiss. Color scheme adapted from [October Roads](http://www.colourlovers.com/palette/582235/October_Roads).<br>Course content adapted in part from [MATH 116 (Albert Kim)](https://rudeboybert.github.io/MATH116/), [STA 199 (Mine Çetinkaya-Rundel)](https://www2.stat.duke.edu/courses/Spring18/Sta199/), [SOC 301 (Chester Ismay)](https://ismayc.github.io/soc301_s2017/), and [CONJ 620 (Alison Presmanes Hill)](https://ohsu-conj620.netlify.com/).
   logo:
     url: /images/stats_hires.png
     alt: Data Science for Public Management
