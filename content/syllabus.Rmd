@@ -151,7 +151,7 @@ Please follow all the best practices you learned in Organizational Behavior to e
 ```{r assignments-grades, include=FALSE}
 assignments <- tribble(
   ~Points, ~Assignment,
-  150     , "Preparation (≈ 8.5 × 14)",
+  150     , "Preparation (≈ 10.5 × 14)",
   7 * 40  , "Problem sets (7 × 40)",
   50      , "Code-through",
   100     , "Exam 1",
