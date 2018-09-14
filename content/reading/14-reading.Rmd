@@ -9,4 +9,5 @@ csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
 # Required
 
 - <i class="fas fa-book"></i> [12.1–12.2 in *ModernDive*](https://moderndive.com/12-thinking-with-data.html) [@IsmayKim:2018]
-- Other readings TBD
+- DJ Patil, ["A Code of Ethics for Data Science"](https://medium.com/@dpatil/a-code-of-ethics-for-data-science-cda27d1fac1)
+- Mike Loukides, Hilary Mason, and DJ Patil, [*Ethics and Data Science*](https://www.amazon.com/dp/B07GTC8ZN7)^[This concise booklet is the result of DJ Patil's call for ethics in the previous post.]
