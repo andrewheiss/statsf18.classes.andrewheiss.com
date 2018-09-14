@@ -1,0 +1,205 @@
+---
+title: "Bird collisions at the Salt Lake Airpot"
+author: "Andrew Heiss"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+Let's see if we can find any patterns in the number of bird collisions at the Salt Lake City airport. The Federal Aviation Administration (FAA) keeps track of every bird-airplane collision in its [Wildlife Strike Database](https://wildlife.faa.gov/) and makes its data available publicly available for free. Utah offers a subset of this data for Salt Lake City specifically in the [Utah Open Data Catalog](https://opendata.utah.gov/Public-Safety/Birdstrikes-At-Salt-Lake-City-Intl-Airport-2000-20/ez64-g6kd/about).
+
+We'll use some basic functions from a few **tidyverse** packages (specifically **dplyr**, **ggplot2**, and **lubridate**).
+
+
+# Look at the raw data
+
+First we load the necessary libraries (this makes it so we can use functions like `mutate()` and `ggplot()`).
+
+```{r load-libraries}
+library(tidyverse)
+library(lubridate)
+library(scales)
+```
+
+Next we load the data. I downloaded this as a CSV previously from the [Open Data Catalog](https://opendata.utah.gov/Public-Safety/Birdstrikes-At-Salt-Lake-City-Intl-Airport-2000-20/ez64-g6kd/about).
+
+We'll then clean it up a little by adding some columns to indicate the year and month of the incident and renaming some of the longer variables.
+
+```{r load-data}
+# Load raw data
+bird_strikes_raw <- read_csv("data/Birdstrikes_At_Salt_Lake_City_Intl_Airport_2000-2014.csv")
+
+# Clean up the raw data a little
+bird_strikes <- bird_strikes_raw %>% 
+  mutate(Date = mdy_hms(Date)) %>% 
+  mutate(Year = year(Date),
+         Month = month(Date, label = TRUE, abbr = TRUE)) %>% 
+  rename(Phase = `Phase of Flight`,
+         Cloudy = `Sky Condition`,
+         Time = `Time of Day`,
+         Cost = `Cost of Repairs`)
+```
+
+What does this dataset look like?
+
+```{r view-data}
+bird_strikes
+```
+
+Alternativey, click on `bird_strikes` in the "Environmnent" panel on the right to open the dataset in a new tab. Or, run `View()`:
+
+```{r view-data-tab, eval=FALSE}
+View(bird_strikes)
+```
+
+
+# Analyze and visualize the data
+
+## Bird strike details
+
+Let's look at some interesting patterns in the data. Which bird species gets hit the most often? Species information is included in the `Species` variable.
+
+Things to try out:
+
+- What happens if you remove `sort = TRUE`?
+
+```{r species-count}
+bird_strikes %>% 
+  count(Species, sort = TRUE)
+```
+
+Find the count of bird strikes in each phase of flight. The `Phase` variable contains this information and indicates if a plane is taking off, landing, or doing something else. Make sure the list is sorted.
+
+```{r phase-count}
+bird_strikes %>% 
+  count()
+```
+
+Find the count of bird strikes under different sky conditions. The `Cloudy` variable contains this information and indicates how cloudy it was 
+
+```{r cloudy-count}
+
+```
+
+Find the count of bird strikes during different times of the day. The `Time` varialbe contains this information and indicates if it was during the day, at night, or in between.
+
+```{r time-count}
+
+```
+
+## Bird strikes over time
+
+Let's see if there are any patterns over time. Has the number of bird strikes increased since 2000?
+
+Things to try:
+
+- Try including `sort = TRUE` in `count()`. Why would you want to sort this list? Why would you not want to sort this list?
+
+```{r count-year}
+strikes_per_year <- bird_strikes %>% 
+  count(Year)
+
+ggplot(data = strikes_per_year, 
+       mapping = aes(x = Year, y = n)) +
+  geom_col()
+```
+
+Are there any months that are more or less deadly for birds (use the `Month` variable)? Why do you think this pattern exists?
+
+```{r count-month}
+
+```
+
+
+```{r summarize-time-month}
+birds_time_month <- bird_strikes %>% 
+  filter(Time %in% c("Day", "Night")) %>% 
+  count(Time, Month)
+birds_time_month
+```
+
+Let's plot this so we can see patterns easier! What patterns do you see here? 
+
+Change `position = "stack"` to `position = "dodge"`. What's different? Which plot is easier to interpret? Wny?
+
+```{r plot-time-month1}
+ggplot(data = birds_time_month, 
+       mapping = aes(x = Month, y = n, fill = Time)) + 
+  geom_col(position = "stack") +
+  labs(x = "Month", 
+       y = "Bird strikes",
+       title = "Bird strikes per month",
+       subtitle = "Autumn nights are bad for birds",
+       caption = "Source: FAA Wildlife Strike Database")
+```
+
+Instead of dodging or stacking the bars, here we'll put each time period in its own subplot, or facet. 
+
+Is this more interpretable or less interpretable than the dodged or stacked versions from above? Change `ncol = 1` to `ncol = 2`. What's different? Which is a better plot?
+
+```{r plot-time-month2}
+ggplot(data = birds_time_month, 
+       mapping = aes(x = Month, y = n, fill = Time)) + 
+  geom_col() + 
+  labs(x = "Month", 
+       y = "Bird strikes",
+       title = "Bird strikes per month",
+       subtitle = "Autumn nights are bad for birds",
+       caption = "Source: FAA Wildlife Strike Database") +
+  facet_wrap(~ Time, ncol = 1)
+```
+
+## Costs of bird strikes
+
+Let's now see how expensive all these bird strikes are. First, let's summarize the total cost and average cost
+
+Things to try:
+
+- What happens if you remove `na.rm = TRUE`? Why does that happen?
+
+```{r summarize-damages}
+strike_damages <- bird_strikes %>% 
+  summarize(total_damages = sum(Cost, na.rm = TRUE),
+            average_damages = mean(Cost, na.rm = TRUE))
+```
+
+We can also calculate these summary statistics by groups of other variables. For example, we can look at the average and total damages by month.
+
+```{r summarize-damages-month}
+strike_damages_month <- bird_strikes %>% 
+  group_by(Month) %>% 
+  summarize(total_damages = sum(Cost, na.rm = TRUE),
+            average_damages = mean(Cost, na.rm = TRUE))
+
+ggplot(data = strike_damages_month, 
+       mapping = aes(x = Month, y = total_damages)) + 
+  geom_col() + 
+  scale_y_continuous(labels = dollar) +
+  labs(x = "Month",
+       y = "Total damages",
+       title = "Really expensive collisions happen in the fall?",
+       subtitle = "Don't fly in August or October?",
+       source = "Source: FAA Wildlife Strike Database")
+```
+
+What can we learn from this plot? What's going on in August and October? View the raw data in a new tab and see if you can find the super expensive incidents driving up these total amounts.
+
+Summarize the total damages by some other variable, like cloud cover (`Cloudy`), time of day (`Time`), phase of flight (`Phase`), or something else in the dataset. Are there times, weather patterns, or phases of the flight that cause more or less expensive damage?
+
+```{r summarize-damages-something-else}
+# strike_damages_XXXX <- bird_strikes %>% 
+#   group_by(SOMETHING_HERE) %>% 
+#   summarize(total_damages = sum(Cost, na.rm = TRUE))
+# 
+# ggplot(data = strike_damages_XXXX, 
+#        mapping = aes(x = SOMETHING_HERE, y = total_damages)) + 
+#   geom_col() +
+#   scale_y_continuous(labels = dollar) +
+#   labs(x = "Month",
+#        y = "Total damages",
+#        title = "Something interesting",
+#        subtitle = "Something else interesting",
+#        source = "Source: FAA Wildlife Strike Database")
+```

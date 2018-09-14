@@ -1,0 +1,126 @@
+---
+title: "Data visualization"
+date: "2018-09-13"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# Slides
+
+[Download the slides from today's lecture](/slides/MPA-630_2018-09-13.pdf).
+
+<figure>
+[![First slide](/images/slides/slides_2018-09-13.png)](/slides/MPA-630_2018-09-13.pdf)
+</figure>
+
+
+# In-class examples
+
+Here's the code and data we'll be working with in class. These are also accessible in RStudio.cloud.
+
+- Movies and the 5 named graphs: [<i class="fas fa-file-archive"></i> `movies-5ng.zip`](/files/movies-5ng.zip)
+- Bird collisions at the SLC airport: [<i class="fas fa-file-archive"></i> `airport-birds.zip`](/files/airport-birds.zip)
+
+
+# Guessing the identity of the Trump resistance op-ed writer with R
+
+- [David Robinson's approach](http://varianceexplained.org/r/op-ed-text-analysis/)
+- Mike Kearney's approach: [his code](https://github.com/mkearney/resist_oped) and [his short article](https://www.rjionline.org/stories/we-put-data-science-to-the-test-to-try-to-uncover-the-mystery-author-of-the)
+
+
+# Visualizing Hurricane Florence's storm surge
+
+- [Video of simulated storm surge](https://twitter.com/weatherchannel/status/1040305773664980993)
+
+
+# Clearest and muddiest things
+
+Go to [this form](https://goo.gl/forms/PlPwZGhMOdU9mKfC3) and answer these three questions:
+
+1. What was the muddiest thing from class today? What are you still wondering about?
+2. What was the clearest thing from class today? 
+3. What was the most exciting thing you learned?
+
+I'll compile the questions and send out answers after class.
+
+
+```{r slide-stuff, eval=FALSE, include=FALSE}
+library(tidyverse)
+library(gapminder)
+
+gapminder_2007 <- gapminder %>% 
+  filter(year == 2007)
+
+ggplot(data = gapminder_2007,
+       mapping = aes(x = gdpPercap, 
+                     y = lifeExp, 
+                     color = continent, 
+                     size = pop)) +
+  geom_point() +
+  scale_x_log10()
+
+troops <- read.table("https://raw.githubusercontent.com/andrewheiss/fancy-minard/master/input/minard/troops.txt", header = TRUE, stringsAsFactors = FALSE) %>% 
+  rename(longitude = long, latitude = lat)
+
+ggplot(data = troops, 
+       mapping = aes(x = longitude, group = group,
+                     y = latitude,
+                     color = direction,
+                     size = survivors)) +
+  geom_path(lineend = "round") +
+  scale_size(range = c(0.5, 15))
+
+
+
+library(tidyverse)  # Load ggplot2, dplyr, and other helpful packages
+library(ggplot2movies)  # Load the package that has the movie data in it
+
+star_movies <- movies %>%
+  filter(str_detect(title, "Star Wars") | str_detect(title, "Star Trek"),
+         length > 100) %>%  # Get rid of some short Star Trek movies 
+  select(title, year, length, budget, rating) %>% 
+  mutate(budget = budget / 1000000,  # Make the budget more manageable
+         series = ifelse(str_detect(title, "Wars"), "Star Wars", "Star Trek"))
+
+# Scatterplots
+ggplot(data = star_movies, 
+       mapping = aes(x = budget, y = rating)) +
+  geom_point()
+
+# Linegraphs
+ggplot(data = star_movies, 
+       mapping = aes(x = year, y = rating, color = series)) +
+  geom_point() +
+  geom_line()
+
+# Histograms
+ggplot(data = star_movies, 
+       mapping = aes(x = budget)) +
+  geom_histogram(binwidth = 10)
+
+# Boxplots
+ggplot(data = star_movies, 
+       mapping = aes(x = series, y = budget)) +
+  geom_boxplot()
+
+ggplot(data = star_movies, 
+       mapping = aes(x = series, y = budget)) +
+  geom_violin(draw_quantiles = 0.5) +
+  geom_point()
+
+# Bar charts
+star_movies_count <- star_movies %>% 
+  count(series)
+
+ggplot(data = star_movies_count, 
+       mapping = aes(x = series, y = n)) +
+  geom_col()
+
+```

@@ -10,6 +10,7 @@ lessons:
   - title: "Data visualization"
     date: "September 13 (I & II)"
     reading: "02-reading"
+    class: "02-class"
 
   - title: "Tidy data"
     date: "September 20 (I & II)"

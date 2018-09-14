@@ -6,10 +6,12 @@ googleAnalytics: ""
 ignoreFiles:
   - \.Rmd$
   - \.Rmarkdown$
+  - \.Rhistory$
   - \.yaml$
   - _files$
   - _cache$
   - \.csl$
+  - \.Rproj.user/*
 permalinks:
   post: "/:year/:month/:day/:slug/"
 buildFuture: true
