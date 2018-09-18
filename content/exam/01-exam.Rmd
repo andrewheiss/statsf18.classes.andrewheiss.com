@@ -1,8 +1,129 @@
 ---
-title: "Example questions for Exam 1"
+title: "Exam 1 example"
 date: "2018-09-27"
 editor_options: 
   chunk_output_type: console
 ---
 
-An example of the questions you'll have in Exam 1 will go here two weeks before the exam.
+# Short answer
+
+1. According to the idea of the "Grammar of Graphics," what is a statistical graphic?
+
+\ 
+
+\ 
+
+2. What is the main difference between a barplot and a histogram?
+
+\ 
+
+\ 
+
+3. What is overplotting? Name two ways to deal with it.
+
+\ 
+
+\ 
+
+# Graphics
+
+One of your employees shows you this graph about the number of books in Utah's 71 libraries.
+
+\ 
+
+<figure class="fullwidth">
+
+```{r example-ggplot, warning=FALSE, message=FALSE, echo=FALSE, fig.width=8, fig.height=5}
+library(tidyverse)
+library(here)
+
+counties <- tribble(
+  ~county, ~region,
+  "BEAVER", "Southern",
+  "BOX ELDER", "Northern",
+  "CACHE", "Northern",
+  "CARBON", "Central",
+  "DAGGETT", "Northern",
+  "DAVIS", "Wasatch Front",
+  "DUCHESNE", "Northern",
+  "EMERY", "Central",
+  "GARFIELD", "Southern",
+  "GRAND", "Central",
+  "IRON", "Southern",
+  "JUAB", "Central",
+  "KANE", "Southern",
+  "MILLARD", "Central",
+  "MORGAN", "Northern",
+  "PIUTE", "Southern",
+  "RICH", "Northern",
+  "SALT LAKE", "Wasatch Front",
+  "SAN JUAN", "Southern",
+  "SANPETE", "Central",
+  "SEVIER", "Central",
+  "SUMMIT", "Northern",
+  "TOOELE", "Northern",
+  "UINTAH", "Northern",
+  "UTAH", "Wasatch Front",
+  "WASATCH", "Central",
+  "WASHINGTON", "Southern",
+  "WAYNE", "Southern",
+  "WEBER", "Northern"
+)
+
+# Data from https://opendata.utah.gov/Heritage-and-Arts/Utah-Libraries-Based-on-Size-of-Total-Collections/p5hm-bw2w
+
+libraries <- read_csv(here("static", "data", 
+                           "Utah_Libraries_Based_on_Size_of_Total_Collections.csv")) %>% 
+  filter(!is.na(`Library Code`)) %>% 
+  rename(employees = `Total FTE of Paid Employees`,
+         pop = `Population of Legal Service Area`,
+         books = `Print Materials`,
+         county = `County of the Entity`) %>% 
+  left_join(counties, by = "county")
+
+ggplot(libraries, aes(x = employees, y = books, size = pop, color = region)) +
+  geom_point() + 
+  scale_color_viridis_d(option = "plasma", end = 0.9, name = "Region") +
+  scale_y_continuous(labels = scales::comma) +
+  scale_size_continuous(range = c(0.5, 10), labels = scales::comma, name = "Population") +
+  labs(x = "Full time employees",
+       y = "Count of printed materials",
+       title = "Printed collections of Utah libraries",
+       caption = "Source: Utah Open Data Catalog") +
+  theme_grey(13)
+```
+
+</figure>
+
+
+1. Identify:
+
+- All of the variables displayed in this graphic
+- How they are represented in the graphic (hint: think of which `aes` and `geom_*` applies to each variable)
+
+\ 
+
+\ 
+
+
+2. What is the main comparison being made in this plot?
+
+\ 
+
+\ 
+
+3. How could this plot be improved?
+
+\ 
+
+\ 
+
+# Tidy data
+
+You just received this spreadsheet from one of your interns and you want to manipulate and graph it with R. This data is **not** in a tidy format. Rewrite this data frame so that it is tidy (by hand; no code is involved).
+
+\ 
+
+```{r untidy-data, echo=FALSE, out.width="100%"}
+knitr::include_graphics("/images/midterms/untidy.png")
+```
