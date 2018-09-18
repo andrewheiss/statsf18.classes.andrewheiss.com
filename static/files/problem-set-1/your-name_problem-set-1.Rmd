@@ -1,0 +1,123 @@
+---
+title: "Problem set 1"
+author: "YOUR NAME HERE"
+date: "DATE HERE"
+---
+
+# Details
+
+- Who did you collaborate with: TYPE NAMES HERE
+- Approximately how much time did you spend on this problem set: ANSWER HERE
+- What, if anything, gave you the most trouble: ANSWER HERE
+
+
+```{r load-libraries, warning=FALSE, message=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+```
+
+# Task 1: Baby Names
+
+The `babynames` package includes data from the Social Security Administration with counts of baby names with at least 5 annual uses between 1880-2015 (with 1.8+ million rows!).
+
+Because there are so many names, we'll look at "Riley."
+
+```{r load-and-filter-babynames}
+library(babynames)  # Load the package that has the babynames data in it
+data(babynames)  # Open the babynames data into RStudio
+
+babynames_riley_only <- babynames %>%
+  filter(name == "Riley")
+```
+
+Make a plot that shows how often the name "Riley" was used as a male and as a female name over time. (Hint: map the `sex` variable to the color aesthetic; also, the `n` variable shows the count per year)
+
+```{r riley-mf-time}
+
+```
+
+Given this trend, what can you say about the name "Riley"? Don't just describe what's happening in the picture---make a broader statement. For instance, what would you tell a parent who is interested in naming their child "Riley"?
+
+TYPE YOUR ANSWER HERE.
+
+Make similar graphs for "Ashley" and "Casey." Hint: You'll need to create a new filtered version of the `babynames` dataset, just like you did with `babynames_riley_only`.
+
+```{r ashley-mf-time}
+
+```
+
+```{r casey-mf-time}
+
+```
+
+What can you say about the trends in these names? Again, don't just say what's happening in the graph. Tell some sort of story and speculate about the differences in the patterns between the names.
+
+TYPE YOUR ANSWER HERE.
+
+
+# Question 2: Plane Crashes
+
+Finally, let's look at some data about airplane crashes (from [Kaggle](https://www.kaggle.com/saurograndi/airplane-crashes-since-1908/)).
+
+This dataset lists all plane crashes between 1908 and 2009. Because this is real world data, it's a little bit messy, so we'll create a few extra variables and get rid of incomplete rows.
+
+```{r clean-plane-data, message=FALSE, warning=FALSE}
+library(lubridate)  # Loads functions like mdy(), year(), and month()
+
+crashes_raw <- read_csv("Data/Airplane_Crashes_and_Fatalities_Since_1908.csv")
+
+crashes <- crashes_raw %>% 
+  # Create new variables related to dates
+  mutate(Date = mdy(Date),
+         Year = year(Date),
+         Month = month(Date, label = TRUE)) %>% 
+  # Get rid of rows with missing data or where there were no fatalities
+  filter(!is.na(Fatalities),
+         !is.na(Aboard),
+         !is.na(Operator),
+         Fatalities > 0,) %>% 
+  # Make a new variable that indicates if the flight was operated by the military
+  mutate(Military = ifelse(str_detect(Operator, "Military"), "Military", "Not military")) %>% 
+  # Make a new variable that shows what percentage of people on the flight died
+  mutate(percent_passengers_died = Fatalities / Aboard)
+```
+
+Make a plot that shows the percentage of passengers that died in crashes over time, colored by whether or not it was a military flight. (Hint, use both `geom_point()` and `geom_smooth()` to see both the actual data points and the trendlines). 
+
+```{r percent-died}
+
+```
+
+What can you infer from this graph? Again, don't just explain what's in the graph—speculate or tell a story.
+
+TYPE YOUR ANSWER HERE.
+
+Next, let's summarize the data to see total counts of crashes every year. We'll create a new data frame:
+
+```{r summarize-crashes-year}
+crashes_by_year <- crashes %>% 
+  group_by(Year, Military) %>% 
+  summarize(number_of_crashes = n(),
+            number_died = sum(Fatalities),
+            avg_died = mean(Fatalities))
+```
+
+Make a bar chart (with `geom_col()`) showing the number of crashes each year. Add `facet_wrap(~ Military)` to the plot so that it separates military crashes from non-military crashes
+
+```{r plot-crashes-year}
+
+```
+
+What can you infer from this plot?
+
+TYPE YOUR ANSWER HERE.
+
+Finally, make a plot that shows the number of crashes per month, again separated by military or not military. Are there months that are more deadly than others? (Hint: you'll need to make a smaller data frame like `crashes_by_year`, but group by `Month` instead of `Year`)
+
+```{r summarize-plot-crashes-year}
+
+```
+
+
+# All done!
+
+Knit the completed R Markdown file as a Word document (use the "Knit" button at the top of the script editor window) and upload it to Learning Suite.
