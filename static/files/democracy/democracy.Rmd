@@ -1,0 +1,89 @@
+---
+title: "Untitled"
+author: "Andrew Heiss"
+date: "September 21, 2018"
+output:
+  html_document: default
+  word_document: default
+---
+
+# Research question
+
+What I care about…
+
+# Load data
+
+I want to analyze stuff. There's data about democracy online. Let's load it.
+
+```{r load-libraries-and-data, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+democracy <- read_csv("https://moderndive.com/data/dem_score.csv")
+```
+
+
+# Wrangle data
+
+I want to see which country changed the most
+
+```{r calculate-change}
+change_in_score <- democracy %>% 
+  mutate(change = `1992` - `1952`) %>% 
+  select(country, change) %>% 
+  mutate(change_absolute = abs(change)) %>% 
+  arrange(desc(change_absolute))
+
+change_in_score
+```
+
+I want it to be tidy
+
+```{r tidify-data}
+tidy_democracy <- democracy %>% 
+  gather(year, score, -country) %>% 
+  mutate(year = parse_number(year))
+tidy_democracy
+```
+
+
+# Do stuff with data
+
+## Myanmar
+
+I want to look at Myanmar
+
+```{r myanmar-graph}
+myanmar_only <- tidy_democracy %>% 
+  filter(country == "Myanmar")
+
+ggplot(data = myanmar_only, 
+       mapping = aes(x = year, y = score)) +
+  geom_line() +
+  geom_hline(yintercept = -5, color = "red") + 
+  geom_hline(yintercept = 5, color = "blue")
+```
+
+## Lithuania
+
+Lithuantiua's turn
+
+```{r lith-graph}
+lith_only <- tidy_democracy %>% 
+  filter(country == "Lithuania")
+
+ggplot(data = lith_only, 
+       mapping = aes(x = year, y = score)) +
+  geom_line() +
+  geom_hline(yintercept = -5, color = "red") + 
+  geom_hline(yintercept = 5, color = "blue")
+```
+
+
+All coutnries
+
+```{r graph-all-countries}
+ggplot(tidy_democracy, aes(x = year, y = score, group = country)) + 
+  geom_line(alpha = 0.1) +
+  geom_hline(yintercept = -5, color = "red") + 
+  geom_hline(yintercept = 5, color = "blue")
+```

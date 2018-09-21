@@ -15,6 +15,7 @@ lessons:
   - title: "Tidy data"
     date: "September 20 (I & II)"
     reading: "03-reading"
+    class: "03-class"
     
   - title: "**Problem set 1**"
     date: "September 27"
