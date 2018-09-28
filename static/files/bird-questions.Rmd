@@ -1,0 +1,35 @@
+---
+title: "Bird questions"
+author: "Your name"
+date: "Whatever today is"
+output: html_document
+---
+
+# Load data
+
+```{r load-libraries-data}
+library(tidyverse)  # Load all our favorite functions, like ggplot and dplyr
+library(lubridate)  # Load date-related functions
+
+# Load raw data
+bird_strikes_raw <- read_csv("data/Birdstrikes_At_Salt_Lake_City_Intl_Airport_2000-2014.csv")
+```
+
+# Wrangle data
+
+```{r clean-bird-data}
+# Clean up the raw data a little
+bird_strikes <- bird_strikes_raw %>% 
+  mutate(Date = mdy_hms(Date)) %>% 
+  mutate(Year = year(Date),
+         Month = month(Date, label = TRUE, abbr = TRUE)) %>% 
+  # Make these column names shorter
+  rename(Phase = `Phase of Flight`,
+         Cloudy = `Sky Condition`,
+         Time = `Time of Day`,
+         Cost = `Cost of Repairs`)
+```
+
+
+# Answer questions with data
+

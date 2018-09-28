@@ -27,6 +27,7 @@ lessons:
   - title: "Data wrangling with the Tidyverse I"
     date: "September 27 (II)"
     reading: "04-reading"
+    class: "04-class"
     
   - title: "Data wrangling with the Tidyverse II"
     date: "October 4 (I & II)"

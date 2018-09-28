@@ -1,0 +1,124 @@
+---
+title: "Data wrangling with the Tidyverse I"
+date: "2018-09-27"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# Slides
+
+Download the slides from today's lecture:
+
+- [<i class="fas fa-file-pdf"></i> PDF (best option)](/slides/MPA-630_2018-09-27.pdf)
+- [<i class="fas fa-file-powerpoint"></i> PowerPoint](/slides/MPA-630_2018-09-27.pptx)
+
+<figure>
+[![First slide](/images/slides/slides_2018-09-27.png)](/slides/MPA-630_2018-09-27.pdf)
+</figure>
+
+
+# Answer your own questions
+
+*(Well, my questions for now—but still.)*
+
+## Setting up your project
+
+*(Practice makes perfect!)*
+
+Do the following:
+
+1. Create a new RStudio project named "birds" and put it somewhere on your computer.
+
+2. Navigate to that new project folder on your computer with Windows Explorer or macOS Finder (i.e. however you look at files on your computer). Create a new folder in your project called "data".
+
+3. Download this CSV file: [<i class="fas fa-table"></i> `Birdstrikes_At_Salt_Lake_City_Intl_Airport_2000-2014.csv`](/data/Birdstrikes_At_Salt_Lake_City_Intl_Airport_2000-2014.csv)^[You'll probably need to right click on the link and select "Save link as…" or something similar—often browsers will load the CSV file like a web page, which isn't helpful.]
+
+4. Using Windows Explorer or macOS Finder, move the newly downloaded CSV file into the "data" folder you created.
+
+5. Download this R Markdown file: [<i class="fab fa-r-project"></i> `bird-questions.Rmd`](/files/bird-questions.Rmd)^[Again, you'll probably need to right click on the link and select "Save link as…"] and place it in your newly-created project (but not in your data folder—put it in the main directory).
+
+In the end, your project folder should be structured like this:
+
+```
+birds\
+  bird-questions.Rmd
+  birds.Rproj
+  data\
+    Birdstrikes_At_Salt_Lake_City_Intl_Airport_2000-2014.csv
+```
+
+## Questions
+
+I provided you with two chunks in the R Markdown file to load and clean the data. Choose a few of these questions and answer them with a table or a plot (or both). You should be able to answer most with `group_by(BLAH) %>% summarize(SOMETHING = BLAH)` and with `ggplot()`
+
+- Which bird species gets hit the most often?
+- Which bird species causes the most damage (in dollars)?
+- Has the number of bird strikes increased since 2000?
+- Are there any months that are more or less deadly for birds?
+- Are there any months that cost more (or less) in damages?
+
+
+# Clearest and muddiest things
+
+Go to [this form](https://goo.gl/forms/PlPwZGhMOdU9mKfC3) and answer these three questions:
+
+1. What was the muddiest thing from class today? What are you still wondering about?
+2. What was the clearest thing from class today? 
+3. What was the most exciting thing you learned?
+
+I'll compile the questions and send out answers after class.
+
+
+```{r slide-stuff, eval=FALSE, include=FALSE}
+library(tidyverse)
+
+libraries <- tribble(
+  ~County, ~Year, ~Books,
+  "Utah", 2017, 50000,
+  "Salt Lake", 2017, 100000,
+  "Weber", 2017, 30000,
+  "Utah", 2018, 55000,
+  "Salt Lake", 2018, 150000,
+  "Weber", 2018, 35000
+)
+
+lions <- tribble(
+  ~County, ~Year, ~Lions,
+  "Utah", 2017, 5,
+  "Salt Lake", 2017, 17,
+  "Weber", 2017, 20,
+  "Juab", 2017, 10,
+  "Utah", 2018, 6,
+  "Salt Lake", 2018, 20,
+  "Weber", 2018, 22,
+  "Juab", 2018, 14
+)
+
+county_seats <- tribble(
+  ~County, ~City,
+  "Utah", "Provo",
+  "Salt Lake", "Salt Lake City",
+  "Weber", "Ogden",
+  "Juab", "Nephi"
+)
+
+libraries %>% 
+  left_join(county_seats, by = "County")
+
+libraries %>% 
+  left_join(lions, by = c("County", "Year"))
+
+libraries %>% 
+  right_join(lions, by = c("County", "Year"))
+
+libraries %>% 
+  left_join(lions, by = c("County", "Year")) %>% 
+  left_join(county_seats, by = "County")
+```
