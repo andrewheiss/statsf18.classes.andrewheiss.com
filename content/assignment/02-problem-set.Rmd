@@ -7,4 +7,40 @@ editor_options:
   chunk_output_type: console
 ---
 
-The instructions for this problem set will be posted one week before it is due.
+For this problem set, you'll be working with data from the [2010 US Religion Census](http://www.usreligioncensus.org/), which provides county-level data on 236 religious groups in the United States. Because this data is a little unwieldy,^[This data is the epitome of untidy. Each county has its own row, and each religion gets three columns: `LDSCNG` for the number of congregations, `LDSADH` for the number of adherents, and `LDSRATE` for the number of adherents per 1,000 people in the county (but repeated for every religion!)] I'm giving you a pre-tidied version. Code for tidying the raw file, in case you're interested, is available [here](/files/clean-religion-data.R).^[You should hopefully be able to understand most of the code I used.]
+
+
+# Instructions
+
+## Setting up your project
+
+1. Create a new RStudio project named "problem-set-2" (or whatever you want to call it) and put it somewhere on your computer.
+
+2. Navigate to that new project folder on your computer with File Explorer (in Windows) or Finder (in macOS) (i.e. however you look at files on your computer). 
+
+3. Download this R Markdown file: [<i class="fab fa-r-project"></i> `your-name_problem-set-2.Rmd`](/files/your-name_problem-set-2.Rmd)^[You'll probably need to right click on the link and select "Save link as…"] and place it in your newly-created project (but not in your data folder—put it in the main directory).
+
+4. Create a new folder in your problem set folder called "data".
+
+5. Download these two CSV files. They'll probably go into your Downloads folder.^[You'll probably need to right click on the link and select "Save link as…" or something similar—often browsers will load the CSV file like a web page, which isn't helpful.]
+
+    - [<i class="fas fa-table"></i> `religion_utah.csv`](/data/religion_utah.csv)
+    - [<i class="fas fa-table"></i> `religion_names.csv`](/data/religion_names.csv)
+
+6. Using Windows File Explorer or macOS Finder, move the newly downloaded CSV files into the "data" folder you created.
+
+In the end, your project folder should be structured like this:^[Make sure your `.Rmd` file is *not* inside the data folder.]
+
+```{r project-outline, echo=FALSE, out.width="60%"}
+knitr::include_graphics("/images/assignment/ps2-project-outline.png")
+```
+
+## Completing the assignment
+
+1. Ensure that you have your new `problem-set-2` project open in RStudio. Open the `.Rmd` file from the "Files" panel in RStudio and follow the instructions there for the rest of the problem set. 
+
+2. There are `xxxx` placeholders throughout the document where you should type text. 
+
+    Feel free to delete the questions I provided and rewrite the text to be more narrative. So instead of keeping the instructions an hints, you can remove them and write things like "The top 10 religions in Utah are listed in the table below…"
+
+3. Knit the `.Rmd` as a Word document^[Or PDF if you've installed tinytex.] when you're done and submit it via Learning Suite.

@@ -9,4 +9,39 @@ editor_options:
 
 
 
-<p>The instructions for this problem set will be posted one week before it is due.</p>
+<p>For this problem set, you’ll be working with data from the <a href="http://www.usreligioncensus.org/">2010 US Religion Census</a>, which provides county-level data on 236 religious groups in the United States. Because this data is a little unwieldy,<span><label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">This data is the epitome of untidy. Each county has its own row, and each religion gets three columns: <code>LDSCNG</code> for the number of congregations, <code>LDSADH</code> for the number of adherents, and <code>LDSRATE</code> for the number of adherents per 1,000 people in the county (but repeated for every religion!)<br />
+<br />
+</span></span> I’m giving you a pre-tidied version. Code for tidying the raw file, in case you’re interested, is available <a href="/files/clean-religion-data.R">here</a>.<span><label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">You should hopefully be able to understand most of the code I used.<br />
+<br />
+</span></span></p>
+<h2 id="instructions">Instructions</h2>
+<h3 id="setting-up-your-project">Setting up your project</h3>
+<ol style="list-style-type: decimal">
+<li><p>Create a new RStudio project named “problem-set-2” (or whatever you want to call it) and put it somewhere on your computer.</p></li>
+<li><p>Navigate to that new project folder on your computer with File Explorer (in Windows) or Finder (in macOS) (i.e. however you look at files on your computer).</p></li>
+<li><p>Download this R Markdown file: <a href="/files/your-name_problem-set-2.Rmd"><i class="fab fa-r-project"></i> <code>your-name_problem-set-2.Rmd</code></a><span><label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">You’ll probably need to right click on the link and select “Save link as…”<br />
+<br />
+</span></span> and place it in your newly-created project (but not in your data folder—put it in the main directory).</p></li>
+<li><p>Create a new folder in your problem set folder called “data”.</p></li>
+<li><p>Download these two CSV files. They’ll probably go into your Downloads folder.<span><label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">You’ll probably need to right click on the link and select “Save link as…” or something similar—often browsers will load the CSV file like a web page, which isn’t helpful.<br />
+<br />
+</span></span></p>
+<ul>
+<li><a href="/data/religion_utah.csv"><i class="fas fa-table"></i> <code>religion_utah.csv</code></a></li>
+<li><a href="/data/religion_names.csv"><i class="fas fa-table"></i> <code>religion_names.csv</code></a></li>
+</ul></li>
+<li><p>Using Windows File Explorer or macOS Finder, move the newly downloaded CSV files into the “data” folder you created.</p></li>
+</ol>
+<p>In the end, your project folder should be structured like this:<span><label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">Make sure your <code>.Rmd</code> file is <em>not</em> inside the data folder.<br />
+<br />
+</span></span></p>
+<p><img src="/images/assignment/ps2-project-outline.png" width="60%" /></p>
+<h3 id="completing-the-assignment">Completing the assignment</h3>
+<ol style="list-style-type: decimal">
+<li><p>Ensure that you have your new <code>problem-set-2</code> project open in RStudio. Open the <code>.Rmd</code> file from the “Files” panel in RStudio and follow the instructions there for the rest of the problem set.</p></li>
+<li><p>There are <code>xxxx</code> placeholders throughout the document where you should type text.</p>
+<p>Feel free to delete the questions I provided and rewrite the text to be more narrative. So instead of keeping the instructions an hints, you can remove them and write things like “The top 10 religions in Utah are listed in the table below…”</p></li>
+<li><p>Knit the <code>.Rmd</code> as a Word document<span><label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">Or PDF if you’ve installed tinytex.<br />
+<br />
+</span></span> when you’re done and submit it via Learning Suite.</p></li>
+</ol>

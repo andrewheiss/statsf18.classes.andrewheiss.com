@@ -1,0 +1,155 @@
+---
+title: "Problem set 2: Religions in Utah"
+author: "Your name here"
+date: "Date here"
+---
+
+# Details
+
+- Who did you collaborate with: xxxx
+- Approximately how much time did you spend on this problem set: xxxx
+- What, if anything, gave you the most trouble: xxxx
+
+
+# Load and wrangle data
+
+The data you'll be playing with comes from the [2010 US Religion Census](http://www.usreligioncensus.org/), which provides county-level data on 236 religious groups in the United States. Because this data is a little unwiledly, I'm giving you a pre-tidied version. Code for tidying the raw file, in case you're interested, is available here.
+
+Load two CSV files and join them to create a data frame named `religion_utah` (i.e. using `religions` as the main data frame, left join `religion_names` to it)
+
+```{r load-libraries-religion-data, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+religions <- read_csv("data/religion_utah.csv")
+religion_names <- read_csv("data/religion_names.csv")
+```
+
+```{r wrangle-data}
+# Do something to add the names of the religions
+religion_utah <- religions
+```
+
+
+# Answer questions
+
+Answer the following questions. I occasionally provide a chunk of code to help you get started. 
+
+## General religious landscape
+
+### Top religions
+
+What are the top 10 religions in Utah, based on number of adherents?
+
+```{r top-10-adherents}
+top_10_adherents <- religion_utah %>% 
+  group_by(religion_clean) %>% 
+  summarize(total = sum(adherents, na.rm = TRUE)) %>% 
+  top_n(10, total) %>% 
+  arrange(desc(total))
+
+top_10_adherents
+```
+
+Make a bar plot of the top 10 religions in Utah, by adherents:
+
+```{r top-10-adherents-plot}
+# Here we make a copy of the top_10_adherents data from above and we
+# change/mutate the `religion_clean` column so that the religion labels are in
+# order (that's what `fct_inorder()` does---it converts `religion_clean` into a
+# list of categories and puts them in a specific order)
+top_10_adherents_plot <- top_10_adherents %>% 
+  mutate(religion_clean = fct_inorder(religion_clean))
+
+# Notice the `fct_rev()` here. That takes the list of categories in
+# `religion_clean` and reverses them. If they're not reversed, they'll be
+# plotted from lowest to highest, and LDS will be at the bottom.
+#
+# Also notice the `coord_flip()` layer. This rotates the plot so the bars go
+# horizontally intead of vertically
+ggplot(top_10_adherents_plot, aes(x = fct_rev(religion_clean), y = total)) +
+  geom_col() + 
+  labs(x = "Denomination", y = "Number of adherents") +
+  coord_flip()
+```
+
+
+Which 10 religions have the most number of congregations?
+
+```{r top-10-congregations}
+
+```
+
+Make a bar plot of the top 10 religions in Utah, by congregations:
+
+```{r top-10-congregations-plot}
+
+```
+
+
+Why are Catholics ranked differently in the two tables? xxxx
+
+
+### Proportion of membership in total population
+
+Utah's total population in 2010 was 2,763,885. Calculate the proportion of each of the top 10 religions based on this population (i.e. Catholics made up X percent of Utah's population in 2010).
+
+Hint: copy the code from the `top-10-adherents` chunk above and use `mutate()` to create a new column.
+
+```{r top-10-adherents-percent}
+
+```
+
+
+## LDS membership
+
+Which 5 counties in Utah have the most LDS members (or adherents)?
+
+```{r top-5-lds-adherents}
+religion_utah %>% 
+  filter(religion_clean == "LDS") %>% 
+  top_n(5, adherents) %>% 
+  arrange(desc(adherents)) %>% 
+  select(county, religion_clean, adherents)
+```
+
+Which 5 counties in Utah have the most LDS congregations?
+
+```{r top-5-lds-congregations}
+
+```
+
+Which 5 counties in Utah have the highest proportion of LDS members? (i.e. `adherents_per_1000`)
+
+```{r top-5-lds-proportion}
+
+```
+
+Why are these answers not all the same? xxxx
+
+
+## Non-LDS membership
+
+What are the top 5 non-LDS religions in Utah, based on number of adherents?
+
+```{r top-5-non-lds-adherents}
+
+```
+
+
+Which 10 counties have the highest proportion (`adherents_per_1000`) of non-LDS religions? What are those religions?
+
+```{r top-10-non-lds-counties}
+
+```
+
+Which 5 counties have the highest proportion of Muslims?
+
+```{r top-5-muslims}
+
+```
+
+Which 5 counties have the highest proportion of Buddhists?
+
+```{r top-5-buddhists}
+
+```
