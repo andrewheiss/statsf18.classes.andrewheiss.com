@@ -13,8 +13,6 @@ date: "Date here"
 
 # Load and wrangle data
 
-The data you'll be playing with comes from the [2010 US Religion Census](http://www.usreligioncensus.org/), which provides county-level data on 236 religious groups in the United States. Because this data is a little unwiledly, I'm giving you a pre-tidied version. Code for tidying the raw file, in case you're interested, is available here.
-
 Load two CSV files and join them to create a data frame named `religion_utah` (i.e. using `religions` as the main data frame, left join `religion_names` to it)
 
 ```{r load-libraries-religion-data, message=FALSE, warning=FALSE}
