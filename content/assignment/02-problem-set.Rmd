@@ -7,18 +7,22 @@ editor_options:
   chunk_output_type: console
 ---
 
-For this problem set, you'll be working with data from the [2010 US Religion Census](http://www.usreligioncensus.org/), which provides county-level data on 236 religious groups in the United States. Because this data is a little unwieldy,^[This data is the epitome of untidy. Each county has its own row, and each religion gets three columns: `LDSCNG` for the number of congregations, `LDSADH` for the number of adherents, and `LDSRATE` for the number of adherents per 1,000 people in the county (but repeated for every religion!)] I'm giving you a pre-tidied version. Code for tidying the raw file, in case you're interested, is available [here](/files/clean-religion-data.R).^[You should hopefully be able to understand most of the code I used.]
+For this problem set, you'll be working with data from the [2010 US Religion Census](http://www.usreligioncensus.org/), which provides county-level data on 236 religious groups in the United States. Because this data is a little unwieldy,^[The original data is the epitome of untidy. Each county has its own row, and each religion gets three columns: `LDSCNG` for the number of congregations, `LDSADH` for the number of adherents, and `LDSRATE` for the number of adherents per 1,000 people in the county (but repeated for every religion!)] I'm giving you a pre-tidied version. Code for tidying the raw file, in case you're interested, is available [here](/files/clean-religion-data.R).^[You should hopefully be able to understand most of the code I used.]
 
 
 # Instructions
 
 ## Setting up your project
 
+<i class="fas fa-info-circle"></i> *You can copy the "Problem Set 2" project on RStudio.cloud, which has this set up for you. But remember that you should eventually be moving off the cloud version and onto your computer, and this might be a good assignment to make that transition. [Here are the instructions for installing everything on your computer.](https://statsf18.classes.andrewheiss.com/install/)*
+
 1. Create a new RStudio project named "problem-set-2" (or whatever you want to call it) and put it somewhere on your computer.
 
 2. Navigate to that new project folder on your computer with File Explorer (in Windows) or Finder (in macOS) (i.e. however you look at files on your computer). 
 
-3. Download this R Markdown file: [<i class="fab fa-r-project"></i> `your-name_problem-set-2.Rmd`](/files/your-name_problem-set-2.Rmd)^[You'll probably need to right click on the link and select "Save link as…"] and place it in your newly-created project (but not in your data folder—put it in the main directory).
+3. Download this R Markdown file^[You'll probably need to right click on the link and select "Save link as…"] and place it in your newly-created project (but not in your data folder—put it in the main directory):
+
+    - [<i class="fab fa-r-project"></i> `your-name_problem-set-2.Rmd`](/files/your-name_problem-set-2.Rmd)
 
 4. Create a new folder in your problem set folder called "data".
 
@@ -41,6 +45,6 @@ knitr::include_graphics("/images/assignment/ps2-project-outline.png")
 
 2. There are `xxxx` placeholders throughout the document where you should type text. 
 
-    Feel free to delete the questions I provided and rewrite the text to be more narrative. So instead of keeping the instructions an hints, you can remove them and write things like "The top 10 religions in Utah are listed in the table below…"
+    Feel free to delete the questions I provided and rewrite the text to be more narrative. So instead of keeping the instructions and hints, you can remove them and write things like "The top 10 religions in Utah are listed in the table below…"
 
 3. Knit the `.Rmd` as a Word document^[Or PDF if you've installed tinytex.] when you're done and submit it via Learning Suite.
