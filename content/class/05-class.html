@@ -1,0 +1,92 @@
+---
+title: "Data wrangling with the Tidyverse II"
+date: "2018-10-04"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- BLOGDOWN-HEAD -->
+<!-- /BLOGDOWN-HEAD -->
+
+<h2>Contents</h2>
+<div id="TOC">
+<ul>
+<li><a href="#slides">Slides</a></li>
+<li><a href="#elections-food-security-and-mortality">2016 elections, food security, and mortality</a><ul>
+<li><a href="#setting-up-your-project">Setting up your project</a></li>
+<li><a href="#questions">Questions</a></li>
+</ul></li>
+<li><a href="#clearest-and-muddiest-things">Clearest and muddiest things</a></li>
+</ul>
+</div>
+
+<h2 id="slides">Slides</h2>
+<p>Download the slides from today’s lecture:</p>
+<ul>
+<li><a href="/slides/MPA-630_2018-10-04.pdf"><i class="fas fa-file-pdf"></i> PDF (best option)</a></li>
+<li><a href="/slides/MPA-630_2018-10-04.pptx"><i class="fas fa-file-powerpoint"></i> PowerPoint</a></li>
+</ul>
+<figure>
+<a href="/slides/MPA-630_2018-10-04.pdf"><img src="/images/slides/slides_2018-10-04.png" alt="First slide" /></a>
+</figure>
+<h2 id="elections-food-security-and-mortality">2016 elections, food security, and mortality</h2>
+<h3 id="setting-up-your-project">Setting up your project</h3>
+<p><em>(Practice makes perfect!)</em></p>
+<p>Do the following:</p>
+<ol style="list-style-type: decimal">
+<li><p>Create a new RStudio project named “elections-food-death” (or something) and put it somewhere on your computer.</p></li>
+<li><p>Navigate to that new project folder on your computer with Windows File Explorer or macOS Finder (i.e. however you look at files on your computer). Create a new folder in your project called “data”.</p></li>
+<li><p>Download this CSV file: <a href="/data/clean_combined_data.csv"><i class="fas fa-table"></i> <code>clean_combined_data.csv</code></a><span><label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">You’ll probably need to right click on the link and select “Save link as…” or something similar—often browsers will load the CSV file like a web page, which isn’t helpful.<br />
+<br />
+</span></span></p>
+<p>The R code I used to clean and merge these three datasets <a href="/files/clean-merge-food-election-data.R">can be seen here</a>. The raw data <a href="/files/election-food-data.zip">can be downloaded here</a>.</p></li>
+<li><p>Using Windows File Explorer or macOS Finder, move the newly downloaded CSV file into the “data” folder you created.</p></li>
+<li><p>Download this R Markdown file: <a href="/files/elections-food-death-questions.Rmd"><i class="fab fa-r-project"></i> <code>elections-food-death-questions.Rmd</code></a><span><label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Again, you’ll probably need to right click on the link and select “Save link as…”<br />
+<br />
+</span></span> and place it in your newly-created project (but not in your data folder—put it in the main directory).</p></li>
+</ol>
+<p>In the end, your project folder should be structured like this:</p>
+<pre><code>elections-food-death\
+  elections-food-death-questions.Rmd
+  elections-food-death.Rproj
+  data\
+    clean_combined_data.csv</code></pre>
+<h3 id="questions">Questions</h3>
+<p>I provided you with once chunk in the R Markdown file to load the pre-cleaned data. Choose a few of these questions and answer them with a table or a plot (or both). You should be able to answer most with <code>filter(BLAH == &quot;BLOOP&quot;)</code> or <code>group_by(BLAH) %&gt;% summarize(SOMETHING = BLAH)</code> and with <code>ggplot()</code>.</p>
+<p>(Note: I have <em>no idea</em> what you will find here. This is a fishing expedition; see what interesting stories you can find!)</p>
+<p><strong>Filtering, grouping, and summarizing</strong></p>
+<ul>
+<li>Which counties/states had the highest proportion of Republican votes in 2016?</li>
+<li>Which counties/states had the highest proportion of Democratic votes in 2016?</li>
+<li>Which counties/states had the greatest difference of Democratic to Republican votes in 2016? Which counties were the narrowest?</li>
+<li>Which counties/states have the highest mortality?</li>
+<li>Which counties/states have the greatest number of fast food restaurants? Grocery stores? Stores that accept SNAP?</li>
+<li>Which counties/states have the greatest proportion of people with low access to food? Children with low access to food?</li>
+<li>Anything else that looks interesting!</li>
+</ul>
+<p><strong>Relationships and correlations</strong></p>
+<p>What is the relationship between the following variables at a county (or state) level? Which counties (or states) have the strongest or weakest relationships? What could that relationship possibly mean?</p>
+<ul>
+<li>Mortality rate and low access to food</li>
+<li>Mortality rate and 2016 election results</li>
+<li>SNAP-eligible stores per 1000 and low access to food</li>
+<li>Fast food prevalence and low access to food</li>
+<li>2016 election results and fast food prevalence</li>
+<li>Low access to food and 2016 election results</li>
+<li>Anything else that looks interesting!</li>
+</ul>
+<h2 id="clearest-and-muddiest-things">Clearest and muddiest things</h2>
+<p>Go to <a href="https://goo.gl/forms/PlPwZGhMOdU9mKfC3">this form</a> and answer these three questions:</p>
+<ol style="list-style-type: decimal">
+<li>What was the muddiest thing from class today? What are you still wondering about?</li>
+<li>What was the clearest thing from class today?</li>
+<li>What was the most exciting thing you learned?</li>
+</ol>
+<p>I’ll compile the questions and send out answers after class.</p>

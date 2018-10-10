@@ -1,0 +1,195 @@
+---
+title: "Data wrangling with the Tidyverse II"
+date: "2018-10-04"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# Slides
+
+Download the slides from today's lecture:
+
+- [<i class="fas fa-file-pdf"></i> PDF (best option)](/slides/MPA-630_2018-10-04.pdf)
+- [<i class="fas fa-file-powerpoint"></i> PowerPoint](/slides/MPA-630_2018-10-04.pptx)
+
+<figure>
+[![First slide](/images/slides/slides_2018-10-04.png)](/slides/MPA-630_2018-10-04.pdf)
+</figure>
+
+
+# 2016 elections, food security, and mortality 
+
+## Setting up your project
+
+*(Practice makes perfect!)*
+
+Do the following:
+
+1. Create a new RStudio project named "elections-food-death" (or something) and put it somewhere on your computer.
+
+2. Navigate to that new project folder on your computer with Windows File Explorer or macOS Finder (i.e. however you look at files on your computer). Create a new folder in your project called "data".
+
+3. Download this CSV file: [<i class="fas fa-table"></i> `clean_combined_data.csv`](/data/clean_combined_data.csv)^[You'll probably need to right click on the link and select "Save link as…" or something similar—often browsers will load the CSV file like a web page, which isn't helpful.]
+
+    The R code I used to clean and merge these three datasets [can be seen here](/files/clean-merge-food-election-data.R). The raw data [can be downloaded here](/files/election-food-data.zip).
+
+4. Using Windows File Explorer or macOS Finder, move the newly downloaded CSV file into the "data" folder you created.
+
+5. Download this R Markdown file: [<i class="fab fa-r-project"></i> `elections-food-death-questions.Rmd`](/files/elections-food-death-questions.Rmd)^[Again, you'll probably need to right click on the link and select "Save link as…"] and place it in your newly-created project (but not in your data folder—put it in the main directory).
+
+In the end, your project folder should be structured like this:
+
+```
+elections-food-death\
+  elections-food-death-questions.Rmd
+  elections-food-death.Rproj
+  data\
+    clean_combined_data.csv
+```
+
+## Questions
+
+I provided you with once chunk in the R Markdown file to load the pre-cleaned data. Choose a few of these questions and answer them with a table or a plot (or both). You should be able to answer most with `filter(BLAH == "BLOOP")` or `group_by(BLAH) %>% summarize(SOMETHING = BLAH)` and with `ggplot()`.
+
+(Note: I have *no idea* what you will find here. This is a fishing expedition; see what interesting stories you can find!)
+
+**Filtering, grouping, and summarizing**
+
+- Which counties/states had the highest proportion of Republican votes in 2016?
+- Which counties/states had the highest proportion of Democratic votes in 2016?
+- Which counties/states had the greatest difference of Democratic to Republican votes in 2016? Which counties were the narrowest?
+- Which counties/states have the highest mortality?
+- Which counties/states have the greatest number of fast food restaurants? Grocery stores? Stores that accept SNAP?
+- Which counties/states have the greatest proportion of people with low access to food? Children with low access to food?
+- Anything else that looks interesting!
+
+**Relationships and correlations**
+
+What is the relationship between the following variables at a county (or state) level? Which counties (or states) have the strongest or weakest relationships? What could that relationship possibly mean?
+
+- Mortality rate and low access to food
+- Mortality rate and 2016 election results
+- SNAP-eligible stores per 1000 and low access to food
+- Fast food prevalence and low access to food
+- 2016 election results and fast food prevalence
+- Low access to food and 2016 election results
+- Anything else that looks interesting!
+
+
+# Clearest and muddiest things
+
+Go to [this form](https://goo.gl/forms/PlPwZGhMOdU9mKfC3) and answer these three questions:
+
+1. What was the muddiest thing from class today? What are you still wondering about?
+2. What was the clearest thing from class today? 
+3. What was the most exciting thing you learned?
+
+I'll compile the questions and send out answers after class.
+
+
+```{r slide-stuff, eval=FALSE, include=FALSE}
+library(tidyverse)
+
+groups <- tribble(
+                   ~Name,     ~Group,
+           "Dallen Done",  "Group 1",
+          "Aleni Regehr",  "Group 1",
+           "Vince Feula",  "Group 1",
+             "Mike Hall",  "Group 1",
+      "Stephanie Livsey",  "Group 1",
+         "Hilary O'Neil",  "Group 2",
+           "Mark Gefrom",  "Group 2",
+           "Harvey Unga",  "Group 2",
+            "Dave Hawks",  "Group 2",
+         "Rebecca Smoot",  "Group 2",
+         "Elyse Bradley",  "Group 3",
+        "Colleen Kohler",  "Group 3",
+    "Michelle Stevenson",  "Group 3",
+     "Spencer Parkinson",  "Group 3",
+           "Dane Larsen",  "Group 4",
+        "Tracy McIntier",  "Group 4",
+       "Dallas Reynolds",  "Group 4",
+           "Heidi Hatch",  "Group 4",
+  "Wallis Rothlisberger",  "Group 5",
+           "Sione Manoa",  "Group 5",
+           "Brad Lester",  "Group 5",
+            "Karla Ward",  "Group 5",
+          "Cindy Tolman",  "Group 6",
+        "Spencer Foster",  "Group 6",
+        "Angie Anderson",  "Group 6",
+         "Daniel Dudley",  "Group 6",
+            "Julie Rash",  "Group 7",
+             "Jeff Long",  "Group 7",
+       "Teri Chatterton",  "Group 7",
+         "Lissa Camacho",  "Group 7",
+        "Carina Alleman",  "Group 8",
+        "Krista Gardner",  "Group 8",
+          "Tim Anderson",  "Group 8",
+          "Grant Gillum",  "Group 8",
+          "Sara Donakey",  "Group 9",
+        "Craig Haderlie",  "Group 9",
+       "Phyllis Nielsen",  "Group 9",
+     "Rich Christianson",  "Group 9",
+          "Brian Tuttle", "Group 10",
+           "Natalie Gay", "Group 10",
+             "Joel Cook", "Group 10"
+  )
+
+set.seed(1234)
+groups_shuffled <- groups %>% 
+  group_by(Group) %>% 
+  slice(sample(1:n()))
+
+numbers <- c(1, 7, 4, 2, 4)
+sum(numbers)
+mean(numbers)
+
+numbers <- c(1, 7, 4, NA, 4)
+sum(numbers)
+mean(numbers)
+
+sum(numbers, na.rm = TRUE)
+mean(numbers, na.rm = TRUE)
+
+# https://www.kaggle.com/mustafaali96/weight-height
+height_weight <- read_csv("~/Downloads/weight-height.csv") %>% 
+  mutate(IQ = rnorm(10000, mean = 100, sd = 15))
+
+ggplot(height_weight, aes(x = Weight, y = Height, color = Gender)) +
+  geom_point(alpha = 0.5, size = 0.5) +
+  guides(color = FALSE) +
+  labs(x = "Weight (pounds)", y = "Height (inches)") +
+  theme_grey(15) +
+  facet_wrap(~ Gender)
+
+
+ggplot(height_weight, aes(x = Weight, y = IQ, color = Gender)) +
+  geom_point(alpha = 0.5, size = 0.5) +
+  guides(color = FALSE) +
+  labs(x = "Weight (pounds)", y = "IQ") +
+  theme_grey(15) +
+  facet_wrap(~ Gender)
+
+
+
+height_weight %>% 
+  group_by(Gender) %>% 
+  summarize(correlation_hw = cor(Height, Weight),
+            correlation_iqw = cor(IQ, Weight))
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point(size = 3) +
+  labs(x = "Car weight (tons)",
+       y = "Miles per gallon") +
+  theme_grey(15)
+
+cor(mtcars$wt, mtcars$mpg)
+
+```

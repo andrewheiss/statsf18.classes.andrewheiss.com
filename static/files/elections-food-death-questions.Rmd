@@ -1,0 +1,24 @@
+---
+title: "2016 elections, food security, and mortality"
+author: "Your name"
+date: "Whatever today is"
+output: html_document
+---
+
+# Load data
+
+```{r load-libraries-data}
+library(tidyverse)  # Load all our favorite functions, like ggplot and dplyr
+
+# Load raw data
+all_data <- read_csv("data/clean_combined_data.csv")
+```
+
+# Wrangle data
+
+Do stuff here if you need to.
+
+
+# Answer questions with data
+
+Do stuff here!
