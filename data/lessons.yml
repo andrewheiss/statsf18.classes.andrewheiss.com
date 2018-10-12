@@ -44,6 +44,7 @@ lessons:
   - title: "Correlation and basic regression"
     date: "October 11 (I & II)"
     reading: "06-reading"
+    class: "06-class"
   
   - title: "Multiple regression"
     date: "October 18 (I & II)"
