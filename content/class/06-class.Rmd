@@ -98,7 +98,7 @@ world_happiness %>%
                                          use = "complete.obs"))
 ```
 
-Phew. Back to interpretation now. The correlation coefficient for national happiness and life expectacny is 0.743. With that, you can write the following sentences, using the template we talked about in class:
+Phew. Back to interpretation now. The correlation coefficient for national happiness and life expectancy is 0.743. With that, you can write the following sentences, using the template we talked about in class:
 
 > National happiness and life expectancy are positively and strongly correlated. As life expectancy increases, happiness also tends to improve (r = 0.743).
 
