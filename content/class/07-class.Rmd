@@ -1,0 +1,106 @@
+---
+title: "Multiple regression"
+date: "2018-10-18"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# Slides
+
+The slides for today will go here.
+
+
+# Clearest and muddiest things
+
+Go to [this form](https://goo.gl/forms/PlPwZGhMOdU9mKfC3) and answer these three questions:
+
+1. What was the muddiest thing from class today? What are you still wondering about?
+2. What was the clearest thing from class today? 
+3. What was the most exciting thing you learned?
+
+I'll compile the questions and send out answers after class.
+
+
+```{r slide-stuff, eval=FALSE, include=FALSE}
+
+```
+
+```{r animated-multiple-regression, include=FALSE, eval=FALSE}
+# Load libraries
+library(tidyverse)
+library(broom)
+library(scales)
+library(moderndive)  # For the house price data
+library(gganimate)
+
+# Make a data frame of just the independent variables
+all_models <- tribble(
+  ~IVs,
+  "sqft_living",
+  "sqft_living + floors",
+  "sqft_living + floors + waterfront + zipcode",
+  "sqft_living + floors + waterfront + zipcode + yr_built + grade",
+  "sqft_living + floors + waterfront + zipcode + yr_built + grade + sqft_basement + condition + bedrooms"
+) %>% 
+  # Make all these actual formulas
+  mutate(formula = IVs %>% map(~ as.formula(paste("price ~", .)))) %>% 
+  # Run a model in each row
+  mutate(model = formula %>% map(~ lm(.x, data = house_prices))) %>% 
+  # Extract model elements
+  mutate(model_tidy = model %>% map(tidy),
+         model_glance = model %>% map(glance))
+
+# Only look at the intercept and the slope for sqft_living
+sqft_only <- all_models %>% 
+  unnest(model_tidy) %>% 
+  filter(term %in% c("(Intercept)", "sqft_living")) %>% 
+  select(IVs, term, estimate) %>% 
+  spread(term, estimate)
+
+# Plot the lines with facets
+ggplot() +
+  geom_point(data = house_prices, aes(x = sqft_living, y = price),
+             alpha = 0.1, size = 0.5, color = "#410660") + 
+  geom_abline(data = sqft_only, aes(intercept = `(Intercept)`, slope = sqft_living),
+              size = 1, color = "grey40") +
+  scale_x_continuous(labels = comma) +
+  scale_y_log10(labels = dollar) +
+  labs(x = "Square feet of living space", y = "House price") +
+  theme_minimal(base_family = "Roboto Condensed") +
+  facet_wrap(~ IVs)
+
+# Animate this puppy
+animated_thing <- ggplot() +
+  geom_point(data = house_prices, aes(x = sqft_living, y = price),
+             alpha = 0.1, size = 0.5, color = "#410660") + 
+  geom_abline(data = sqft_only, aes(intercept = `(Intercept)`, slope = sqft_living),
+              size = 1, color = "grey40") +
+  scale_x_continuous(labels = comma) +
+  scale_y_continuous(labels = dollar) +
+  labs(x = "Square feet of living space", y = "House price",
+       title = "{closest_state}") +
+  theme_minimal(base_size = 18, base_family = "Roboto Condensed") +
+  transition_states(IVs, transition_length = 0.5, state_length = 2) +
+  enter_fade() +
+  exit_shrink() +
+  ease_aes('sine-in-out')
+
+animated_gif <- animate(animated_thing,
+                        width = 1000, height = 700)
+
+animated_movie <- animate(animated_thing,
+                          width = 1000, height = 700,
+                          renderer = ffmpeg_renderer())
+
+anim_save(animated_gif, filename = "~/Desktop/regression.gif")
+anim_save(animated_movie, filename = "~/Desktop/regression.mp4")
+
+animated_gif
+```
