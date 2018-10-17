@@ -1,0 +1,165 @@
+---
+title: "Problem set 3: Property taxes in the Western US"
+author: "Your name here"
+date: "Date here"
+---
+
+# Details
+
+- Who did you collaborate with: xxxx
+- Approximately how much time did you spend on this problem set: xxxx
+- What, if anything, gave you the most trouble: xxxx
+
+
+# Load and wrangle data
+
+```{r load-libraries-data, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(moderndive)
+
+# I pre-wrangled and pre-manipulated this data for you
+# so you only have to load it here
+taxes <- read_csv("data/property_taxes_2016.csv")
+```
+
+
+# Understand the data
+
+Which 10 counties collected the most property tax dollars in 2016? (hint: look at the `real_estate_taxes_paid` column and your code from problem set two)
+
+```{r top-10-tax}
+
+```
+
+Which 10 counties have the lowest ratio of property tax per housing unit (`tax_per_housing_unit`)? (hint: use a negative number in `top_n()` to get the bottom number)
+
+```{r bottom-10-tax-ratio}
+
+```
+
+Which 5 counties have the highest proportion of households with kids (`prop_houses_with_kids`)?
+
+```{r top-5-kids}
+
+```
+
+Make a histogram of property taxes per housing unit and facet by state. What does this tell us about property tax rates in these states?
+
+```{r plot-tax-hist}
+
+```
+
+
+# Basic regression 1: Tax per housing unit explained by median home value
+
+(Note: I have given you the code for this entire first basic regression. Use this as a template for the rest of the regression sections.)
+
+## Correlation analysis
+
+We're interested in the relationship between median home value and property tax per housing unit. We first calculate the correlation between the two to check the direction and strength of this relationship.
+
+```{r tax-home-value-correlation}
+taxes %>% 
+  get_correlation(tax_per_housing_unit ~ median_home_value)
+```
+
+Median home value and property tax per housing unit are highly positively correlated (r = 0.90), which makes sense since property taxes are based on the value of property.
+
+## Regression analysis
+
+This correlation doesn't tell us about the effects of this relationship, though. How much does the average tax per housing unit go up as median home value increases? We can calculate this with a basic regression model. We define tax per housing unit as our outcome variable (or y) and median home value as our explanatory variable (or x).
+
+We first plot the relationship. We color the points by state to see if there are any state-level trends.
+
+```{r tax-home-value-plot}
+ggplot(taxes, aes(x = median_home_value, y = tax_per_housing_unit)) +
+  geom_point(aes(color = state)) +
+  geom_smooth(method = "lm")
+```
+
+Here we can see visually that the two variables are closely correlated. We can also see some state-level trends. California has some of the highest taxes per housing unit, but it also has some of the highest media home values. Notably, there's one county in Utah with a California-level super high median home value (greater than $500,000), but with a surprisingly low per-household tax rate. Looking at the data in RStudio, we can find that this is Summit County, home of Park City and several ski resorts.
+
+We then calculate the slope and intercept of this line:
+
+```{r tax-home-value-model}
+# Build the model and save it as an object named tax_home_value_model
+tax_home_value_model <- lm(tax_per_housing_unit ~ median_home_value, data = taxes)
+
+# Look at the results
+tax_home_value_model %>% 
+  get_regression_table()
+```
+
+Here we only care about the numbers in the estimate column. First, the intercept is 19.201. Technically, this means that a county where the median home value is 0 will assess $19 in property taxes per houshold. However, the fact that no county anywhere has houses that cheap means that this number is fairly nonsensical, and we can ignore it.
+
+The slope of median home value is 0.004, which means that a one dollar increase in median home values in a county is associated with an increase of $0.004 in property taxes per household, on average. This seems tiny if we look at one dollar changes in home value, but makes more sense if we use larger numbers. A 100 dollar increase in the median home value in a county is associated with an increase of 40 cents in property taxes per household, on average.
+
+
+# Basic regression 2: Tax per housing unit explained by households with kids
+
+Because property taxes are often used to fund schools, there might be a relationship between the proportion of houses with kids and tax rates (i.e. counties with more kids have higher taxes).
+
+## Correlation analysis
+
+Find the correlation between tax per housing unit (`tax_per_housing_unit`) and the proportion of households in the county with kids under 18 (`prop_houses_with_kids`). Interpret this correlation in a sentence (hint: use the template we talked about in class).
+
+```{r tax-kids-correlation}
+
+```
+
+## Regression analyis
+
+Plot a scatterplot of tax per housing unit and the proportion of households with kids. Inclue a straight linear model line and color each point by state (hint: look at the code in the previous section). The outcome variable (y) is `tax_per_housing_unit`; the explanatory variable (x) is `prop_houses_with_kids`.
+
+```{r tax-kids-plot}
+
+```
+
+Calculate the slope and intercept of this line:
+
+```{r tax-kids-model}
+
+```
+
+Interpret the intercept value and the slope value. On average, what happens to tax per housing unit when the proportion of houses with kids increases by 1%? (Use the template we learned in class, and/or look at the previous example). 
+
+
+# Basic regression 3: Tax per housing unit explained by state
+
+Note: refer to ModernDive 6.2 for a reminder of how to interpret these state coefficients. Here, Arizona is the base case (this means that all the state coefficients are based on Arizona).
+
+## Average tax per housing unit by state
+
+States are categories, not numbers. This means we can't calculate the correlation. Instead, we can calculate the avearge tax per housing unit in each state.
+
+Calculate the average (mean) tax per housing unit by state (hint: you'll need to `group_by()` and `summarize()`)
+
+```{r tax-by-state}
+
+```
+
+## Regression analysis
+
+Build a regression model that explains variation in the outcome variable (y, or `tax_per_housing_unit`) by state (x, or the explanatory variable). Recall from ModernDive 6.2.2 that these coefficients are *not* slopes, but shifts in the average value from the base case.
+
+```{r tax-by-state-model}
+
+```
+
+Interpret these state estimates.
+
+
+# Multiple regression 1: Tax per housing unit explained by lots of things
+
+Finally, we want to explain variation in property taxes per housing unit based on more than just one variable. If we account for (or control for) median home value *and* state, what is the average effect of households with kids on property taxes?
+
+I provide the code here. You interpret the coefficients. Use the template we talked about in class on October 18 (and refer to ModernDive 7).
+
+```{r tax-home-value-state-kids-model}
+tax_home_value_state_kids_model <- lm(tax_per_housing_unit ~ 
+                                        median_home_value + prop_houses_with_kids + state,
+                                      data = taxes)
+
+tax_home_value_state_kids_model %>% 
+  get_regression_table()
+```

@@ -9,4 +9,57 @@ editor_options:
 
 
 
-<p>The instructions for this problem set will be posted one week before it is due.</p>
+<p>For this problem set, you’ll be working with data from the 2016 <a href="https://www.census.gov/programs-surveys/acs/">American Community Survey (ACS)</a>, which is a regular survey of 3.5 million housing units conducted annually by the US Census Bureau.</p>
+<p>You will use basic and multiple regression to explore some of the factors that determine the median county-level real estate tax rate in the Western US (Utah, Idaho, Arizona, Nevada, and California).</p>
+<p>I’m providing you with pre-cleaned data. <em>If you’re interested</em>, you can see how I constructed the dataset with <a href="/files/clean-property-tax-data.R">this R script</a>. You don’t need to run that file, though—you’ll download the actual final data below.</p>
+<p>The data contains these 15 variables:</p>
+<ul>
+<li><code>FIPS</code>: The unique Federal Information Processing Standards (FIPS) code for each county</li>
+<li><code>county</code>: The name of the county</li>
+<li><code>state</code>: The name of the state</li>
+<li><code>population</code>: The population of the county</li>
+<li><code>kids_population</code>: The number of children under the age of 18 in the county</li>
+<li><code>households</code>: The number of households in the county</li>
+<li><code>households_with_kids</code>: The number of households with children under the age of 18 in the county</li>
+<li><code>households_no_kids</code>: The number of households without children under the age of 18 in the county</li>
+<li><code>median_income</code>: The median annual income per household in the county</li>
+<li><code>housing_units</code>: The number of housing units (i.e. houses, apartments, etc.) in the county</li>
+<li><code>median_home_value</code>: The median home value in the county</li>
+<li><code>real_estate_taxes_paid</code>: The total amount of real estate (or property) taxes paid in the county</li>
+<li><code>median_real_estate_taxes</code>: The median amount of real esetate taxes paid in the county per household</li>
+<li><code>tax_per_housing_unit</code>: The total amount of property taxes paid in the county divided by the total number of households. This provides a rough measure of property tax per household. (<code>real_estate_taxes_paid</code> / <code>housing_units</code>)</li>
+<li><code>prop_houses_with_kids</code>: The proportion of households in the county with children under the age of 18 (<code>households_with_kids</code> / <code>households</code>)</li>
+</ul>
+<h2 id="instructions">Instructions</h2>
+<h3 id="setting-up-your-project">Setting up your project</h3>
+<p><i class="fas fa-info-circle"></i> <em>You can copy the “Problem Set 3” project on RStudio.cloud, which has this set up for you. But remember that you should eventually be moving off the cloud version and onto your computer, and this might be a good assignment to make that transition. <a href="https://statsf18.classes.andrewheiss.com/install/">Here are the instructions for installing everything on your computer.</a></em></p>
+<ol style="list-style-type: decimal">
+<li><p>Create a new RStudio project named “problem-set-3” (or whatever you want to call it) and put it somewhere on your computer.</p></li>
+<li><p>Navigate to that new project folder on your computer with File Explorer (in Windows) or Finder (in macOS) (i.e. however you look at files on your computer).</p></li>
+<li><p>Download this R Markdown file<span><label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">You’ll probably need to right click on the link and select “Save link as…”<br />
+<br />
+</span></span> and place it in your newly-created project (but not in your data folder—put it in the main directory):</p>
+<ul>
+<li><a href="/files/your-name_problem-set-3.Rmd"><i class="fab fa-r-project"></i> <code>your-name_problem-set-3.Rmd</code></a></li>
+</ul></li>
+<li><p>Create a new folder in your problem set folder called “data”.</p></li>
+<li><p>Download this CSV file. It’ll probably go into your Downloads folder.<span><label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">You’ll probably need to right click on the link and select “Save link as…” or something similar—often browsers will load the CSV file like a web page, which isn’t helpful.<br />
+<br />
+</span></span></p>
+<ul>
+<li><a href="/data/property_taxes_2016.csv"><i class="fas fa-table"></i> <code>property_taxes_2016.csv</code></a></li>
+</ul></li>
+<li><p>Using Windows File Explorer or macOS Finder, move the newly downloaded CSV files into the “data” folder you created.</p></li>
+</ol>
+<p>In the end, your project folder should be structured like this:<span><label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Make sure your <code>.Rmd</code> file is <em>not</em> inside the data folder.<br />
+<br />
+</span></span></p>
+<p><img src="/images/assignment/ps3-project-outline.png" width="60%" /></p>
+<h3 id="completing-the-assignment">Completing the assignment</h3>
+<ol style="list-style-type: decimal">
+<li><p>Ensure that you have your new <code>problem-set-3</code> project open in RStudio. Open the <code>.Rmd</code> file from the “Files” panel in RStudio and follow the instructions there for the rest of the problem set.</p></li>
+<li><p>Where appropriate, delete the questions I provided and rewrite the text to be more narrative. You can leave all my text for the section called “Basic Regression 1”, since that’s a complete example that you can follow and that you probably want to keep for future reference.</p></li>
+<li><p>Knit the <code>.Rmd</code> as a Word document<span><label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">Or PDF if you’ve installed tinytex.<br />
+<br />
+</span></span> when you’re done and submit it via Learning Suite.</p></li>
+</ol>
