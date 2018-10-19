@@ -49,6 +49,7 @@ lessons:
   - title: "Multiple regression"
     date: "October 18 (I & II)"
     reading: "07-reading"
+    class: "07-class"
   
   - title: "**Problem set 3**"
     date: "October 25"

@@ -14,7 +14,270 @@ editor_options:
 
 # Slides
 
-The slides for today will go here.
+Download the slides from today's lecture:
+
+- [<i class="fas fa-file-pdf"></i> PDF (best option)](/slides/MPA-630_2018-10-18.pdf)
+- [<i class="fas fa-file-powerpoint"></i> PowerPoint](/slides/MPA-630_2018-10-18.pptx)
+
+<figure>
+[![First slide](/images/slides/slides_2018-10-18.png)](/slides/MPA-630_2018-10-18.pdf)
+</figure>
+
+
+# Predicting temperature
+
+At the end of class today, we looked at the factors that predict the daily high temperature in Provo [(specifically `40.248752, -111.649216`)](https://www.google.com/maps/place/40%C2%B014'55.5%22N+111%C2%B038'57.2%22W/@40.248752,-111.6514047,17z/) from January to May 2017. Here's a cleaner version of that analysis.
+
+## Load and wrangle data
+
+First, we load the libraries we'll be using:
+
+```{r load-libraries, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(lubridate)
+library(moderndive)
+library(scales)  # For nicer axis labels
+```
+
+Then we load the data. I used the [`darksky` R package](https://github.com/hrbrmstr/darksky) to download this historical data from [Dark Sky](https://darksky.net), and then I [saved the CSV file online](https://gist.githubusercontent.com/andrewheiss/3eb9ef6186915711b44789767a1e434e/raw/be36336130546dd674332208eef5bac345bbf225/weather_provo_2017.csv).
+
+```{r fake-load-data, eval=FALSE}
+# This reads the CSV file directly from the internet
+weather_provo_raw <- read_csv("https://andhs.co/provoweather")
+```
+
+```{r real-load-data, include=FALSE, warning=FALSE, message=FALSE}
+weather_provo_raw <- read_csv(here::here("static", "data", "weather_provo_2017.csv"))
+```
+
+Then we clean and wrangle the data, or make adjustments to it so that it's easier to use and model and plot. I include comments explaining what each line does below:
+
+```{r wrangle-data}
+weather_provo_2017 <- weather_provo_raw %>% 
+         # Extract the month name from the date
+  mutate(month = month(date, label = TRUE, abbr = FALSE),
+         # Extract the month number from the date 
+         month_number = month(date, label = FALSE),
+         # Extract the day of the week from the date
+         weekday = wday(date, label = TRUE, abbr = FALSE),
+         # Extract the number of the day of the week (1 = Sunday)
+         weekday_number = wday(date, label = FALSE)) %>% 
+  # Change all the missing values in the precipType column to "none"
+  mutate(precipType = ifelse(is.na(precipType), "none", precipType)) %>% 
+  # Only select these columns
+  select(date, month, month_number, weekday, weekday_number,
+         sunriseTime, sunsetTime, moonPhase, precipProbability, precipType,
+         temperatureHigh, temperatureLow, dewPoint, humidity, pressure, 
+         windSpeed, cloudCover, visibility, uvIndex)
+
+# Make a subset of the clean data that only includes January through May
+winter_spring <- weather_provo_2017 %>% 
+  filter(month_number <= 5) %>% 
+  # After we filter, R still thinks that the month column has 12 possible
+  # categories. Here, we tell it to be a factor again (it already is one) so
+  # that it only includes January through May
+  mutate(month = factor(month, ordered = FALSE)) %>% 
+  # Finally, we multiply some of the percentage variables by 100 so the
+  # regression coefficients are easier to interpret
+  mutate(humidity = humidity * 100,
+         cloudCover = cloudCover * 100,
+         precipProbability = precipProbability * 100)
+```
+
+## Explore data
+
+First we can look at how the high temperature changed over time. Not surprisingly, it went up.
+
+```{r plot-temp-time}
+ggplot(winter_spring, aes(x = date, y = temperatureHigh)) +
+  geom_line() +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_y_continuous(labels = degree_format()) +
+  labs(x = NULL, y = "High temperature") +
+  theme_minimal()
+```
+
+Next we look at how humidity has changed over time. It went down:
+
+```{r plot-humid-time}
+ggplot(winter_spring, aes(x = date, y = humidity)) +
+  geom_line() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = NULL, y = "Humidity") +
+  theme_minimal()
+```
+
+Neat.
+
+## Humidity and temperature
+
+Our main research question is exploring the relationship between humidity and temperature. Are they correlated, and if so, how much does temperature change as humidity increases or decreases?
+
+Our outcome variable (or y or response or dependent variable) is thus `temperatureHigh`, while our main explanatory variable (or x or independent variable) is `humidity`.
+
+First we check to see how correlated they are, both visually and with a correlation coefficient:
+
+```{r plot-humid-temp}
+ggplot(winter_spring, aes(x = humidity, y = temperatureHigh)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_y_continuous(labels = degree_format()) +
+  labs(x = "Humidity", y = "High temperature") +
+  theme_minimal()
+```
+
+The graph shows that the two variables are definitely negatively correlated (as humidity increases, temperature decreases). The correlation between the two is…
+
+```{r cor-humid-temp}
+winter_spring %>% 
+  get_correlation(temperatureHigh ~ humidity)
+```
+
+…-0.821. That's close to 1, so we can say that temperature and humidity are strongly negatively correlated (r = -0.821).
+
+Next, we want to see how much temperature changes as humidity changes. We use a linear model to find the slope and intercept of this line:
+
+```{r model-humid-temp}
+model1 <- lm(temperatureHigh ~ humidity, data = winter_spring)
+model1 %>% get_regression_table()
+```
+
+First, we see if the intercept ($\beta_0$) provides helpful information. The intercept is 97, which means that on average, during the period of January to May 2017, if humidity was 0, the predicted temperature would be 97˚. That seems… really really high. There were 0 days with 0 humidity during this time period (the lowest humidity level was 25), so it's a stretch to try to interpret this for non-existent extra-humid days. We can safely disregard the intercept.
+
+The $\beta_1$ coefficient, or slope of humidity, shows that for every 1 point increase in humidity, there is an associated drop in temperature of 0.856˚, on average. As the weather becomes more humid, the high daily temperature becomes colder. This is probably because humidity in the winter is a sign of snow—I'm guessing this relationship is reversed in summer months, where humidity leads to muggier weather.
+
+
+## Months and temperature
+
+Next, we want to see what the effect of time is on temperature. While humidity explains some of the variation in temperature, from previous experience in being alive, we know that the weather naturally warms up as we approach summer, regardless of humidity or any other factor. We can see this if we look at the average temperature per month:
+
+```{r temp-month-table}
+winter_spring %>% 
+  group_by(month) %>% 
+  summarize(avg_high = mean(temperatureHigh))
+```
+
+Not surprisingly, January was really cold on average, while May was not. The other months fall somewhere in between.
+
+If we include month in the regression model, we'll get a coefficient for each month *except* the base case, which is the first category (January in this case):
+
+```{r model-temp-month}
+model2 <- lm(temperatureHigh ~ month, data = winter_spring)
+model2 %>% get_regression_table()
+```
+
+These coefficients are *not* slopes. They are shifts in the intercept. Notice how the intercept is 33.9—identical to January's average high temperature. All other month-based coefficients show the adjustment in average temperature per month using January as the base case. February is 11.8˚ warmer than January, on average. March is 22.8˚ warmer than January, on average. April is 22.9˚ warmer than January, on average. May is 35.4˚ warmer than January, on average.
+
+
+## Humidity, months, and temperature
+
+Both humidity and month explain variation in temperatures. This is obvious in this scatterplot, which colors the points by month. Points for May are clustered in the top left corner, while points in January are clustered in the bottom right. 
+
+```{r plot-temp-humid-month}
+ggplot(winter_spring, aes(x = humidity, y = temperatureHigh)) +
+  geom_point(aes(color = month)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_y_continuous(labels = degree_format()) +
+  labs(x = "Humidity", y = "High temperature") +
+  theme_minimal()
+```
+
+If we include both humidity and month in the model, we can get an estimate of the effect of humidity *controlling for* or *taking into account* time (or month). 
+
+```{r model-temp-humid-month}
+model3 <- lm(temperatureHigh ~ humidity + month, data = winter_spring)
+model3 %>% get_regression_table()
+```
+
+Now we have a slope for humidity, as well as several shifts in intercept based on month. We can start by interpreting the $\beta_0$ coefficient. This shows the average temperature in January when humidity is at 0. 71˚ still seems really high for January, but recall that there are no days with 0 humidity, so it's a stretch to try to get anything meaningful out of the intercept.
+
+We can make the following statements about this model:
+
+- Controlling for month, a one point increase in humidity is associated with a 0.56˚ drop in temperature, on average.
+- Controlling for humidity, the high temperature in February is 6.4˚ warmer than in January, on average. Note that this is a lot different than the $\beta$ from the previous model (there it was 11.8). That's because humidity is now explaining some of the variation in temperature.
+- Controlling for humidity, the high temperature in March is 10.9˚ warmer than in January, on average.
+- Taking humidity into account, the high temperature in April is 11.2˚ warmer than in January, on average.
+- On average, if we take humidity into account, the high temperature in May is 20.7˚ higher than in January.
+
+
+## Humidity, wind, and clouds
+
+For fun, we can see what the effect of other weather-related variables is on high temperature. Here we build a model using humidity, wind speed, and cloud cover to explain variation in temperature.
+
+```{r model-humid-wind-clouds}
+model4 <- lm(temperatureHigh ~ humidity + windSpeed + cloudCover,
+             data = winter_spring)
+model4 %>% get_regression_table()
+```
+
+We can make the following statements:
+
+- Controlling for wind speed and cloud cover, a one unit increase in humidity is associated with a 0.992˚ lower temperature, on average.
+- Taking humidity and cloud cover into account, a 1 MPH increase in wind speed is associated with a lower temperature of 0.959˚, on average.
+- On average, controlling for humidity and wind speed, a one percent increase in cloud cover is associated wig a higher temperature of 0.074˚.
+
+
+## Humidity, wind, clouds, and month
+
+We can also account for month when looking at humidity, wind speed, and cloud cover:
+
+```{r model-humid-wind-clouds-month}
+model5 <- lm(temperatureHigh ~ humidity + windSpeed + cloudCover + month,
+             data = winter_spring)
+model5 %>% get_regression_table()
+```
+
+Phew. Get ready for all these interpretations:
+
+- Controlling for wind speed, cloud cover, and month, a one unit increase in humidity is associated with a 0.658 drop in temperature, on average.
+- Taking into account all the other variables in the model, a 1 MPH increase in wind speed is associated with a 0.1˚ lower temperature.
+- Taking humidity, wind speed, and month into account, on average a 1 percent increase in cloud cover is associated with a 0.06˚ higher temperature.
+- Controlling for humidity, wind speed, and cloud cover, February is—on average—6.14˚ warmer than January.
+- Controlling for humidity, wind speed, and cloud cover, the average high temperature in March is 10.7˚ higher than in January
+- Taking humidity, wind speed, and cloud cover into account, April is 11.1˚ warmer than January, on average.
+- After controlling for humidity, wind speed, and cloud cover, we can see that high temperatures in May are an average of 20.8˚ higher than in January.
+
+
+## The kitchen sink
+
+For fun, here's a model that explains variation in temperature with humidity, wind speed, cloud cover, the probability of precipitation, visibility, *and* month. Oh baby.
+
+```{r kitchen-sink-model}
+model6 <- lm(temperatureHigh ~ humidity + windSpeed + cloudCover + 
+               precipProbability + visibility + month,
+             data = winter_spring)
+model6 %>% get_regression_table()
+```
+
+SO MANY COEFFICIENTS. I'm not going to interpret them all here. I'm sick of typing. Here are few:
+
+- Controlling for all the other variables in the model, a one unit increase in humidity is associated with a 0.764˚ lower temperature, on average.
+- Taking into account humidity, wind speed, cloud cover, visibility, and month, a 1% greater likelihood of precipitation is associated with a 0.112˚ higher temperature, on average.
+- Controlling for all the variables in the model, February is 5.9˚ warmer than January, on average.
+
+
+## All coefficients from all models
+
+For fun, we can compare the coefficients from all of these models simultaneously, similar to what we did in class with the regression that looked at the effect of small class sizes on test scores. If you install the `huxtable` package and use the `huxreg()` function, you can make the same sort of vertical, one-column-per-model table:
+
+```{r hux-models-fake, eval=FALSE}
+library(huxtable)
+
+huxreg(model1, model2, model3, model4, model5, model6)
+```
+
+```{r hux-models, echo=FALSE, warning=FALSE, message=FALSE, results="asis"}
+library(huxtable)
+
+huxreg(model1, model2, model3, model4, model5, model6,
+       number_format = "%.2f") %>% 
+  set_position("left") %>% 
+  print_html()
+```
+
+If the main goal of this whole exercise was to measure the effect of humidity on temperature, we've done a fairly good job. In every single model (except #2, where we didn't include it), the coefficient for humidity is consistently negative and ranges between 0.56 and 0.92. 
+
+In general, during the winter in Utah, if you see humidity rising, get your coat.
 
 
 # Clearest and muddiest things

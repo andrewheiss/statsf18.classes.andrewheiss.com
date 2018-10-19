@@ -13,18 +13,901 @@ editor_options:
 ---
 
 <!-- BLOGDOWN-HEAD -->
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+</style>
 <!-- /BLOGDOWN-HEAD -->
 
 <h2>Contents</h2>
 <div id="TOC">
 <ul>
 <li><a href="#slides">Slides</a></li>
+<li><a href="#predicting-temperature">Predicting temperature</a><ul>
+<li><a href="#load-and-wrangle-data">Load and wrangle data</a></li>
+<li><a href="#explore-data">Explore data</a></li>
+<li><a href="#humidity-and-temperature">Humidity and temperature</a></li>
+<li><a href="#months-and-temperature">Months and temperature</a></li>
+<li><a href="#humidity-months-and-temperature">Humidity, months, and temperature</a></li>
+<li><a href="#humidity-wind-and-clouds">Humidity, wind, and clouds</a></li>
+<li><a href="#humidity-wind-clouds-and-month">Humidity, wind, clouds, and month</a></li>
+<li><a href="#the-kitchen-sink">The kitchen sink</a></li>
+<li><a href="#all-coefficients-from-all-models">All coefficients from all models</a></li>
+</ul></li>
 <li><a href="#clearest-and-muddiest-things">Clearest and muddiest things</a></li>
 </ul>
 </div>
 
 <h2 id="slides">Slides</h2>
-<p>The slides for today will go here.</p>
+<p>Download the slides from today’s lecture:</p>
+<ul>
+<li><a href="/slides/MPA-630_2018-10-18.pdf"><i class="fas fa-file-pdf"></i> PDF (best option)</a></li>
+<li><a href="/slides/MPA-630_2018-10-18.pptx"><i class="fas fa-file-powerpoint"></i> PowerPoint</a></li>
+</ul>
+<figure>
+<a href="/slides/MPA-630_2018-10-18.pdf"><img src="/images/slides/slides_2018-10-18.png" alt="First slide" /></a>
+</figure>
+<h2 id="predicting-temperature">Predicting temperature</h2>
+<p>At the end of class today, we looked at the factors that predict the daily high temperature in Provo <a href="https://www.google.com/maps/place/40%C2%B014&#39;55.5%22N+111%C2%B038&#39;57.2%22W/@40.248752,-111.6514047,17z/">(specifically <code>40.248752, -111.649216</code>)</a> from January to May 2017. Here’s a cleaner version of that analysis.</p>
+<h3 id="load-and-wrangle-data">Load and wrangle data</h3>
+<p>First, we load the libraries we’ll be using:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(moderndive)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(scales)  <span class="co"># For nicer axis labels</span></a></code></pre></div>
+<p>Then we load the data. I used the <a href="https://github.com/hrbrmstr/darksky"><code>darksky</code> R package</a> to download this historical data from <a href="https://darksky.net">Dark Sky</a>, and then I <a href="https://gist.githubusercontent.com/andrewheiss/3eb9ef6186915711b44789767a1e434e/raw/be36336130546dd674332208eef5bac345bbf225/weather_provo_2017.csv">saved the CSV file online</a>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># This reads the CSV file directly from the internet</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">weather_provo_raw &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://andhs.co/provoweather&quot;</span>)</a></code></pre></div>
+<p>Then we clean and wrangle the data, or make adjustments to it so that it’s easier to use and model and plot. I include comments explaining what each line does below:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">weather_provo_<span class="dv">2017</span> &lt;-<span class="st"> </span>weather_provo_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">         </span><span class="co"># Extract the month name from the date</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">month</span>(date, <span class="dt">label =</span> <span class="ot">TRUE</span>, <span class="dt">abbr =</span> <span class="ot">FALSE</span>),</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">         <span class="co"># Extract the month number from the date </span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">         <span class="dt">month_number =</span> <span class="kw">month</span>(date, <span class="dt">label =</span> <span class="ot">FALSE</span>),</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">         <span class="co"># Extract the day of the week from the date</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">         <span class="dt">weekday =</span> <span class="kw">wday</span>(date, <span class="dt">label =</span> <span class="ot">TRUE</span>, <span class="dt">abbr =</span> <span class="ot">FALSE</span>),</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">         <span class="co"># Extract the number of the day of the week (1 = Sunday)</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">         <span class="dt">weekday_number =</span> <span class="kw">wday</span>(date, <span class="dt">label =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="st">  </span><span class="co"># Change all the missing values in the precipType column to &quot;none&quot;</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">precipType =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(precipType), <span class="st">&quot;none&quot;</span>, precipType)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="st">  </span><span class="co"># Only select these columns</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="st">  </span><span class="kw">select</span>(date, month, month_number, weekday, weekday_number,</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">         sunriseTime, sunsetTime, moonPhase, precipProbability, precipType,</a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">         temperatureHigh, temperatureLow, dewPoint, humidity, pressure, </a>
+<a class="sourceLine" id="cb3-16" data-line-number="16">         windSpeed, cloudCover, visibility, uvIndex)</a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co"># Make a subset of the clean data that only includes January through May</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19">winter_spring &lt;-<span class="st"> </span>weather_provo_<span class="dv">2017</span> <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="st">  </span><span class="kw">filter</span>(month_number <span class="op">&lt;=</span><span class="st"> </span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="st">  </span><span class="co"># After we filter, R still thinks that the month column has 12 possible</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="st">  </span><span class="co"># categories. Here, we tell it to be a factor again (it already is one) so</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="st">  </span><span class="co"># that it only includes January through May</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">factor</span>(month, <span class="dt">ordered =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="st">  </span><span class="co"># Finally, we multiply some of the percentage variables by 100 so the</span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="st">  </span><span class="co"># regression coefficients are easier to interpret</span></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">humidity =</span> humidity <span class="op">*</span><span class="st"> </span><span class="dv">100</span>,</a>
+<a class="sourceLine" id="cb3-28" data-line-number="28">         <span class="dt">cloudCover =</span> cloudCover <span class="op">*</span><span class="st"> </span><span class="dv">100</span>,</a>
+<a class="sourceLine" id="cb3-29" data-line-number="29">         <span class="dt">precipProbability =</span> precipProbability <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)</a></code></pre></div>
+<h3 id="explore-data">Explore data</h3>
+<p>First we can look at how the high temperature changed over time. Not surprisingly, it went up.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">ggplot</span>(winter_spring, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> temperatureHigh)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">degree_format</span>()) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;High temperature&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="/class/07-class_files/figure-html/plot-temp-time-1.png" width="672" /></p>
+<p>Next we look at how humidity has changed over time. It went down:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">ggplot</span>(winter_spring, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> humidity)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;Humidity&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="/class/07-class_files/figure-html/plot-humid-time-1.png" width="672" /></p>
+<p>Neat.</p>
+<h3 id="humidity-and-temperature">Humidity and temperature</h3>
+<p>Our main research question is exploring the relationship between humidity and temperature. Are they correlated, and if so, how much does temperature change as humidity increases or decreases?</p>
+<p>Our outcome variable (or y or response or dependent variable) is thus <code>temperatureHigh</code>, while our main explanatory variable (or x or independent variable) is <code>humidity</code>.</p>
+<p>First we check to see how correlated they are, both visually and with a correlation coefficient:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">ggplot</span>(winter_spring, <span class="kw">aes</span>(<span class="dt">x =</span> humidity, <span class="dt">y =</span> temperatureHigh)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">degree_format</span>()) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Humidity&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;High temperature&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="/class/07-class_files/figure-html/plot-humid-temp-1.png" width="672" /></p>
+<p>The graph shows that the two variables are definitely negatively correlated (as humidity increases, temperature decreases). The correlation between the two is…</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">winter_spring <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">get_correlation</span>(temperatureHigh <span class="op">~</span><span class="st"> </span>humidity)</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##   correlation
+##         &lt;dbl&gt;
+## 1      -0.821</code></pre>
+<p>…-0.821. That’s close to 1, so we can say that temperature and humidity are strongly negatively correlated (r = -0.821).</p>
+<p>Next, we want to see how much temperature changes as humidity changes. We use a linear model to find the slope and intercept of this line:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">model1 &lt;-<span class="st"> </span><span class="kw">lm</span>(temperatureHigh <span class="op">~</span><span class="st"> </span>humidity, <span class="dt">data =</span> winter_spring)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 7
+##   term      estimate std_error statistic p_value lower_ci upper_ci
+##   &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 intercept   97.0       2.62       37.0       0   91.9    102.   
+## 2 humidity    -0.856     0.049     -17.6       0   -0.952   -0.759</code></pre>
+<p>First, we see if the intercept (<span class="math inline">\(\beta_0\)</span>) provides helpful information. The intercept is 97, which means that on average, during the period of January to May 2017, if humidity was 0, the predicted temperature would be 97˚. That seems… really really high. There were 0 days with 0 humidity during this time period (the lowest humidity level was 25), so it’s a stretch to try to interpret this for non-existent extra-humid days. We can safely disregard the intercept.</p>
+<p>The <span class="math inline">\(\beta_1\)</span> coefficient, or slope of humidity, shows that for every 1 point increase in humidity, there is an associated drop in temperature of 0.856˚, on average. As the weather becomes more humid, the high daily temperature becomes colder. This is probably because humidity in the winter is a sign of snow—I’m guessing this relationship is reversed in summer months, where humidity leads to muggier weather.</p>
+<h3 id="months-and-temperature">Months and temperature</h3>
+<p>Next, we want to see what the effect of time is on temperature. While humidity explains some of the variation in temperature, from previous experience in being alive, we know that the weather naturally warms up as we approach summer, regardless of humidity or any other factor. We can see this if we look at the average temperature per month:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">winter_spring <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">avg_high =</span> <span class="kw">mean</span>(temperatureHigh))</a></code></pre></div>
+<pre><code>## # A tibble: 5 x 2
+##   month    avg_high
+##   &lt;fct&gt;       &lt;dbl&gt;
+## 1 January      33.9
+## 2 February     45.7
+## 3 March        56.6
+## 4 April        56.8
+## 5 May          69.3</code></pre>
+<p>Not surprisingly, January was really cold on average, while May was not. The other months fall somewhere in between.</p>
+<p>If we include month in the regression model, we’ll get a coefficient for each month <em>except</em> the base case, which is the first category (January in this case):</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">model2 &lt;-<span class="st"> </span><span class="kw">lm</span>(temperatureHigh <span class="op">~</span><span class="st"> </span>month, <span class="dt">data =</span> winter_spring)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 5 x 7
+##   term          estimate std_error statistic p_value lower_ci upper_ci
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 intercept         33.9      1.65     20.5        0    30.6      37.2
+## 2 monthFebruary     11.8      2.40      4.94       0     7.11     16.6
+## 3 monthMarch        22.8      2.34      9.74       0    18.1      27.4
+## 4 monthApril        22.9      2.35      9.75       0    18.3      27.6
+## 5 monthMay          35.4      2.34     15.2        0    30.8      40.0</code></pre>
+<p>These coefficients are <em>not</em> slopes. They are shifts in the intercept. Notice how the intercept is 33.9—identical to January’s average high temperature. All other month-based coefficients show the adjustment in average temperature per month using January as the base case. February is 11.8˚ warmer than January, on average. March is 22.8˚ warmer than January, on average. April is 22.9˚ warmer than January, on average. May is 35.4˚ warmer than January, on average.</p>
+<h3 id="humidity-months-and-temperature">Humidity, months, and temperature</h3>
+<p>Both humidity and month explain variation in temperatures. This is obvious in this scatterplot, which colors the points by month. Points for May are clustered in the top left corner, while points in January are clustered in the bottom right.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">ggplot</span>(winter_spring, <span class="kw">aes</span>(<span class="dt">x =</span> humidity, <span class="dt">y =</span> temperatureHigh)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> month)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">degree_format</span>()) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Humidity&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;High temperature&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="/class/07-class_files/figure-html/plot-temp-humid-month-1.png" width="672" /></p>
+<p>If we include both humidity and month in the model, we can get an estimate of the effect of humidity <em>controlling for</em> or <em>taking into account</em> time (or month).</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">model3 &lt;-<span class="st"> </span><span class="kw">lm</span>(temperatureHigh <span class="op">~</span><span class="st"> </span>humidity <span class="op">+</span><span class="st"> </span>month, <span class="dt">data =</span> winter_spring)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">model3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 7
+##   term          estimate std_error statistic p_value lower_ci upper_ci
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 intercept        71.8      3.70      19.4    0       64.5     79.1  
+## 2 humidity         -0.56     0.052    -10.9    0       -0.662   -0.458
+## 3 monthFebruary     6.44     1.85       3.48   0.001    2.78    10.1  
+## 4 monthMarch       10.9      2.05       5.30   0        6.83    15.0  
+## 5 monthApril       11.2      2.06       5.43   0        7.11    15.3  
+## 6 monthMay         20.7      2.20       9.39   0       16.3     25.1</code></pre>
+<p>Now we have a slope for humidity, as well as several shifts in intercept based on month. We can start by interpreting the <span class="math inline">\(\beta_0\)</span> coefficient. This shows the average temperature in January when humidity is at 0. 71˚ still seems really high for January, but recall that there are no days with 0 humidity, so it’s a stretch to try to get anything meaningful out of the intercept.</p>
+<p>We can make the following statements about this model:</p>
+<ul>
+<li>Controlling for month, a one point increase in humidity is associated with a 0.56˚ drop in temperature, on average.</li>
+<li>Controlling for humidity, the high temperature in February is 6.4˚ warmer than in January, on average. Note that this is a lot different than the <span class="math inline">\(\beta\)</span> from the previous model (there it was 11.8). That’s because humidity is now explaining some of the variation in temperature.</li>
+<li>Controlling for humidity, the high temperature in March is 10.9˚ warmer than in January, on average.</li>
+<li>Taking humidity into account, the high temperature in April is 11.2˚ warmer than in January, on average.</li>
+<li>On average, if we take humidity into account, the high temperature in May is 20.7˚ higher than in January.</li>
+</ul>
+<h3 id="humidity-wind-and-clouds">Humidity, wind, and clouds</h3>
+<p>For fun, we can see what the effect of other weather-related variables is on high temperature. Here we build a model using humidity, wind speed, and cloud cover to explain variation in temperature.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">model4 &lt;-<span class="st"> </span><span class="kw">lm</span>(temperatureHigh <span class="op">~</span><span class="st"> </span>humidity <span class="op">+</span><span class="st"> </span>windSpeed <span class="op">+</span><span class="st"> </span>cloudCover,</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">             <span class="dt">data =</span> winter_spring)</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">model4 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 7
+##   term       estimate std_error statistic p_value lower_ci upper_ci
+##   &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 intercept   103.        3.67      28.0    0       95.5    110.   
+## 2 humidity     -0.992     0.08     -12.4    0       -1.15    -0.833
+## 3 windSpeed    -0.959     0.533     -1.80   0.074   -2.01     0.093
+## 4 cloudCover    0.074     0.036      2.04   0.043    0.002    0.146</code></pre>
+<p>We can make the following statements:</p>
+<ul>
+<li>Controlling for wind speed and cloud cover, a one unit increase in humidity is associated with a 0.992˚ lower temperature, on average.</li>
+<li>Taking humidity and cloud cover into account, a 1 MPH increase in wind speed is associated with a lower temperature of 0.959˚, on average.</li>
+<li>On average, controlling for humidity and wind speed, a one percent increase in cloud cover is associated wig a higher temperature of 0.074˚.</li>
+</ul>
+<h3 id="humidity-wind-clouds-and-month">Humidity, wind, clouds, and month</h3>
+<p>We can also account for month when looking at humidity, wind speed, and cloud cover:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">model5 &lt;-<span class="st"> </span><span class="kw">lm</span>(temperatureHigh <span class="op">~</span><span class="st"> </span>humidity <span class="op">+</span><span class="st"> </span>windSpeed <span class="op">+</span><span class="st"> </span>cloudCover <span class="op">+</span><span class="st"> </span>month,</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">             <span class="dt">data =</span> winter_spring)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">model5 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 8 x 7
+##   term          estimate std_error statistic p_value lower_ci upper_ci
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 intercept       74.5       4.41     16.9     0       65.7     83.2  
+## 2 humidity        -0.658     0.074    -8.85    0       -0.805   -0.511
+## 3 windSpeed       -0.101     0.438    -0.231   0.817   -0.967    0.764
+## 4 cloudCover       0.06      0.029     2.07    0.04     0.003    0.117
+## 5 monthFebruary    6.14      1.85      3.33    0.001    2.49     9.79 
+## 6 monthMarch      10.7       2.04      5.23    0        6.63    14.7  
+## 7 monthApril      11.1       2.04      5.43    0        7.04    15.1  
+## 8 monthMay        20.8       2.21      9.40    0       16.4     25.2</code></pre>
+<p>Phew. Get ready for all these interpretations:</p>
+<ul>
+<li>Controlling for wind speed, cloud cover, and month, a one unit increase in humidity is associated with a 0.658 drop in temperature, on average.</li>
+<li>Taking into account all the other variables in the model, a 1 MPH increase in wind speed is associated with a 0.1˚ lower temperature.</li>
+<li>Taking humidity, wind speed, and month into account, on average a 1 percent increase in cloud cover is associated with a 0.06˚ higher temperature.</li>
+<li>Controlling for humidity, wind speed, and cloud cover, February is—on average—6.14˚ warmer than January.</li>
+<li>Controlling for humidity, wind speed, and cloud cover, the average high temperature in March is 10.7˚ higher than in January</li>
+<li>Taking humidity, wind speed, and cloud cover into account, April is 11.1˚ warmer than January, on average.</li>
+<li>After controlling for humidity, wind speed, and cloud cover, we can see that high temperatures in May are an average of 20.8˚ higher than in January.</li>
+</ul>
+<h3 id="the-kitchen-sink">The kitchen sink</h3>
+<p>For fun, here’s a model that explains variation in temperature with humidity, wind speed, cloud cover, the probability of precipitation, visibility, <em>and</em> month. Oh baby.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">model6 &lt;-<span class="st"> </span><span class="kw">lm</span>(temperatureHigh <span class="op">~</span><span class="st"> </span>humidity <span class="op">+</span><span class="st"> </span>windSpeed <span class="op">+</span><span class="st"> </span>cloudCover <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="st">               </span>precipProbability <span class="op">+</span><span class="st"> </span>visibility <span class="op">+</span><span class="st"> </span>month,</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">             <span class="dt">data =</span> winter_spring)</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">model6 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 10 x 7
+##    term              estimate std_error statistic p_value lower_ci upper_ci
+##    &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 intercept           88.2       8.50      10.4    0       71.4    105.   
+##  2 humidity            -0.764     0.081     -9.48   0       -0.924   -0.605
+##  3 windSpeed           -0.039     0.429     -0.09   0.928   -0.887    0.809
+##  4 cloudCover           0.019     0.031      0.61   0.543   -0.043    0.081
+##  5 precipProbability    0.112     0.041      2.77   0.006    0.032    0.192
+##  6 visibility          -0.8       0.74      -1.08   0.282   -2.26     0.664
+##  7 monthFebruary        5.90      1.93       3.06   0.003    2.08     9.71 
+##  8 monthMarch           9.62      2.20       4.36   0        5.26    14.0  
+##  9 monthApril           9.32      2.30       4.06   0        4.78    13.9  
+## 10 monthMay            19.4       2.38       8.17   0       14.7     24.1</code></pre>
+<p>SO MANY COEFFICIENTS. I’m not going to interpret them all here. I’m sick of typing. Here are few:</p>
+<ul>
+<li>Controlling for all the other variables in the model, a one unit increase in humidity is associated with a 0.764˚ lower temperature, on average.</li>
+<li>Taking into account humidity, wind speed, cloud cover, visibility, and month, a 1% greater likelihood of precipitation is associated with a 0.112˚ higher temperature, on average.</li>
+<li>Controlling for all the variables in the model, February is 5.9˚ warmer than January, on average.</li>
+</ul>
+<h3 id="all-coefficients-from-all-models">All coefficients from all models</h3>
+<p>For fun, we can compare the coefficients from all of these models simultaneously, similar to what we did in class with the regression that looked at the effect of small class sizes on test scores. If you install the <code>huxtable</code> package and use the <code>huxreg()</code> function, you can make the same sort of vertical, one-column-per-model table:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">library</span>(huxtable)</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="kw">huxreg</span>(model1, model2, model3, model4, model5, model6)</a></code></pre></div>
+<table class="huxtable" style="border-collapse: collapse; margin-bottom: 2em; margin-top: 2em; width: 50%; margin-left: 0%; margin-right: auto; ">
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<tr>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+(1)
+</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+(2)
+</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+(3)
+</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+(4)
+</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+(5)
+</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+(6)
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(Intercept)
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+97.05 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+33.90 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+71.80 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+102.72 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+74.46 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+88.24 ***
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.63)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(1.65)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(3.70)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(3.67)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(4.41)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(8.50)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+humidity
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-0.86 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-0.56 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-0.99 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-0.66 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-0.76 ***
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.05)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.05)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.08)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.07)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.08)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+monthFebruary
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+11.85 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+6.44 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+6.14 ** 
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+5.90 ** 
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.40)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(1.85)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(1.85)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(1.93)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+monthMarch
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+22.75 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+10.89 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+10.66 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+9.62 ***
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.33)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.05)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.04)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.20)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+monthApril
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+22.94 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+11.19 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+11.07 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+9.32 ***
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.35)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.06)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.04)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.30)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+monthMay
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+35.39 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+20.70 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+20.82 ***
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+19.44 ***
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.33)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.20)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.21)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(2.38)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+windSpeed
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-0.96    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-0.10    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-0.04    
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.53)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.44)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.43)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+cloudCover
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.07 *  
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.06 *  
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.02    
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.04)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.03)   
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.03)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+precipProbability
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.11 ** 
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+(0.04)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+visibility
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-0.80    
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+(0.74)   
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+N
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+151       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+151       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+151       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+151       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+151       
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+151       
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+R2
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.67    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.64    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.80    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.69    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.81    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+0.82    
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+logLik
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-538.86    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-546.68    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-501.71    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-536.40    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-498.95    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">
+-494.00    
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+AIC
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+1083.72    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+1105.36    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+1017.43    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+1082.80    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+1015.91    
+</td>
+<td style="vertical-align: top; text-align: right; white-space: nowrap; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt; padding: 4pt 4pt 4pt 4pt;">
+1010.01    
+</td>
+</tr>
+<tr>
+<td colspan="7" style="vertical-align: top; text-align: left; white-space: normal; padding: 4pt 4pt 4pt 4pt;">
+*** p &lt; 0.001; ** p &lt; 0.01; * p &lt; 0.05.
+</td>
+</tr>
+</table>
+<p>If the main goal of this whole exercise was to measure the effect of humidity on temperature, we’ve done a fairly good job. In every single model (except #2, where we didn’t include it), the coefficient for humidity is consistently negative and ranges between 0.56 and 0.92.</p>
+<p>In general, during the winter in Utah, if you see humidity rising, get your coat.</p>
 <h2 id="clearest-and-muddiest-things">Clearest and muddiest things</h2>
 <p>Go to <a href="https://goo.gl/forms/PlPwZGhMOdU9mKfC3">this form</a> and answer these three questions:</p>
 <ol style="list-style-type: decimal">
