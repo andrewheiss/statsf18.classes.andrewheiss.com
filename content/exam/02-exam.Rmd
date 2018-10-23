@@ -5,4 +5,222 @@ editor_options:
   chunk_output_type: console
 ---
 
-An example of the questions you'll have in Exam 2 will go here three weeks before the exam.
+```{r load-libraries-data, warning=FALSE, message=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(openintro)
+library(moderndive)
+library(broom)
+library(pander)
+```
+
+
+# Short answer
+
+1. What is the difference between $R^2$ and adjusted $R^2$?
+
+\ 
+
+2. How do we know what the best fit of a regression line is?
+
+\ 
+
+3. What does it mean to account for other variables in a regression model?
+
+\ 
+
+4. What does it mean when we say that the coefficients for categorical variables are not slopes?
+
+\ 
+
+
+# Correlation
+
+## Coefficients
+
+Interpret the following correlation coefficients:
+
+1. 0.64
+
+\ 
+
+2. 0.11
+
+\ 
+
+3. -0.92
+
+\ 
+
+4. -0.01
+
+\ 
+
+5. 0.39
+
+\ 
+
+## Scatterplots
+
+Guess a correlation coefficient for each of these plots:
+
+```{r correlation-scatter}
+set.seed(1234)
+
+n_sim = 100
+
+simulated_cor <- data_frame(correlation = c(-0.95, 0.01, -0.7, 0.8)) %>% 
+  mutate(simulated_matrix = correlation %>% 
+           map(~ matrix(c(5, .x * sqrt(50), .x * sqrt(50), 10), 2, 2))) %>% 
+  mutate(simulated = simulated_matrix %>% 
+           map(~ mvtnorm::rmvnorm(n = n_sim, mean = c(20, 40), sigma = .x) %>% 
+                 as_data_frame())) %>% 
+  mutate(title = 1:n())
+
+simulated_cor %>% 
+  unnest(simulated) %>% 
+  ggplot(aes(x = V1, y = V2)) +
+  geom_point() +
+  facet_wrap(~ title, ncol = 2)
+```
+
+1. Plot 1
+
+\ 
+
+2. Plot 2
+
+\ 
+
+3. Plot 3
+
+\ 
+
+4. Plot 4
+
+\ 
+
+
+# Multiple regression 
+
+**There will be two questions structured similarly to this one, but with different emphases (i.e. just interpreting coefficients, just interpreting $R^2$, etc.).**
+
+```{r clean-mariokart, include=FALSE}
+mario_kart <- marioKart %>% 
+  filter(totalPr < 100) %>% 
+  select(price = totalPr, used = cond, duration, num_bids = nBids,
+         seller_rating = sellerRate, has_photo = stockPhoto, num_wheels = wheels)
+```
+
+You come across a data set with information about every Nintento Wii Mario Kart game listing on eBay in October 2009. There are 141 rows, each representing one eBay posting. There are columns indicating many different variables:
+
+- `price`: The final price of the game
+- `duration`: The number of days the game was listed on eBay
+- `used`: A categorical variable indicating if the game was new or used (base case = "new")
+- `num_bids`: The number of bids made during the auction
+- `seller_rating`: The number of ratings the seller has on eBay
+- `has_photo`: A categorical variable indicating if the seller included a stock photograph of the game (base case = "no")
+- `num_wheels`: The number of Wii wheel controllers included with the game
+
+## Variable identification
+
+We are interested in predicting the final price of a Mario Kart game sold on eBay, based on a host of factors. We run the following multiple regression model:
+
+$$
+\begin{align}
+\text{Model 1: } \widehat{\text{price}} &= \beta_0 + \beta_1 \text{duration} + \beta_2 \text{num_bids} + \beta_3 \text{used} + \\
+&\beta_4 \text{seller_rating} + \beta_5 \text{has_photo} + \beta_6 \text{duration}
+\end{align}
+$$
+
+1. What is/are the outcome (or dependent) variable(s)?
+
+\ 
+
+2. What is/are the explanatory (or independent) variable(s)?
+
+\ 
+
+
+## Interpreting output
+
+Here is the output from this regression model:
+
+```{r build-model, echo=TRUE}
+model1 <- lm(price ~ duration + num_bids + used + 
+               seller_rating + has_photo + num_wheels,
+             data = mario_kart)
+model1 %>% get_regression_table()
+```
+
+Interpret the following coefficients (remember the template!):
+
+3. `duration`
+
+\ 
+
+4. `num_bids`
+
+\ 
+
+5. `used`
+
+\ 
+
+6. `num_wheels`
+
+\ 
+
+
+## Interpreting fit
+
+The following code shows a summary of the model diagnostics:
+
+```{r show-summary, echo=TRUE}
+model1 %>% get_regression_summaries()
+```
+
+7. How much variation in final price does this model explain?
+
+\ 
+
+## Comparing models
+
+After running this first model, you run a couple simpler models that predict price based on whether the game is used, and one based on whether the game is used, how long it's posted, and how many wheel controllers are included:
+
+$$
+\begin{align}
+\text{Model 2: }\widehat{\text{price}} &= \beta_0 + \beta_1 \text{used}
+\end{align}
+$$
+
+$$
+\begin{align}
+\text{Model 3: }\widehat{\text{price}} &= \beta_0 + \beta_1 \text{used} + \beta_2 \text{duration} + \beta_3 \text{num_wheels}
+\end{align}
+$$
+
+```{r build-model2}
+model2 <- lm(price ~ used,
+             data = mario_kart)
+
+model3 <- lm(price ~ used + duration + num_wheels,
+             data = mario_kart)
+```
+
+This table provides the $R^2$ and adjusted $R^2$ values for the three models.
+
+```{r diagnose-all-models, results="asis"}
+data_frame(model = list(model1, model2, model3)) %>% 
+  mutate(glance = model %>% map(glance)) %>% 
+  unnest(glance) %>% 
+  mutate(formula = model %>% map_chr(~ as.character(.x$call)[[2]])) %>% 
+  mutate(model = paste0("Model ", 1:n())) %>% 
+  select(model, formula, r.squared, adj.r.squared) %>% 
+  pandoc.table(justify = "llcc")
+```
+
+1. Which of these models explains the most variation in price? How much variation does it explain?
+
+\ 

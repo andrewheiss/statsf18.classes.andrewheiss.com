@@ -5,6 +5,260 @@ editor_options:
   chunk_output_type: console
 ---
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+</style>
 
 
-<p>An example of the questions you’ll have in Exam 2 will go here three weeks before the exam.</p>
+<h2 id="short-answer">Short answer</h2>
+<ol style="list-style-type: decimal">
+<li>What is the difference between <span class="math inline">\(R^2\)</span> and adjusted <span class="math inline">\(R^2\)</span>?</li>
+</ol>
+<p> </p>
+<ol start="2" style="list-style-type: decimal">
+<li>How do we know what the best fit of a regression line is?</li>
+</ol>
+<p> </p>
+<ol start="3" style="list-style-type: decimal">
+<li>What does it mean to account for other variables in a regression model?</li>
+</ol>
+<p> </p>
+<ol start="4" style="list-style-type: decimal">
+<li>What does it mean when we say that the coefficients for categorical variables are not slopes?</li>
+</ol>
+<p> </p>
+<h2 id="correlation">Correlation</h2>
+<h3 id="coefficients">Coefficients</h3>
+<p>Interpret the following correlation coefficients:</p>
+<ol style="list-style-type: decimal">
+<li>0.64</li>
+</ol>
+<p> </p>
+<ol start="2" style="list-style-type: decimal">
+<li>0.11</li>
+</ol>
+<p> </p>
+<ol start="3" style="list-style-type: decimal">
+<li>-0.92</li>
+</ol>
+<p> </p>
+<ol start="4" style="list-style-type: decimal">
+<li>-0.01</li>
+</ol>
+<p> </p>
+<ol start="5" style="list-style-type: decimal">
+<li>0.39</li>
+</ol>
+<p> </p>
+<h3 id="scatterplots">Scatterplots</h3>
+<p>Guess a correlation coefficient for each of these plots:</p>
+<p><img src="/exam/02-exam_files/figure-html/correlation-scatter-1.png" width="672" /></p>
+<ol style="list-style-type: decimal">
+<li>Plot 1</li>
+</ol>
+<p> </p>
+<ol start="2" style="list-style-type: decimal">
+<li>Plot 2</li>
+</ol>
+<p> </p>
+<ol start="3" style="list-style-type: decimal">
+<li>Plot 3</li>
+</ol>
+<p> </p>
+<ol start="4" style="list-style-type: decimal">
+<li>Plot 4</li>
+</ol>
+<p> </p>
+<h2 id="multiple-regression">Multiple regression</h2>
+<p><strong>There will be two questions structured similarly to this one, but with different emphases (i.e. just interpreting coefficients, just interpreting <span class="math inline">\(R^2\)</span>, etc.).</strong></p>
+<p>You come across a data set with information about every Nintento Wii Mario Kart game listing on eBay in October 2009. There are 141 rows, each representing one eBay posting. There are columns indicating many different variables:</p>
+<ul>
+<li><code>price</code>: The final price of the game</li>
+<li><code>duration</code>: The number of days the game was listed on eBay</li>
+<li><code>used</code>: A categorical variable indicating if the game was new or used (base case = “new”)</li>
+<li><code>num_bids</code>: The number of bids made during the auction</li>
+<li><code>seller_rating</code>: The number of ratings the seller has on eBay</li>
+<li><code>has_photo</code>: A categorical variable indicating if the seller included a stock photograph of the game (base case = “no”)</li>
+<li><code>num_wheels</code>: The number of Wii wheel controllers included with the game</li>
+</ul>
+<h3 id="variable-identification">Variable identification</h3>
+<p>We are interested in predicting the final price of a Mario Kart game sold on eBay, based on a host of factors. We run the following multiple regression model:</p>
+<p><span class="math display">\[
+\begin{align}
+\text{Model 1: } \widehat{\text{price}} &amp;= \beta_0 + \beta_1 \text{duration} + \beta_2 \text{num_bids} + \beta_3 \text{used} + \\
+&amp;\beta_4 \text{seller_rating} + \beta_5 \text{has_photo} + \beta_6 \text{duration}
+\end{align}
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>What is/are the outcome (or dependent) variable(s)?</li>
+</ol>
+<p> </p>
+<ol start="2" style="list-style-type: decimal">
+<li>What is/are the explanatory (or independent) variable(s)?</li>
+</ol>
+<p> </p>
+<h3 id="interpreting-output">Interpreting output</h3>
+<p>Here is the output from this regression model:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">model1 &lt;-<span class="st"> </span><span class="kw">lm</span>(price <span class="op">~</span><span class="st"> </span>duration <span class="op">+</span><span class="st"> </span>num_bids <span class="op">+</span><span class="st"> </span>used <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">               </span>seller_rating <span class="op">+</span><span class="st"> </span>has_photo <span class="op">+</span><span class="st"> </span>num_wheels,</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">             <span class="dt">data =</span> mario_kart)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 7 x 7
+##   term          estimate std_error statistic p_value lower_ci upper_ci
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 intercept       40.8       2.04     20.0     0       36.8     44.9  
+## 2 duration         0.035     0.184     0.192   0.848   -0.328    0.399
+## 3 num_bids        -0.066     0.071    -0.932   0.353   -0.207    0.074
+## 4 usedused        -4.62      1.02     -4.54    0       -6.63    -2.61 
+## 5 seller_rating    0         0         3.64    0        0        0    
+## 6 has_photoyes     0.968     1.01      0.957   0.34    -1.03     2.97 
+## 7 num_wheels       7.72      0.553    13.9     0        6.62     8.81</code></pre>
+<p>Interpret the following coefficients (remember the template!):</p>
+<ol start="3" style="list-style-type: decimal">
+<li><code>duration</code></li>
+</ol>
+<p> </p>
+<ol start="4" style="list-style-type: decimal">
+<li><code>num_bids</code></li>
+</ol>
+<p> </p>
+<ol start="5" style="list-style-type: decimal">
+<li><code>used</code></li>
+</ol>
+<p> </p>
+<ol start="6" style="list-style-type: decimal">
+<li><code>num_wheels</code></li>
+</ol>
+<p> </p>
+<h3 id="interpreting-fit">Interpreting fit</h3>
+<p>The following code shows a summary of the model diagnostics:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 8
+##   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.749         0.737  20.7  4.55  4.67      66.5       0     7</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>How much variation in final price does this model explain?</li>
+</ol>
+<p> </p>
+<h3 id="comparing-models">Comparing models</h3>
+<p>After running this first model, you run a couple simpler models that predict price based on whether the game is used, and one based on whether the game is used, how long it’s posted, and how many wheel controllers are included:</p>
+<p><span class="math display">\[
+\begin{align}
+\text{Model 2: }\widehat{\text{price}} &amp;= \beta_0 + \beta_1 \text{used}
+\end{align}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\text{Model 3: }\widehat{\text{price}} &amp;= \beta_0 + \beta_1 \text{used} + \beta_2 \text{duration} + \beta_3 \text{num_wheels}
+\end{align}
+\]</span></p>
+<p>This table provides the <span class="math inline">\(R^2\)</span> and adjusted <span class="math inline">\(R^2\)</span> values for the three models.</p>
+<table style="width:97%;">
+<colgroup>
+<col width="13%" />
+<col width="44%" />
+<col width="16%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="left">formula</th>
+<th align="center">r.squared</th>
+<th align="center">adj.r.squared</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Model 1</td>
+<td align="left">price ~ duration + num_bids +
+used + seller_rating +
+has_photo + num_wheels</td>
+<td align="center">0.7487</td>
+<td align="center">0.7375</td>
+</tr>
+<tr class="even">
+<td align="left">Model 2</td>
+<td align="left">price ~ used</td>
+<td align="center">0.3506</td>
+<td align="center">0.3459</td>
+</tr>
+<tr class="odd">
+<td align="left">Model 3</td>
+<td align="left">price ~ used + duration +
+num_wheels</td>
+<td align="center">0.7169</td>
+<td align="center">0.7107</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: decimal">
+<li>Which of these models explains the most variation in price? How much variation does it explain?</li>
+</ol>
+<p> </p>
