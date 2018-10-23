@@ -82,13 +82,13 @@ Do high school GPAs predict (or explain variation in) freshman GPAs? If so, how 
 
 ```
 
-Does the effect of SAT scores on college GPA change when controlling for gender? What is the effect of SAT scores in this model? What is the effect of gender in this model? How much of the variation in college GPA is explained by this model?
+Does the effect of SAT scores on college GPA change when controlling for sex? What is the effect of SAT scores in this model? What is the effect of sex in this model? How much of the variation in college GPA is explained by this model?
 
 ```{r model-sat-sex}
 
 ```
 
-Does the effect of SAT scores on college GPA change when controlling for both high school GPA and gender? What is the effect of SAT scores in this model? What is the ffect of high school GPA in this model? What is the ffect of gender in this model? How much of the variation in college GPA is explained by this model?
+Does the effect of SAT scores on college GPA change when controlling for both high school GPA and sex? What is the effect of SAT scores in this model? What is the effect of high school GPA in this model? What is the effect of sex in this model? How much of the variation in college GPA is explained by this model?
 
 ```{r model-sat-hs-sex}
 
