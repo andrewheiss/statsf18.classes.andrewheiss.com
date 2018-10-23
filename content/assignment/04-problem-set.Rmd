@@ -7,4 +7,69 @@ editor_options:
   chunk_output_type: console
 ---
 
-The instructions for this problem set will be posted one week before it is due.
+SAT scores have long been a major factor in college admissions, under the assumption that students with higher test scores will perform better in college and receive a higher GPA. The SAT's popularity [has dropped in recent years](https://www.washingtonpost.com/news/answer-sheet/wp/2017/04/12/the-list-of-test-optional-colleges-and-universities-keeps-growing-despite-college-boards-latest-jab/), though, and this summer, the [University of Chicago announced that it would stop requiring SAT scores for all prospective undergraduates](http://www.chicagotribune.com/news/local/breaking/ct-university-chicago-sat-act-20180614-story.html).
+
+Educational Testing Service (ETS), the creator of the SAT, collected SAT scores, high school GPAs, and freshman-year-college GPAs for 1,000 students at an unnamed university.^[This is real data about real students, [compiled and cleaned by a professor at Dartmouth.](https://www.dartmouth.edu/~chance/course/Syllabi/Princeton96/Class12.html)]
+
+You are a university admissions officer and you are curious if SAT scores really do predict college performance. You're also interested in other factors that could influence student performance. 
+
+The data contains 6 variables:
+
+- `sex`: The sex of the student (male or female; female is the base case)
+- `sat_verbal`: The student's *percentile* score in the verbal section of the SAT
+- `sat_math`: The student's *percentile* score in the math section of the SAT
+- `sat_total`: `sat_verbal` + `sat_math`
+- `gpa_hs`: The student's GPA in high school at graduation
+- `gpa_fy`: The student's GPA at the end of their freshman year
+
+
+# Instructions
+
+## Setting up your project
+
+<i class="fas fa-info-circle"></i> *You can copy the "Problem Set 4" project on RStudio.cloud, which has this set up for you. But remember that you should eventually be moving off the cloud version and onto your computer, and this might be a good assignment to make that transition. [Here are the instructions for installing everything on your computer.](https://statsf18.classes.andrewheiss.com/install/)*
+
+1. Create a new RStudio project named "problem-set-4" (or whatever you want to call it) and put it somewhere on your computer.
+
+2. Navigate to that new project folder on your computer with File Explorer (in Windows) or Finder (in macOS) (i.e. however you look at files on your computer). 
+
+3. Download this R Markdown file^[You'll probably need to right click on the link and select "Save link as…"] and place it in your newly-created project (but not in your data folder—put it in the main directory):
+
+    - [<i class="fab fa-r-project"></i> `your-name_problem-set-4.Rmd`](/files/your-name_problem-set-4.Rmd)
+
+4. Create a new folder in your problem set folder called "data".
+
+5. Download this CSV file. It'll probably go into your Downloads folder.^[You'll probably need to right click on the link and select "Save link as…" or something similar—often browsers will load the CSV file like a web page, which isn't helpful.]
+
+    - [<i class="fas fa-table"></i> `sat_gpa.csv`](/data/sat_gpa.csv)
+
+6. Using Windows File Explorer or macOS Finder, move the newly downloaded CSV file into the "data" folder you created.
+
+In the end, your project folder should be structured like this:^[Make sure your `.Rmd` file is *not* inside the data folder.]
+
+```{r project-outline, echo=FALSE, out.width="60%"}
+knitr::include_graphics("/images/assignment/ps4-project-outline.png")
+```
+
+## Completing the assignment
+
+1. Ensure that you have your new `problem-set-4` project open in RStudio. Open the `.Rmd` file from the "Files" panel in RStudio and follow the instructions there for the rest of the problem set. 
+
+    You'll be answering the following questions. These are already in the problem set template and there are empty code chunks for you to use when answering.
+    
+    - How well do SAT scores correlate with freshman GPA?
+    - How well does high school GPA correlate with freshman GPA?
+    - Is the correlation between SAT scores and freshman GPA stronger for men or for women?
+    - Is the correlation between high school GPA and freshman GPA stronger for men or for women?
+    - Are there any sex-based differences in SAT scores? Are sex-based score differences larger in the verbal test or the math test?
+    - Do SAT scores predict (or explain variation in) freshman GPAs? If so, how much college GPA change is associated with changes in SAT scores? (i.e. interpret the slope for the SAT coefficient) How much of the variation in college GPA is explained by this model?
+    - Does a certain type of SAT score have a larger effect on freshman GPAs?
+    - Do high school GPAs predict (or explain variation in) freshman GPAs? If so, how much? How much of the variation in college GPA is explained by this model?
+    - Does the effect of SAT scores on college GPA change when controlling for gender? What is the effect of SAT scores in this model? What is the effect of gender in this model? How much of the variation in college GPA is explained by this model?
+    - Does the effect of SAT scores on college GPA change when controlling for both high school GPA and gender? What is the effect of SAT scores in this model? What is the ffect of high school GPA in this model? What is the ffect of gender in this model? How much of the variation in college GPA is explained by this model?
+    - Which model best predicts freshman GPA? How do you know?
+    - Do women's SAT scores underpredict their freshman GPAs?
+    - Should SAT scores be used for college admissions?
+    - What else might statistically predict freshman GPA? What else should be taken into account when admitting students?
+
+2. Knit the `.Rmd` as a Word document^[Or PDF if you've installed tinytex.] when you're done and submit it via Learning Suite.
