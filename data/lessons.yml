@@ -61,6 +61,7 @@ lessons:
   - title: "Regression diagnostics and predictions"
     date: "October 25 (I & II)"
     reading: "08-reading"
+    class: "08-class"
   
   - title: "**Problem set 4**"
     date: "November 1"
