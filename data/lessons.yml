@@ -81,13 +81,13 @@ lessons:
     date: "November 8 (I & II)"
     reading: "10-reading"
   
-  - title: "**Problem set 5**"
-    date: "November 8"
-    assignment: "05-problem-set"
-  
   - title: "Hypothesis testing"
     date: "November 15 (I & II)"
     reading: "11-reading"
+    
+  - title: "**Problem set 5**"
+    date: "November 15"
+    assignment: "05-problem-set"
   
   - title: "Inference and regression"
     date: "November 29 (I & II)"
