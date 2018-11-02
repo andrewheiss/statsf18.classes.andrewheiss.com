@@ -582,7 +582,7 @@ AIC
 <a class="sourceLine" id="cb40-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb40-7" data-line-number="7"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</a></code></pre></div>
 <p><img src="/class/08-class_files/figure-html/leave-party-plot-1.png" width="672" /></p>
-<p>Holy cow look at that UKIP line. It’s densely packed around the line, meaning that there’s a very strong positive correlation—the more a constituency voted for UKIP in 2015, the more it voted to leave the EU in 2016.</p>
+<p>Holy cow look at that UKIP line. The points are densely packed around the line, meaning that there’s a very strong positive correlation—the more a constituency voted for UKIP in 2015, the more it voted to leave the EU in 2016.</p>
 <p>Let’s look at the model to get the slopes (or effects):</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">leave_politics &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span>, </a>
 <a class="sourceLine" id="cb41-2" data-line-number="2">                     <span class="dt">data =</span> results_brexit)</a>
@@ -604,7 +604,7 @@ AIC
 <p>Controlling for a constituency’s Labour and UKIP voting patterns, a 1% increase in the votes cast for the Conservative party in 2015 is associated with a 0.007 point increase in the share of leave votes on, average (e.g. moving from 50% to 50.007%), which is pretty much a sign that there’s no effect. Controlling for a constituency’s Conservative and UKIP voting patterns, a 1% increase in the votes cast for the Labour party in 2015 is associated with a 0.026 point drop in the share of leave votes, on average (e.g. moving from 50% to 49.97%). Labour constituencies were less likely to vote to leave, but only slightly. However, taking into account Labour and Conservative voting patterns, a 1% increase in the votes cast for UKIP in 2015 is associated with a 1.49 point increase in the share of leave votes (e.g. moving from 50% to 51.49%), which is quite a sizable effect.</p>
 <p>This model explains 71.8% of the variation in the share of leave votes, which is pretty good. Just knowing how much of a presence UKIP has in a constituency is a good predictor of how it voted in the Brexit referendum.</p>
 <h4 id="leave-share-explained-by-lots-of-things">Leave share explained by lots of things</h4>
-<p>So far we’ve looked at immigration, education, age, and political party as explanations of the Brexit votes. How do these explanations change when we account for all these factors at once?</p>
+<p>So far we’ve looked at immigration, education, age, and political party as explanations of the Brexit vote. How do these explanations change when we account for all these factors at once?</p>
 <p>First, let’s run a big model:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">leave_everything &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span> <span class="op">+</span></a>
 <a class="sourceLine" id="cb45-2" data-line-number="2"><span class="st">                         </span>degree <span class="op">+</span><span class="st"> </span>age_18to24 <span class="op">+</span><span class="st"> </span>born_in_uk, <span class="dt">data =</span> results_brexit)</a>
@@ -625,7 +625,7 @@ AIC
 ##   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
 ## 1     0.915         0.914  9.94  3.15  3.17     1012.       0     7</code></pre>
-<p>I’ll interpret all the coefficients here so that you can get more practice reading these tables. In real life, you’d probably only be concerned about one or two of the explanatory variables (i.e. if you were only looking at the effect of age and education on leave vote share), so you’d only need to interpret those. The other control variable are essential—they explain part of the variation in vote share, and they let us isolate the effect of individual variables—but they don’t always have to be interpreted in your text in sentences.</p>
+<p>I’ll interpret all the coefficients here so that you can get more practice reading these tables. In real life, you’d probably only be concerned about one or two of the explanatory variables (i.e. if you were only looking at the effect of age and education on leave vote share), so you’d only need to interpret those. The other control variables are essential—they explain part of the variation in vote share, and they let us isolate the effect of individual variables—but they don’t always have to be interpreted in your text in sentences.</p>
 <p><deep breath></p>
 <ul>
 <li>Taking into account Labour and UKIP voting patterns, education, age, and immigration patterns, a 1% increase in the votes cast for the Conservative party in 2015 is associated with a 0.155 point increase in the share of leave votes in a constituency, on average (e.g. moving from 50% to 50.155%). This shows that Conservative constituencies tended to lean more towards “Leave”, but only slightly.</li>
@@ -645,7 +645,7 @@ AIC
 <li>UKIP won 15%</li>
 <li>20% of the constituency has a university degree</li>
 <li>10% of the constituency is between 18 and 24</li>
-<li>90% of the constituency was both in the UK</li>
+<li>90% of the constituency was born in the UK</li>
 </ul>
 <p>We could do this by hand by plugging these into the equation that we get from the model. Here’s the model we ran:</p>
 <p><span class="math display">\[
@@ -705,7 +705,7 @@ AIC
 <li>Labour won 30%</li>
 <li>UKIP won 15%</li>
 <li>10% of the constituency is between 18 and 24</li>
-<li>90% of the constituency was both in the UK</li>
+<li>90% of the constituency was born in the UK</li>
 </ul>
 <p>We want to see the the effect of education. What happens if the proportion of the constituency with a university degree is 10%? 20%? 30%? 40%? etc. What happens to the leave share as we move this education up and down?</p>
 <p>We can answer this by creating an <code>imaginary_constituency</code> data frame with multiple rows, varying education in each one. We then plug that data frame into <code>predict()</code> and generate predictions for each row.</p>
