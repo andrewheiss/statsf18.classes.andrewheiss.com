@@ -76,6 +76,7 @@ lessons:
   - title: "Sampling"
     date: "November 1 (II)"
     reading: "09-reading"
+    class: "09-class"
   
   - title: "Bootstrapping and confidence intervals"
     date: "November 8 (I & II)"

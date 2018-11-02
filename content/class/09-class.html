@@ -16,7 +16,467 @@ stuff-to-add: >-
 ---
 
 <!-- BLOGDOWN-HEAD -->
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+</style>
 <!-- /BLOGDOWN-HEAD -->
 
+<h2>Contents</h2>
+<div id="TOC">
+<ul>
+<li><a href="#slides">Slides</a></li>
+<li><a href="#mms">M&amp;Ms</a><ul>
+<li><a href="#mm-reporting-form">M&amp;M reporting form</a></li>
+<li><a href="#the-true-population-parameters-of-mm-colors">The true population parameters of M&amp;M colors</a></li>
+<li><a href="#mms-in-real-life">M&amp;Ms in real life</a></li>
+<li><a href="#simulated-mms">Simulated M&amp;Ms</a></li>
+<li><a href="#the-importance-of-sample-size">The importance of sample size</a></li>
+</ul></li>
+<li><a href="#clearest-and-muddiest-things">Clearest and muddiest things</a></li>
+</ul>
+</div>
 
-
+<h2 id="slides">Slides</h2>
+<p>Download the slides from today’s lecture:</p>
+<ul>
+<li><a href="/slides/MPA-630_2018-11-01.pdf"><i class="fas fa-file-pdf"></i> PDF (best option)</a></li>
+<li><a href="/slides/MPA-630_2018-11-01.pptx"><i class="fas fa-file-powerpoint"></i> PowerPoint</a></li>
+</ul>
+<figure>
+<a href="/slides/MPA-630_2018-11-01.pdf"><img src="/images/slides/slides_2018-11-01.png" alt="First slide" /></a>
+</figure>
+<h2 id="mms">M&amp;Ms</h2>
+<p>In class we used M&amp;Ms to explore how sampling works. Here’s an analysis of this exploration in R. Load these packages to get started, and download these two datasets (and put them in a folder named “data”):</p>
+<ul>
+<li><a href="/data/tons_of_mms.csv"><i class="fas fa-table"></i> <code>tons_of_mms.csv</code></a></li>
+<li><a href="/data/class_mms.csv"><i class="fas fa-table"></i> <code>class_mms.csv</code></a></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(moderndive)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(pander)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(scales)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co"># Setting a random seed ensures that every random draw will be the same each</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># time you run this (and regardless of what computer you run this on)</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co"># Official M&amp;M colors via</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co"># - Wikipedia: https://en.wikipedia.org/wiki/M%26M%27s</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co"># - This palette: https://colorswall.com/palette/172/</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">mm_red &lt;-<span class="st"> &quot;#b11224&quot;</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">mm_orange &lt;-<span class="st"> &quot;#f26f22&quot;</span></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">mm_yellow &lt;-<span class="st"> &quot;#fff200&quot;</span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">mm_green &lt;-<span class="st"> &quot;#31ac55&quot;</span></a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">mm_blue &lt;-<span class="st"> &quot;#2f9fd7&quot;</span></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">mm_brown &lt;-<span class="st"> &quot;#603a34&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">tons_of_mms &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/tons_of_mms.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">class_results &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/class_mms.csv&quot;</span>)</a></code></pre></div>
+<h3 id="mm-reporting-form">M&amp;M reporting form</h3>
+<p>Go here to report the count of M&amp;Ms in your bag:</p>
+<ul>
+<li><i class="fas fa-question-circle"></i> <a href="https://goo.gl/forms/o0MW5ERwh67Iake03">Reporting form</a></li>
+</ul>
+<h3 id="the-true-population-parameters-of-mm-colors">The true population parameters of M&amp;M colors</h3>
+<p>Because of <a href="https://blogs.sas.com/content/iml/2017/02/20/proportion-of-colors-mandms.html">the work of smart/bored statisticians</a> (and from the Mars company itself), we actually know the true population-level parameters for the proportion of colors. For whatever reason, M&amp;Ms’s two US factories produce a different mix of colors (perhaps the East Coast likes blue M&amp;Ms more?). Here are the true population parameters:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mms_population &lt;-<span class="st"> </span><span class="kw">tribble</span>(</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="op">~</span>color,   <span class="op">~</span>prop_clv, <span class="op">~</span>prop_hkp,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="st">&quot;Red&quot;</span>,    <span class="fl">0.131</span>,     <span class="fl">0.125</span>,</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="st">&quot;Orange&quot;</span>, <span class="fl">0.205</span>,     <span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="st">&quot;Yellow&quot;</span>, <span class="fl">0.135</span>,     <span class="fl">0.125</span>,</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="st">&quot;Green&quot;</span>,  <span class="fl">0.198</span>,     <span class="fl">0.125</span>,</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="st">&quot;Blue&quot;</span>,   <span class="fl">0.207</span>,     <span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">  <span class="st">&quot;Brown&quot;</span>,  <span class="fl">0.124</span>,     <span class="fl">0.125</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">mms_population <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="st">  </span><span class="kw">gather</span>(Factory, value, <span class="op">-</span>color) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="kw">percent</span>(value)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="st">  </span><span class="kw">spread</span>(color, value) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Factory =</span> <span class="kw">recode</span>(Factory,</a>
+<a class="sourceLine" id="cb3-16" data-line-number="16">                          <span class="dt">prop_clv =</span> <span class="st">&quot;Cleveland, OH (CLV)&quot;</span>,</a>
+<a class="sourceLine" id="cb3-17" data-line-number="17">                          <span class="dt">prop_hkp =</span> <span class="st">&quot;Hackettstown, NJ (HKP)&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="st">  </span><span class="kw">pandoc.table</span>(<span class="dt">justify =</span> <span class="st">&quot;lcccccc&quot;</span>)</a></code></pre></div>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="12%" />
+<col width="10%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Factory</th>
+<th align="center">Blue</th>
+<th align="center">Brown</th>
+<th align="center">Green</th>
+<th align="center">Orange</th>
+<th align="center">Red</th>
+<th align="center">Yellow</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Cleveland, OH (CLV)</td>
+<td align="center">20.7%</td>
+<td align="center">12.4%</td>
+<td align="center">19.8%</td>
+<td align="center">20.5%</td>
+<td align="center">13.1%</td>
+<td align="center">13.5%</td>
+</tr>
+<tr class="even">
+<td align="left">Hackettstown, NJ (HKP)</td>
+<td align="center">25.0%</td>
+<td align="center">12.5%</td>
+<td align="center">12.5%</td>
+<td align="center">25.0%</td>
+<td align="center">12.5%</td>
+<td align="center">12.5%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mms-in-real-life">M&amp;Ms in real life</h3>
+<p>Here are the results of the M&amp;M sampling that we did in class:</p>
+<h4 id="individual-fun-packs">Individual fun-packs</h4>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">individual_data &lt;-<span class="st"> </span>class_results <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(type <span class="op">==</span><span class="st"> &quot;Myself&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">gather</span>(color, count, <span class="kw">c</span>(Blue, Brown, Green, Orange, Red, Yellow)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> count <span class="op">/</span><span class="st"> </span>total) </a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">individual_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="st">  </span><span class="kw">group_by</span>(color) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">avg_prop =</span> <span class="kw">mean</span>(prop),</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">            <span class="dt">sd_prop =</span> <span class="kw">sd</span>(prop))</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##   color  avg_prop sd_prop
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Blue      0.188  0.0880
+## 2 Brown     0.128  0.0924
+## 3 Green     0.221  0.113 
+## 4 Orange    0.149  0.0784
+## 5 Red       0.173  0.101 
+## 6 Yellow    0.136  0.0781</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">ggplot</span>(individual_data, <span class="kw">aes</span>(<span class="dt">x =</span> prop, <span class="dt">fill =</span> color)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.05</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> mms_population, <span class="kw">aes</span>(<span class="dt">xintercept =</span> prop_clv),</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">             <span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;dotted&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Proportion&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Actual colors in 31 fun-sized bags&quot;</span>,</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">       <span class="dt">subtitle =</span> <span class="st">&quot;Orange dotted line shows the true population value&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>(<span class="dt">accuracy =</span> <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>()) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>color)</a></code></pre></div>
+<p><img src="/class/09-class_files/figure-html/plot-real-individual-1.png" width="672" /></p>
+<h4 id="team-checkout-line-sized-bags">Team checkout-line-sized bags</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">team_data &lt;-<span class="st"> </span>class_results <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(type <span class="op">==</span><span class="st"> &quot;My team&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw">gather</span>(color, count, <span class="kw">c</span>(Blue, Brown, Green, Orange, Red, Yellow)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> count <span class="op">/</span><span class="st"> </span>total) </a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">team_data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">  </span><span class="kw">group_by</span>(color) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">avg_prop =</span> <span class="kw">mean</span>(prop),</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">            <span class="dt">sd_prop =</span> <span class="kw">sd</span>(prop))</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##   color  avg_prop sd_prop
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Blue      0.249  0.0672
+## 2 Brown     0.107  0.0493
+## 3 Green     0.253  0.0530
+## 4 Orange    0.152  0.0967
+## 5 Red       0.142  0.0430
+## 6 Yellow    0.101  0.0285</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">ggplot</span>(team_data, <span class="kw">aes</span>(<span class="dt">x =</span> prop, <span class="dt">fill =</span> color)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.05</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> mms_population, <span class="kw">aes</span>(<span class="dt">xintercept =</span> prop_clv),</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">             <span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;dotted&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Proportion&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Actual colors in 11 checkout-line-sized bags&quot;</span>,</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">       <span class="dt">subtitle =</span> <span class="st">&quot;Orange dotted line shows the true population value&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>(<span class="dt">accuracy =</span> <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>()) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>color)</a></code></pre></div>
+<p><img src="/class/09-class_files/figure-html/plot-real-team-1.png" width="672" /></p>
+<h3 id="simulated-mms">Simulated M&amp;Ms</h3>
+<p>We can use the <code>rep_sample_n()</code> function from the <code>moderndive</code> library to simulate taking a random sample from a giant vat of 100,000 Cleveland-produced M&amp;Ms.</p>
+<p>Here’s what happens if we take one fun-sized sample of M&amp;Ms:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">one_fun_sized_bag &lt;-<span class="st"> </span>tons_of_mms <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">rep_sample_n</span>(<span class="dt">size =</span> <span class="dv">19</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">one_fun_sized_bag</a></code></pre></div>
+<pre><code>## # A tibble: 19 x 3
+## # Groups:   replicate [1]
+##    replicate mm_id color 
+##        &lt;int&gt; &lt;int&gt; &lt;chr&gt; 
+##  1         1 11371 Red   
+##  2         1 62230 Blue  
+##  3         1 60927 Green 
+##  4         1 62337 Green 
+##  5         1 86089 Orange
+##  6         1 64028 Green 
+##  7         1   950 Brown 
+##  8         1 23254 Brown 
+##  9         1 66604 Red   
+## 10         1 51421 Yellow
+## 11         1 69353 Red   
+## 12         1 54492 Brown 
+## 13         1 28270 Green 
+## 14         1 92332 Brown 
+## 15         1 29228 Green 
+## 16         1 83718 Green 
+## 17         1 28618 Brown 
+## 18         1 26678 Green 
+## 19         1 18669 Red</code></pre>
+<p>We can calculate the proportion of colors in this one bag:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">one_fun_sized_bag <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(color) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">prop =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="dv">19</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 2
+##   color    prop
+##   &lt;chr&gt;   &lt;dbl&gt;
+## 1 Blue   0.0526
+## 2 Brown  0.263 
+## 3 Green  0.368 
+## 4 Orange 0.0526
+## 5 Red    0.211 
+## 6 Yellow 0.0526</code></pre>
+<p>Just looking at one bag will result in a lot of variability. Some colors might not be in the bag; some colors might be overrepresented in the bag. We can improve our estimates of <span class="math inline">\(\widehat{p}\)</span> by increasing the number of samples we take. Here’s what happens if we look at 40 fun-sized bags, just like we did in-person in class:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">forty_fun_sized_bags &lt;-<span class="st"> </span>tons_of_mms <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw">rep_sample_n</span>(<span class="dt">size =</span> <span class="dv">19</span>, <span class="dt">reps =</span> <span class="dv">40</span>)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">forty_fun_sized_bags_color &lt;-<span class="st"> </span>forty_fun_sized_bags <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="st">  </span><span class="kw">group_by</span>(color, replicate) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">prop =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="dv">19</span>) </a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8">forty_fun_sized_bags_color <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">avg_prop =</span> <span class="kw">mean</span>(prop),</a>
+<a class="sourceLine" id="cb14-10" data-line-number="10">            <span class="dt">sd_prop =</span> <span class="kw">sd</span>(prop))</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##   color  avg_prop sd_prop
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Blue      0.211  0.0810
+## 2 Brown     0.139  0.0756
+## 3 Green     0.217  0.0864
+## 4 Orange    0.193  0.104 
+## 5 Red       0.154  0.0748
+## 6 Yellow    0.130  0.0721</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">ggplot</span>(forty_fun_sized_bags_color, <span class="kw">aes</span>(<span class="dt">x =</span> prop, <span class="dt">fill =</span> color)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.05</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> mms_population, <span class="kw">aes</span>(<span class="dt">xintercept =</span> prop_clv),</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">             <span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;dotted&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Proportion&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Simulation of 40 party-sized bags&quot;</span>,</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">       <span class="dt">subtitle =</span> <span class="st">&quot;Orange dotted line shows the true population value&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>(<span class="dt">accuracy =</span> <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>()) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>color)</a></code></pre></div>
+<p><img src="/class/09-class_files/figure-html/plot-simulated-forty-bags-1.png" width="672" /></p>
+<p>There’s still some variability, but the standard deviation is smaller than it was with just one fun-sized bag.</p>
+<p>Next let’s simulate 10 checkout-line-sized bags (what we did as teams in class). These have roughly 55 M&amp;Ms per bag:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">ten_checkout_sized_bags &lt;-<span class="st"> </span>tons_of_mms <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw">rep_sample_n</span>(<span class="dt">size =</span> <span class="dv">55</span>, <span class="dt">reps =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">ten_checkout_sized_bags_color &lt;-<span class="st"> </span>ten_checkout_sized_bags <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="st">  </span><span class="kw">group_by</span>(color, replicate) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">prop =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="dv">55</span>) </a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb17-8" data-line-number="8">ten_checkout_sized_bags_color <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">avg_prop =</span> <span class="kw">mean</span>(prop),</a>
+<a class="sourceLine" id="cb17-10" data-line-number="10">            <span class="dt">sd_prop =</span> <span class="kw">sd</span>(prop))</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##   color  avg_prop sd_prop
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Blue      0.198  0.0415
+## 2 Brown     0.153  0.0523
+## 3 Green     0.189  0.0648
+## 4 Orange    0.193  0.0601
+## 5 Red       0.144  0.0406
+## 6 Yellow    0.124  0.0652</code></pre>
+<p>Our errors are shrinking and the means are starting to converge on the true population <span class="math inline">\(p\)</span>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">ggplot</span>(ten_checkout_sized_bags_color, <span class="kw">aes</span>(<span class="dt">x =</span> prop, <span class="dt">fill =</span> color)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.025</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> mms_population, <span class="kw">aes</span>(<span class="dt">xintercept =</span> prop_clv),</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">             <span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;dotted&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Proportion&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Simulation of 10 checkout-line-sized bags&quot;</span>,</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">       <span class="dt">subtitle =</span> <span class="st">&quot;Orange dotted line shows the true population value&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>(<span class="dt">accuracy =</span> <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-8" data-line-number="8"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-11" data-line-number="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>()) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-12" data-line-number="12"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>color)</a></code></pre></div>
+<p><img src="/class/09-class_files/figure-html/plot-ten-checkout-1.png" width="672" /></p>
+<p>Now let’s move beyond what we did in class. Let’s simulate 10 party-sized bags (42 ounces; each contains roughly 1,000 M&amp;Ms):</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">ten_party_sized_bags &lt;-<span class="st"> </span>tons_of_mms <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="st">  </span><span class="kw">rep_sample_n</span>(<span class="dt">size =</span> <span class="dv">1000</span>, <span class="dt">reps =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">ten_party_sized_bags_color &lt;-<span class="st"> </span>ten_party_sized_bags <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="st">  </span><span class="kw">group_by</span>(color, replicate) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">prop =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="dv">1000</span>) </a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb20-8" data-line-number="8">ten_party_sized_bags_color <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-9" data-line-number="9"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">avg_prop =</span> <span class="kw">mean</span>(prop),</a>
+<a class="sourceLine" id="cb20-10" data-line-number="10">            <span class="dt">sd_prop =</span> <span class="kw">sd</span>(prop))</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##   color  avg_prop sd_prop
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Blue      0.209 0.0151 
+## 2 Brown     0.124 0.00954
+## 3 Green     0.195 0.0123 
+## 4 Orange    0.203 0.00919
+## 5 Red       0.133 0.0122 
+## 6 Yellow    0.136 0.0106</code></pre>
+<p>The errors are now substantially smaller. Check out how little variation there is!</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">ggplot</span>(ten_party_sized_bags_color, <span class="kw">aes</span>(<span class="dt">x =</span> prop, <span class="dt">fill =</span> color)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.025</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> mms_population, <span class="kw">aes</span>(<span class="dt">xintercept =</span> prop_clv),</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">             <span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;dotted&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Proportion&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Simulation of 10 party-sized bags&quot;</span>,</a>
+<a class="sourceLine" id="cb22-6" data-line-number="6">       <span class="dt">subtitle =</span> <span class="st">&quot;Orange dotted line shows the true population value&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>(<span class="dt">accuracy =</span> <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-8" data-line-number="8"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-9" data-line-number="9"><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-10" data-line-number="10"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-11" data-line-number="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>()) <span class="op">+</span></a>
+<a class="sourceLine" id="cb22-12" data-line-number="12"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>color)</a></code></pre></div>
+<p><img src="/class/09-class_files/figure-html/plot-ten-party-1.png" width="672" /></p>
+<p>With only 10 large-ish bags of M&amp;Ms (420 ounces, or 26.25 pounds), we can guess the proportion of colors for <em>the entire population of M&amp;Ms created in Cleveland</em> with fairly high confidence. That’s amazing.</p>
+<h3 id="the-importance-of-sample-size">The importance of sample size</h3>
+<p>As a final demonstration of this, here’s a simulation of what happens to our <span class="math inline">\(\widehat{p}\)</span> estimates and margins of error as we increase the sample size from 5 to 1,000. The x-axis here show the sample size; the y-axis shows the <span class="math inline">\(\widehat{p}\)</span> for each color at that sample size; the orange ribbon shows the 95% confidence interval, or margin of error; the black horizontal line shows the true population average.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">different_ns &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">n =</span> <span class="kw">seq</span>(<span class="dv">5</span>, <span class="dv">1000</span>, <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">draw =</span> n <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="st"> </span><span class="kw">rep_sample_n</span>(tons_of_mms, <span class="dt">size =</span> .x, <span class="dt">reps =</span> <span class="dv">1</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="st">  </span><span class="kw">unnest</span>(draw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(n, color) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">prop =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="kw">max</span>(n)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-6" data-line-number="6"><span class="st">  </span><span class="co"># This is the real way of calculating the margin of error; we&#39;ll talk about this next week</span></a>
+<a class="sourceLine" id="cb23-7" data-line-number="7"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">se =</span> <span class="kw">sqrt</span>(prop <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>prop) <span class="op">/</span><span class="st"> </span>n),</a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">         <span class="dt">moe =</span> <span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>se,</a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">         <span class="dt">lower_ci =</span> prop <span class="op">-</span><span class="st"> </span>moe,</a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">         <span class="dt">upper_ci =</span> prop <span class="op">+</span><span class="st"> </span>moe)</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb23-12" data-line-number="12"><span class="kw">ggplot</span>(different_ns, <span class="kw">aes</span>(<span class="dt">x =</span> n, <span class="dt">y =</span> prop)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-13" data-line-number="13"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower_ci, <span class="dt">ymax =</span> upper_ci), <span class="dt">fill =</span> <span class="st">&quot;orange&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">0.25</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-15" data-line-number="15"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">data =</span> mms_population, <span class="kw">aes</span>(<span class="dt">yintercept =</span> prop_clv), <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-16" data-line-number="16"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">data =</span> mms_population, <span class="kw">aes</span>(<span class="dt">yintercept =</span> prop_clv), <span class="dt">size =</span> <span class="fl">0.75</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-17" data-line-number="17"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Sample size (n)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Proportion&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Accuracy of p-hat as sample size increases&quot;</span>,</a>
+<a class="sourceLine" id="cb23-18" data-line-number="18">       <span class="dt">subtitle =</span> <span class="st">&quot;Black horizontal line shows the true population value &quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-19" data-line-number="19"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>(<span class="dt">accuracy =</span> <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-20" data-line-number="20"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> comma) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-21" data-line-number="21"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>color) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-22" data-line-number="22"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-23" data-line-number="23"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</a></code></pre></div>
+<p><img src="/class/09-class_files/figure-html/different-ns-1.png" width="672" /></p>
+<p>Notice how the estimates and errors converge on the true <span class="math inline">\(p\)</span> fairly quickly. When <span class="math inline">\(n\)</span> is small, there’s a lot of variation, but once it’s 250+, there’s not a huge improvement as you increase the sample size.</p>
+<p>This is even more apparent if we plot just the changes in the margin of error as we increase <span class="math inline">\(n\)</span>:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">ggplot</span>(different_ns, <span class="kw">aes</span>(<span class="dt">x =</span> n, <span class="dt">y =</span> moe)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">0.25</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Sample size (n)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Margin of error (± this percent)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>(<span class="dt">accuracy =</span> <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> comma) <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</a></code></pre></div>
+<p><img src="/class/09-class_files/figure-html/plot-moe-different-ns-1.png" width="672" /></p>
+<p>Notice how low the margin of error is at 1,000. Given that there are roughly 1,000 M&amp;Ms in a 42 ounce party bag, we can make a pretty good guess (with a margin of error of 2ish%) of the actual population-level distribution of colors with <em>just one big bag of M&amp;Ms</em>. That’s mindblowing.</p>
+<p>This is why presidential approval polls tend to have <span class="math inline">\(n\)</span>s that seem really low (1,300; 1,500; 800, etc.). Polls with these sample sizes all have margins of error of 2–3%. Bumping up the sample size to 10,000 or something huge would lower shrink the margins of error, but not by a huge amount. If we took a sample of 10,000 M&amp;Ms, here’s what our margin of error would be:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">tons_of_mms <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="st">  </span><span class="kw">rep_sample_n</span>(<span class="dv">10000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(color) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">prop =</span> <span class="kw">n</span>() <span class="op">/</span><span class="st"> </span><span class="dv">10000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">se =</span> <span class="kw">sqrt</span>(prop <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>prop) <span class="op">/</span><span class="st"> </span><span class="dv">10000</span>),</a>
+<a class="sourceLine" id="cb25-6" data-line-number="6">         <span class="dt">moe =</span> <span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>se,</a>
+<a class="sourceLine" id="cb25-7" data-line-number="7">         <span class="dt">lower_ci =</span> prop <span class="op">-</span><span class="st"> </span>moe,</a>
+<a class="sourceLine" id="cb25-8" data-line-number="8">         <span class="dt">upper_ci =</span> prop <span class="op">+</span><span class="st"> </span>moe)</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 6
+##   color   prop      se     moe lower_ci upper_ci
+##   &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Blue   0.204 0.00403 0.00791    0.197    0.212
+## 2 Brown  0.128 0.00335 0.00656    0.122    0.135
+## 3 Green  0.200 0.00400 0.00785    0.193    0.208
+## 4 Orange 0.202 0.00402 0.00787    0.194    0.210
+## 5 Red    0.129 0.00335 0.00657    0.122    0.135
+## 6 Yellow 0.136 0.00342 0.00671    0.129    0.142</code></pre>
+<p>Between 0.65% and 0.8%, depending on the color. That’s definitely an improvement over 2%, but it’s not huge. Consider, for instance, moving from a sample size of 20, where the margin of error is 20ish%, to a sample size of 500, where it’s around 4%. Increasing sample sizes at the low end of the spectrum results in huge gains to <span class="math inline">\(\widehat{p}\)</span> accuracy. Increasing sample sizes from high to even higher doesn’t end up helping all that much with accuracy.</p>
+<p>Pew, CNN, Quinnipiac, and others face a tradeoff: take huge (expensive) samples to get the most accurate estimate of <span class="math inline">\(\widehat{p}\)</span>, or take smaller (cheaper) samples to get <span class="math inline">\(\widehat{p}\)</span> estimates that are less accurate, but still pretty darn accurate in the end. They lean towards the cheaper option.</p>
+<h2 id="clearest-and-muddiest-things">Clearest and muddiest things</h2>
+<p>Go to <a href="https://goo.gl/forms/PlPwZGhMOdU9mKfC3">this form</a> and answer these three questions:</p>
+<ol style="list-style-type: decimal">
+<li>What was the muddiest thing from class today? What are you still wondering about?</li>
+<li>What was the clearest thing from class today?</li>
+<li>What was the most exciting thing you learned?</li>
+</ol>
+<p>I’ll compile the questions and send out answers after class.</p>

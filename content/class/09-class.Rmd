@@ -14,3 +14,401 @@ stuff-to-add: >-
   https://www.nytimes.com/2013/09/24/science/as-normal-as-rabbits-weights-and-dragons-wings.html?_r=0
   Random coin toss vs. made up random coins
 ---
+
+# Slides
+
+Download the slides from today's lecture:
+
+- [<i class="fas fa-file-pdf"></i> PDF (best option)](/slides/MPA-630_2018-11-01.pdf)
+- [<i class="fas fa-file-powerpoint"></i> PowerPoint](/slides/MPA-630_2018-11-01.pptx)
+
+<figure>
+[![First slide](/images/slides/slides_2018-11-01.png)](/slides/MPA-630_2018-11-01.pdf)
+</figure>
+
+# M&Ms
+
+In class we used M&Ms to explore how sampling works. Here's an analysis of this exploration in R. Load these packages to get started, and download these two datasets (and put them in a folder named "data"):
+
+- [<i class="fas fa-table"></i> `tons_of_mms.csv`](/data/tons_of_mms.csv)
+- [<i class="fas fa-table"></i> `class_mms.csv`](/data/class_mms.csv)
+
+```{r load-libraries, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(moderndive)
+library(pander)
+library(scales)
+
+# Setting a random seed ensures that every random draw will be the same each
+# time you run this (and regardless of what computer you run this on)
+set.seed(1234)
+
+# Official M&M colors via
+# - Wikipedia: https://en.wikipedia.org/wiki/M%26M%27s
+# - This palette: https://colorswall.com/palette/172/
+mm_red <- "#b11224"
+mm_orange <- "#f26f22"
+mm_yellow <- "#fff200"
+mm_green <- "#31ac55"
+mm_blue <- "#2f9fd7"
+mm_brown <- "#603a34"
+```
+
+```{r load-data-fake, eval=FALSE}
+tons_of_mms <- read_csv("data/tons_of_mms.csv")
+class_results <- read_csv("data/class_mms.csv")
+```
+
+```{r load-data-real, include=FALSE, warning=FALSE, message=FALSE}
+tons_of_mms <- read_csv(here::here("static", "data", "tons_of_mms.csv"))
+class_results <- read_csv(here::here("static", "data", "class_mms.csv"))
+```
+
+
+## M&M reporting form
+
+Go here to report the count of M&Ms in your bag:
+
+- <i class="fas fa-question-circle"></i> [Reporting form](https://goo.gl/forms/o0MW5ERwh67Iake03)
+
+
+## The true population parameters of M&M colors
+
+Because of [the work of smart/bored statisticians](https://blogs.sas.com/content/iml/2017/02/20/proportion-of-colors-mandms.html) (and from the Mars company itself), we actually know the true population-level parameters for the proportion of colors. For whatever reason, M&Ms's two US factories produce a different mix of colors (perhaps the East Coast likes blue M&Ms more?). Here are the true population parameters:
+
+```{r show-population, results="asis"}
+mms_population <- tribble(
+  ~color,   ~prop_clv, ~prop_hkp,
+  "Red",    0.131,     0.125,
+  "Orange", 0.205,     0.25,
+  "Yellow", 0.135,     0.125,
+  "Green",  0.198,     0.125,
+  "Blue",   0.207,     0.25,
+  "Brown",  0.124,     0.125
+)
+
+mms_population %>% 
+  gather(Factory, value, -color) %>% 
+  mutate(value = percent(value)) %>% 
+  spread(color, value) %>% 
+  mutate(Factory = recode(Factory,
+                          prop_clv = "Cleveland, OH (CLV)",
+                          prop_hkp = "Hackettstown, NJ (HKP)")) %>% 
+  pandoc.table(justify = "lcccccc")
+```
+
+
+## M&Ms in real life
+
+Here are the results of the M&M sampling that we did in class:
+
+### Individual fun-packs
+
+```{r real-individual-props}
+individual_data <- class_results %>% 
+  filter(type == "Myself") %>%
+  gather(color, count, c(Blue, Brown, Green, Orange, Red, Yellow)) %>% 
+  mutate(prop = count / total) 
+
+individual_data %>% 
+  group_by(color) %>% 
+  summarise(avg_prop = mean(prop),
+            sd_prop = sd(prop))
+```
+
+```{r plot-real-individual}
+ggplot(individual_data, aes(x = prop, fill = color)) +
+  geom_histogram(binwidth = 0.05, color = "white") +
+  geom_vline(data = mms_population, aes(xintercept = prop_clv),
+             color = "orange", size = 1, linetype = "dotted") +
+  labs(x = "Proportion", y = "Count", title = "Actual colors in 31 fun-sized bags",
+       subtitle = "Orange dotted line shows the true population value") +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) +
+  guides(fill = FALSE) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank()) +
+  facet_wrap(~ color)
+```
+
+### Team checkout-line-sized bags
+
+```{r real-team-props}
+team_data <- class_results %>% 
+  filter(type == "My team") %>%
+  gather(color, count, c(Blue, Brown, Green, Orange, Red, Yellow)) %>% 
+  mutate(prop = count / total) 
+
+team_data %>% 
+  group_by(color) %>% 
+  summarise(avg_prop = mean(prop),
+            sd_prop = sd(prop))
+```
+
+```{r plot-real-team}
+ggplot(team_data, aes(x = prop, fill = color)) +
+  geom_histogram(binwidth = 0.05, color = "white") +
+  geom_vline(data = mms_population, aes(xintercept = prop_clv),
+             color = "orange", size = 1, linetype = "dotted") +
+  labs(x = "Proportion", y = "Count", title = "Actual colors in 11 checkout-line-sized bags",
+       subtitle = "Orange dotted line shows the true population value") +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) +
+  guides(fill = FALSE) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank()) +
+  facet_wrap(~ color)
+```
+
+
+## Simulated M&Ms
+
+We can use the `rep_sample_n()` function from the `moderndive` library to simulate taking a random sample from a giant vat of 100,000 Cleveland-produced M&Ms.
+
+Here's what happens if we take one fun-sized sample of M&Ms:
+
+```{r simluated-one-bag-draw}
+one_fun_sized_bag <- tons_of_mms %>% 
+  rep_sample_n(size = 19)
+
+one_fun_sized_bag
+```
+
+We can calculate the proportion of colors in this one bag:
+
+```{r simulated-one-bag}
+one_fun_sized_bag %>% 
+  group_by(color) %>% 
+  summarize(prop = n() / 19)
+```
+
+Just looking at one bag will result in a lot of variability. Some colors might not be in the bag; some colors might be overrepresented in the bag. We can improve our estimates of $\widehat{p}$ by increasing the number of samples we take. Here's what happens if we look at 40 fun-sized bags, just like we did in-person in class:
+
+```{r simulated-forty-bags}
+forty_fun_sized_bags <- tons_of_mms %>% 
+  rep_sample_n(size = 19, reps = 40)
+
+forty_fun_sized_bags_color <- forty_fun_sized_bags %>% 
+  group_by(color, replicate) %>%
+  summarize(prop = n() / 19) 
+
+forty_fun_sized_bags_color %>% 
+  summarise(avg_prop = mean(prop),
+            sd_prop = sd(prop))
+```
+
+```{r plot-simulated-forty-bags}
+ggplot(forty_fun_sized_bags_color, aes(x = prop, fill = color)) +
+  geom_histogram(binwidth = 0.05, color = "white") +
+  geom_vline(data = mms_population, aes(xintercept = prop_clv),
+             color = "orange", size = 1, linetype = "dotted") +
+  labs(x = "Proportion", y = "Count", title = "Simulation of 40 party-sized bags",
+       subtitle = "Orange dotted line shows the true population value") +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) +
+  guides(fill = FALSE) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank()) +
+  facet_wrap(~ color)
+```
+
+There's still some variability, but the standard deviation is smaller than it was with just one fun-sized bag.
+
+Next let's simulate 10 checkout-line-sized bags (what we did as teams in class). These have roughly 55 M&Ms per bag:
+
+```{r simulated-checkout-bags}
+ten_checkout_sized_bags <- tons_of_mms %>% 
+  rep_sample_n(size = 55, reps = 10)
+
+ten_checkout_sized_bags_color <- ten_checkout_sized_bags %>% 
+  group_by(color, replicate) %>%
+  summarize(prop = n() / 55) 
+
+ten_checkout_sized_bags_color %>% 
+  summarise(avg_prop = mean(prop),
+            sd_prop = sd(prop))
+```
+
+Our errors are shrinking and the means are starting to converge on the true population $p$:
+
+```{r plot-ten-checkout}
+ggplot(ten_checkout_sized_bags_color, aes(x = prop, fill = color)) +
+  geom_histogram(binwidth = 0.025, color = "white") +
+  geom_vline(data = mms_population, aes(xintercept = prop_clv),
+             color = "orange", size = 1, linetype = "dotted") +
+  labs(x = "Proportion", y = "Count", title = "Simulation of 10 checkout-line-sized bags",
+       subtitle = "Orange dotted line shows the true population value") +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) +
+  guides(fill = FALSE) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank()) +
+  facet_wrap(~ color)
+```
+
+Now let's move beyond what we did in class. Let's simulate 10 party-sized bags (42 ounces; each contains roughly 1,000 M&Ms):
+
+```{r ten-party}
+ten_party_sized_bags <- tons_of_mms %>% 
+  rep_sample_n(size = 1000, reps = 10)
+
+ten_party_sized_bags_color <- ten_party_sized_bags %>% 
+  group_by(color, replicate) %>%
+  summarize(prop = n() / 1000) 
+
+ten_party_sized_bags_color %>% 
+  summarise(avg_prop = mean(prop),
+            sd_prop = sd(prop))
+```
+
+The errors are now substantially smaller. Check out how little variation there is!
+
+```{r plot-ten-party}
+ggplot(ten_party_sized_bags_color, aes(x = prop, fill = color)) +
+  geom_histogram(binwidth = 0.025, color = "white") +
+  geom_vline(data = mms_population, aes(xintercept = prop_clv),
+             color = "orange", size = 1, linetype = "dotted") +
+  labs(x = "Proportion", y = "Count", title = "Simulation of 10 party-sized bags",
+       subtitle = "Orange dotted line shows the true population value") +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  scale_fill_manual(values = c(mm_blue, mm_brown, mm_green, mm_orange, mm_red, mm_yellow)) +
+  guides(fill = FALSE) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank()) +
+  facet_wrap(~ color)
+```
+
+With only 10 large-ish bags of M&Ms (420 ounces, or 26.25 pounds), we can guess the proportion of colors for *the entire population of M&Ms created in Cleveland* with fairly high confidence. That's amazing.
+
+
+## The importance of sample size
+
+As a final demonstration of this, here's a simulation of what happens to our $\widehat{p}$ estimates and margins of error as we increase the sample size from 5 to 1,000. The x-axis here show the sample size; the y-axis shows the $\widehat{p}$ for each color at that sample size; the orange ribbon shows the 95% confidence interval, or margin of error; the black horizontal line shows the true population average.
+
+```{r different-ns, cache=TRUE}
+different_ns <- data_frame(n = seq(5, 1000, 1)) %>% 
+  mutate(draw = n %>% map(~ rep_sample_n(tons_of_mms, size = .x, reps = 1))) %>% 
+  unnest(draw) %>% 
+  group_by(n, color) %>% 
+  summarize(prop = n() / max(n)) %>% 
+  # This is the real way of calculating the margin of error; we'll talk about this next week
+  mutate(se = sqrt(prop * (1 - prop) / n),
+         moe = 1.96 * se,
+         lower_ci = prop - moe,
+         upper_ci = prop + moe)
+
+ggplot(different_ns, aes(x = n, y = prop)) +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), fill = "orange") +
+  geom_line(size = 0.25) +
+  geom_hline(data = mms_population, aes(yintercept = prop_clv), size = 2, color = "white") +
+  geom_hline(data = mms_population, aes(yintercept = prop_clv), size = 0.75, color = "black") +
+  labs(x = "Sample size (n)", y = "Proportion", title = "Accuracy of p-hat as sample size increases",
+       subtitle = "Black horizontal line shows the true population value ") +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_x_continuous(labels = comma) +
+  facet_wrap(~ color) + 
+  theme_minimal() + 
+  theme(panel.grid.minor = element_blank())
+```
+
+Notice how the estimates and errors converge on the true $p$ fairly quickly. When $n$ is small, there's a lot of variation, but once it's 250+, there's not a huge improvement as you increase the sample size. 
+
+This is even more apparent if we plot just the changes in the margin of error as we increase $n$:
+
+```{r plot-moe-different-ns}
+ggplot(different_ns, aes(x = n, y = moe)) + 
+  geom_point(size = 0.25, alpha = 0.25) +
+  labs(x = "Sample size (n)", y = "Margin of error (± this percent)") +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  scale_x_continuous(labels = comma) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank())
+```
+
+Notice how low the margin of error is at 1,000. Given that there are roughly 1,000 M&Ms in a 42 ounce party bag, we can make a pretty good guess (with a margin of error of 2ish%) of the actual population-level distribution of colors with *just one big bag of M&Ms*. That's mindblowing.
+
+This is why presidential approval polls tend to have $n$s that seem really low (1,300; 1,500; 800, etc.). Polls with these sample sizes all have margins of error of 2–3%. Bumping up the sample size to 10,000 or something huge would lower shrink the margins of error, but not by a huge amount. If we took a sample of 10,000 M&Ms, here's what our margin of error would be:
+
+```{r moe-10000}
+tons_of_mms %>% 
+  rep_sample_n(10000) %>% 
+  group_by(color) %>% 
+  summarize(prop = n() / 10000) %>% 
+  mutate(se = sqrt(prop * (1 - prop) / 10000),
+         moe = 1.96 * se,
+         lower_ci = prop - moe,
+         upper_ci = prop + moe)
+```
+
+Between 0.65% and 0.8%, depending on the color. That's definitely an improvement over 2%, but it's not huge. Consider, for instance, moving from a sample size of 20, where the margin of error is 20ish%, to a sample size of 500, where it's around 4%. Increasing sample sizes at the low end of the spectrum results in huge gains to $\widehat{p}$ accuracy. Increasing sample sizes from high to even higher doesn't end up helping all that much with accuracy. 
+
+Pew, CNN, Quinnipiac, and others face a tradeoff: take huge (expensive) samples to get the most accurate estimate of $\widehat{p}$, or take smaller (cheaper) samples to get $\widehat{p}$ estimates that are less accurate, but still pretty darn accurate in the end. They lean towards the cheaper option.
+
+# Clearest and muddiest things
+
+Go to [this form](https://goo.gl/forms/PlPwZGhMOdU9mKfC3) and answer these three questions:
+
+1. What was the muddiest thing from class today? What are you still wondering about?
+2. What was the clearest thing from class today? 
+3. What was the most exciting thing you learned?
+
+I'll compile the questions and send out answers after class.
+
+
+```{r slide-stuff, eval=FALSE, include=FALSE}
+library(googlesheets)
+
+individual <- gs_key("1gaAFv-JUjhgqcu9R-rZWfG2uYSHbOAEu5G7Je2vR4g4") %>% 
+  gs_read_csv() %>% 
+  select(type = `Who are you reporting for?`,
+         replicate = `What is your name? (or multiple names if in a group)`,
+         total = `How many M&Ms were in your package?`,
+         Blue = `How many were blue?`,
+         Brown = `How many were brown?`,
+         Green = `How many were green?`,
+         Orange = `How many were orange?`,
+         Red = `How many were red?`,
+         Yellow = `How many were yellow?`)
+
+
+# https://blogs.sas.com/content/iml/2017/02/20/proportion-of-colors-mandms.html
+mms_cleveland <- tribble(
+  ~color, ~prop,
+  "Red", 0.131, 
+  "Orange", 0.205, 
+  "Yellow", 0.135, 
+  "Green", 0.198, 
+  "Blue", 0.207, 
+  "Brown", 0.124
+)
+
+# Hackettstown, NJ
+mms_nj <- tribble(
+  ~color, ~prop,
+  "Red", 0.125, 
+  "Orange", 0.25, 
+  "Yellow", 0.125, 
+  "Green", 0.125, 
+  "Blue", 0.25, 
+  "Brown", 0.125
+)
+
+mms_all <- bind_rows(mutate(mms_cleveland, plant = "CLV", city = "Cleveland, OH"),
+                     mutate(mms_nj, plant = "HKP", city = "Hackettstown, NJ")) %>% 
+  mutate(prop = scales::percent(prop)) %>% 
+  spread(color, prop)
+
+mms_all %>% pandoc.table.return() %>% Pandoc.convert(text = ., format = "pptx")
+
+
+set.seed(1234)
+tons_of_mms <- mms_cleveland %>% 
+  mutate(count = prop * 100000) %>% 
+  uncount(count) %>% 
+  mutate(random_order = sample(1:n(), n())) %>% 
+  arrange(desc(random_order)) %>% 
+  mutate(mm_id = 1:n()) %>% 
+  select(mm_id, color)
+
+write_csv(tons_of_mms, "~/Desktop/tons_of_mms.csv")
+```
