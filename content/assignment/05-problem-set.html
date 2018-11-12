@@ -9,4 +9,44 @@ editor_options:
 
 
 
-<p>The instructions for this problem set will be posted one week before it is due.</p>
+<p>In this problem set, you’ll be working with data from three different sources:</p>
+<ol style="list-style-type: decimal">
+<li><p>A simulated universe of 100,000 college student SAT math scores. You can pretend that this is the entire population of SAT math scores in 2018. It’s not, but it’s helpful for illustrating concepts of sampling (this is like the <code>bowl</code> dataset in ModernDive, or the <code>tons_of_mms</code> dataset <a href="/class/09-class/">from the class on sampling</a>).</p></li>
+<li><p>The SAT/GPA data from <a href="/assignment/04-problem-set/">problem set 4</a>.</p></li>
+<li><p>Data from the 2016 <a href="http://gss.norc.org/">General Social Survey (GSS)</a>, a biennial nationally representative survey with a comprehensive set of questions about all sort of trends in American life.</p>
+<p>GSS data includes over 900 different variables (!), and the data you’ll download contains all of them, but in the code I’ve provided you’ll use <code>select()</code> to only work with a few of the columns.</p></li>
+</ol>
+<h2 id="instructions">Instructions</h2>
+<h3 id="setting-up-your-project">Setting up your project</h3>
+<p><i class="fas fa-info-circle"></i> <em>You can copy the “Problem Set 5” project on RStudio.cloud, which has this set up for you. But remember that you should eventually be moving off the cloud version and onto your computer, and this might be a good assignment to make that transition. <a href="https://statsf18.classes.andrewheiss.com/install/">Here are the instructions for installing everything on your computer.</a></em></p>
+<ol style="list-style-type: decimal">
+<li><p>Create a new RStudio project named “problem-set-5” (or whatever you want to call it) and put it somewhere on your computer.</p></li>
+<li><p>Navigate to that new project folder on your computer with File Explorer (in Windows) or Finder (in macOS) (i.e. however you look at files on your computer).</p></li>
+<li><p>Download this R Markdown file<span><label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">You’ll probably need to right click on the link and select “Save link as…”<br />
+<br />
+</span></span> and place it in your newly-created project (but not in your data folder—put it in the main directory):</p>
+<ul>
+<li><a href="/files/your-name_problem-set-5.Rmd"><i class="fab fa-r-project"></i> <code>your-name_problem-set-5.Rmd</code></a></li>
+</ul></li>
+<li><p>Create a new folder in your problem set folder called “data”.</p></li>
+<li><p>Download these three CSV files. They’ll probably go into your Downloads folder.<span><label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">You’ll probably need to right click on the link and select “Save link as…” or something similar—often browsers will load the CSV file like a web page, which isn’t helpful.<br />
+<br />
+</span></span></p>
+<ul>
+<li><a href="/data/all_students_math.csv"><i class="fas fa-table"></i> <code>all_students_math.csv</code></a></li>
+<li><a href="/data/sat_gpa.csv"><i class="fas fa-table"></i> <code>sat_gpa.csv</code></a></li>
+<li><a href="/data/gss2016.csv"><i class="fas fa-table"></i> <code>gss2016.csv</code></a></li>
+</ul></li>
+<li><p>Using Windows File Explorer or macOS Finder, move the newly downloaded CSV files into the “data” folder you created.</p></li>
+</ol>
+<p>In the end, your project folder should be structured like this:<span><label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Make sure your <code>.Rmd</code> file is <em>not</em> inside the data folder.<br />
+<br />
+</span></span></p>
+<p><img src="/images/assignment/ps5-project-outline.png" width="60%" /></p>
+<h3 id="completing-the-assignment">Completing the assignment</h3>
+<ol style="list-style-type: decimal">
+<li><p>Ensure that you have your new <code>problem-set-5</code> project open in RStudio. Open the <code>.Rmd</code> file from the “Files” panel in RStudio and follow the instructions there for the rest of the problem set. A lot of the code is provided for you—there are even two fully worked out examples of how to calculate bootstrapped confidence intervals.</p></li>
+<li><p>Knit the <code>.Rmd</code> as a Word document<span><label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">Or PDF if you’ve installed tinytex.<br />
+<br />
+</span></span> when you’re done and submit it via Learning Suite.</p></li>
+</ol>

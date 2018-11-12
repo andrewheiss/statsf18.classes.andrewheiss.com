@@ -1,0 +1,363 @@
+---
+title: "Problem set 5: Sampling and bootstrapping"
+author: "Your name here"
+date: "Date here"
+---
+
+# Task 0: Load and wrangle data
+
+```{r load-libraries-data, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(moderndive)
+library(infer)
+
+# Fake data on all students' math SAT scores
+all_students_math <- read_csv("data/all_students_math.csv")
+
+# I pre-wrangled and pre-manipulated this data for you
+# so you only have to load it here
+sat_gpa <- read_csv("data/sat_gpa.csv")
+
+# The full GSS data includes 935 variables(!!!), so here we use select() to only
+# look at a few. We also add some additional arguments to read_csv():
+#
+# - na: By default, any blank cells in the spreadsheet are considered missing. 
+#       Here we specify other values that mean missing, including blank (""), 
+#       Don't know, No answer, and Not applicable
+# - guess_max: When loading a CSV file, read_csv() looks at the first 1,000 rows
+#              to guess what kind of variable each column is (numeric, 
+#              categorical, date, etc.). Sometimes data doesn't appear in a 
+#              column until row 1,001 (or beyond), and then read_csv() doesn't 
+#              know how to treat that variable. We specify guess_max here so 
+#              that read_csv() looks at all 2,867 rows to guess the 
+#              column/variable type,
+gss <- read_csv("data/gss2016.csv", 
+                na = c("", "Don't know",
+                       "No answer", "Not applicable"),
+                guess_max = 2867) %>%
+  select(harass5, emailmin, emailhr, educ, born, polviews)
+```
+
+## Set a seed
+
+Setting a seed ensures that every random number you generate will be the same every time you generate it. This can be whatever number you want: I tend to use `1234` or `12345`, others use stuff like `1` or `42`, while others put dates like `20181105`. It just has to be a number.
+
+```{r set-seed}
+set.seed(555)
+```
+
+
+# Task 1: SAT scores and sampling
+
+The data frame `all_students_math` contains SAT math scores for every student in the United States in 2018. (Not really; I just made these up. Just go with it.)
+
+We want to estimate the average SAT math score for the entire population, but we don't want to take a census of all 100,000 students. Instead, we'll sample from them.
+
+## Step 1: Define parameters
+
+What are the following?
+
+- Population:
+- Population parameter: 
+- Sample statistic:
+
+## Step 2: Single random sample
+
+Use `rep_sample_n()` to take a single random representative sample of 50 students. What is the average math SAT score of this sample?
+
+```{r sat-math-one-sample}
+
+```
+
+## Step 3: Multiple small random samples
+
+Use `rep_sample_n()` to take 100 random representative samples of 50 students each (imagine 100 people opening up bags of with 50 students in them). Plot a histogram of the average score for each of these samples (use `binwidth = 1`).
+
+```{r sat-math-hundred-samples}
+
+```
+
+## Step 4: Fewer large random samples
+
+Now use `rep_sample_n()` to take 10 random representative samples of 800 students each (imagine 10 people opening up bags of with 800 students in them). Plot a histogram of the average score for each of these samples (use `binwidth = 1` again).
+
+How is this different from the results in step 3? Why?
+
+```{r sat-math-ten-big-samples}
+
+```
+
+
+---
+
+# Interlude: Bootstrapping examples
+
+To give you a template for doing these kinds of sample-to-population comparisons, I've included two worked-out examples showing how to calculate a confidence interval for a single value (in this case an average value) and for two values (in this case an average value across two sexes).
+
+Note that the `stat` I'm using in `calculate()` is different in each example. In the first one, I'm calculating the average SAT score, so I use `calculate(stat = "mean")`. In the second one, I'm calculating the difference in the average SAT scores by sex, so I use `calculate(stat = "diff in means")`. In ModernDive and in other problems below, you saw/will see other statistics, like `median`, `prop`, `diff in props`, and so on. The only way you can know which to use is to think about what you're comparing. If you want to know the proportion of blue M&Ms in the world of M&Ms, you'd use `prop`. If you want to know the difference in yawners vs. non-yawners (see ModernDive 9.7), you'd use `diff in props`, since you're comparing differences in proportions across two groups.
+
+
+## One value
+
+Let's assume that the `sat_gpa` data is a truly random and unbiased sample of college students (it's not, but we can pretend it is for this). Given this sample, what is the average SAT score for all college students nationwide? How confident are we of this?
+
+Here's our definition of all the sampling parameters:
+
+- Population: college student SAT scores
+- Population parameter: average SAT score ($\mu$)
+- Sample statistic: average SAT score in the sample ($\bar{x}$)
+
+To make this inference, we first calculate $\bar{x}$, or the average SAT score in the sample:
+
+```{r sat-xbar}
+xbar_sat <- sat_gpa %>% 
+  summarize(stat = mean(sat_total))
+xbar_sat
+```
+
+The average SAT score here is 103.3. Next, we can generate a bootstrapped sample distribution of SAT scores and then calculate the mean score in that distribution.
+
+```{r boot-sat}
+bootstrapped_sat <- sat_gpa %>% 
+  specify(formula = sat_total ~ NULL) %>%
+  generate(reps = 1000) %>% 
+  calculate(stat = "mean")
+
+bootstrapped_sat %>% 
+  visualize(obs_stat = xbar_sat)
+```
+
+Using this bootstrapped distribution, we can calculate a confidence interval, either with the percentile method or with the standard error method:
+
+```{r ci-sat}
+sat_ci_percentile <- bootstrapped_sat %>% 
+  get_ci(level = 0.95, type = "percentile")
+sat_ci_percentile
+
+sat_ci_se <- bootstrapped_sat %>% 
+  get_ci(level = 0.95, type = "se", point_estimate = xbar_sat)
+sat_ci_se
+```
+
+We can add one of these to the plot:
+
+```{r plot-ci-sat}
+bootstrapped_sat %>% 
+  visualize(endpoints = sat_ci_se, direction = "between")
+```
+
+Finally, we can interpret this. **The average SAT score in our sample is 103.3, and we are 95% confident that the true average SAT score for college students nationwide is between 102.4 and 104.2 (based on a bootstrapped distribution of 1,000 samples).**
+
+
+## One value in two groups
+
+Now we're interested in the average nationwide SAT scores for both males and females. Again, let's assume that the `sat_gpa` data is a truly random and unbiased sample of college students. Given this sample, what is the average SAT score for all college students nationwide, by sex? How confident are we of this?
+
+Here's the definition of our sampling parameters:
+
+- Population: college student SAT scores for males and females
+- Population parameter: difference in SAT scores between males and females ($\mu_\text{male} - \mu_\text{female}$)
+- Sample statistic: average SAT score in the sample ($\bar{x}_\text{male} - \bar{x}_\text{female}$)
+
+To make this inference, we first calculate ($\bar{x}_\text{male} - \bar{x}_\text{female}$), or the average SAT score in the sample. 
+
+Earlier we used `summarize()` to calculate the mean of the sample, and we can do that here too if we group by sex first, but then we have to some additional data wrangling to subtract the female value from the male value. To simplify life, we can instead use `specify()` and `calculate()`, but without generated bootstrapped samples. The `order` argument here means that `calculate()` will run `Male - Female`. We could put "Female" first instead and get the same answers, but in reverse.
+
+```{r sat-sex-xbar}
+xbar_sat_sex <- sat_gpa %>% 
+  specify(sat_total ~ sex) %>%
+  calculate(stat = "diff in means", order = c("Male", "Female"))
+xbar_sat_sex
+```
+
+This means that the average male SAT score minus the average female SAT score in our sample is 4.9 points. How sure are we of that difference? Could that difference possibly be zero sometimes?
+
+To answer this, we'll take a bootstrapped sample of these differences:
+
+```{r boot-sat-sex}
+# sat_total is our response (or y) and sex is our explanatory variable (or x).
+# We could also write this as specify(response = sat_total, explanatory = sex),
+# but the formula syntax mirrors what you did with regression
+bootstrapped_sat_sex <- sat_gpa %>% 
+  specify(formula = sat_total ~ sex) %>%
+  generate(reps = 1000) %>% 
+  calculate(stat = "diff in means", order = c("Male", "Female"))
+
+bootstrapped_sat_sex %>% 
+  visualize(obs_stat = xbar_sat_sex)
+```
+
+Now we calculate a confidence interval and add it to the plot. Here we use the percentile method, just for fun.
+
+```{r ci-sat-sex}
+sat_sex_ci_percentile <- bootstrapped_sat_sex %>% 
+  get_ci(level = 0.95, type = "percentile")
+sat_sex_ci_percentile
+
+bootstrapped_sat_sex %>% 
+  visualize(endpoints = sat_sex_ci_percentile, direction = "between")
+```
+
+Interpretation time. **The average difference between male and female scores in our sample is 4.9 points, and we are 95% confident that the true average difference between the sexes for college students nationwide is between 2.9 and 6.7 (based on a bootstrapped distribution of 1,000 samples).** Thus the answer to our question "Could that difference possibly be zero sometimes" is probably "Nope."
+
+
+---
+
+# Task 2: Harassment at work
+
+In 2016, the GSS added the following question about harassment at work:
+
+> Over the past five years, have you been harassed by your superiors or co-workers at your job, for example, have you experienced any bullying, physical or psychological abuse?
+
+Responses to this question are stored in the variable named `harass5`.
+
+## Step 1: Define parameters
+
+What are the following?
+
+- Population:
+- Population parameter: 
+- Sample statistic:
+
+## Step 2: Possible responses
+
+What are the possible responses to `harass5` and how many respondents chose each of these answers? (hint: remember `count()`)
+
+```{r harass-responses}
+
+```
+
+## Step 3: Yes/no only
+
+Some of these responses are not yes or no, so we'll filter them out for now:
+
+```{r harass-clean}
+# %in% is an operator sign like > or == that checks to see if the value of
+# harass5 is in the list of c("No", "Yes")
+gss_harass <- gss %>% 
+  filter(harass5 %in% c("No", "Yes"))
+```
+
+What percent of the respondents for whom this question is applicable have been harassed by their superiors or co-workers at their job?
+
+(hint: if you use `count()`, you'll have a new column named `n`. If you add a `mutate()` after counting, you can make a new variable where you divide `n` by the sum of `n`, like `n / sum(n)`)
+
+```{r harass-yes-no}
+
+```
+
+## Step 4: Bootstrapped proportion
+
+Construct and visualize a bootstrap distribution for the proportion of Americans who have been harassed at work. Note that since we're constructing a simulation for a proportion, we use `stat = "prop"` in the `calculate()` function. Also note that since the response variable is categorical, we need to add a new argument to the `specify()` function that specifies the level which we want to consider as success. In this case, since we're interested in proportion of Americans who have been harassed, we're interested in `success = "Yes"`.
+
+```{r harass-bootstrap}
+
+```
+
+## Step 5: Confidence interval
+
+Determine the 95% bootstrap confidence interval based on the distribution you constructed above. Use the percentile method (the default). 
+
+```{r harass-ci}
+
+```
+
+Interpret this interval: 
+
+You (probably) mentioned in your interpretation that you are "95% confident." What does "95 confident" mean?
+
+
+# Task 3: Time spent on e-mail
+
+The 2016 GSS also asked respondents how many hours and minutes they spend on e-mail weekly. The responses to these questions are recorded in the `emailhr` and `emailmin` variables. For example, if the response is 2.5 hrs, this would be recorded as `emailhr = 2` and `emailmin = 30`.
+
+## Step 1: Define parameters
+
+What are the following?
+
+- Population:
+- Population parameter: 
+- Sample statistic:
+
+## Step 2: Wrangle the data
+
+Create a new variable named `email_minutes` that combines these two variables to reports the number of minutes the respondents spend on email weekly. Also, remove all rows where `email_minutes` is missing (hint: remember `!is.na()`)
+
+```{r email-clean}
+
+```
+
+## Step 3: View the data
+
+Visualize the distribution of this new `email_minutes` variable with a histogram. Find the mean and the median number of minutes respondents spend on e-mail weekly. Is the mean or the median a better measure of the typical amount of time Americans spend on e-mail weekly? Why?
+
+```{r view-email}
+
+```
+
+## Step 4: Bootstrapped minutes
+
+Construct and visualize a bootstrap distribution for the number of minutes all Americans spend on e-mail per week. Use `stat = "mean"` in `calculate()`, regardless of your answer from step 2 above (if you use `stat = "median"`, pretty much every bootstrap sample will be nearly the same because of the skewed nature of this data). You don't need to specify any success, since we're not calculating any proportions.
+
+```{r email-bootstrap}
+
+```
+
+## Step 5: Confidence interval
+
+Calculate a 90% bootstrap confidence interval for the average amount of time all Americans spend on e-mail weekly. Interpret this interval using "humanized" units (e.g. instead of 200 minutes, say 3 hours and 20 minutes).
+
+```{r email-ci}
+
+```
+
+
+# Task 4: Education and immigration status
+
+The 2016 GSS included questions about how many years of education respondents had completed (`educ`) and whether or not the respondent was born in the US (`born`).
+
+## Step 1: Define parameters
+
+What are the following?
+
+- Population:
+- Population parameter: 
+- Sample statistic:
+
+## Step 2: Wrangle data
+
+Both the `educ` and `born` columns have some missing data. Create a new data frame named `gss_educ` that removes rows where these values are missing (hint: remember `!is.na()` again)
+
+```{r educ-clean}
+
+```
+
+## Step 3: View the data
+
+Create a histogram of years of education (with `binwidth = 1`), faceted by whether people are born in the US. Why are there three distinct spikes in the middle of the distribution? What is the average number of years of education for each kind of resident?
+
+```{r view-educ}
+
+```
+
+What is the difference in average years of education between those born in the US and those not born in the US? (hint: see the chunk named `sat-sex-xbar` above)
+
+```{r educ-diff-means}
+
+```
+
+## Step 4: Bootstrapped years of education by immigration
+
+Construct and visualize a bootstrap distribution for the years of education for all Americans, split by immigration status. Use `stat = "diff in means"` in `calculate()`, since we're interested in the difference in means. You don't need to specify any success, since we're not calculating any proportions, but you will need to specify an `order` in `calculate` so that we run "average education for yes - average education for no".
+
+```{r educ_bootstrap}
+
+```
+
+## Step 5: Confidence interval
+
+Calculate a 99% bootstrap confidence interval for the average difference in years of education for all immigrants and nonimmigrants in the US. Interpret this interval. 
+
+```{r educ-ci}
+
+```

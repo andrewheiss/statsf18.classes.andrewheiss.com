@@ -7,4 +7,49 @@ editor_options:
   chunk_output_type: console
 ---
 
-The instructions for this problem set will be posted one week before it is due.
+In this problem set, you'll be working with data from three different sources: 
+
+1. A simulated universe of 100,000 college student SAT math scores. You can pretend that this is the entire population of SAT math scores in 2018. It's not, but it's helpful for illustrating concepts of sampling (this is like the `bowl` dataset in ModernDive, or the `tons_of_mms` dataset [from the class on sampling](/class/09-class/)).
+
+2. The SAT/GPA data from [problem set 4](/assignment/04-problem-set/).
+
+3. Data from the 2016 [General Social Survey (GSS)](http://gss.norc.org/), a biennial nationally representative survey with a comprehensive set of questions about all sort of trends in American life.
+
+    GSS data includes over 900 different variables (!), and the data you'll download contains all of them, but in the code I've provided you'll use `select()` to only work with a few of the columns. 
+
+
+# Instructions
+
+## Setting up your project
+
+<i class="fas fa-info-circle"></i> *You can copy the "Problem Set 5" project on RStudio.cloud, which has this set up for you. But remember that you should eventually be moving off the cloud version and onto your computer, and this might be a good assignment to make that transition. [Here are the instructions for installing everything on your computer.](https://statsf18.classes.andrewheiss.com/install/)*
+
+1. Create a new RStudio project named "problem-set-5" (or whatever you want to call it) and put it somewhere on your computer.
+
+2. Navigate to that new project folder on your computer with File Explorer (in Windows) or Finder (in macOS) (i.e. however you look at files on your computer). 
+
+3. Download this R Markdown file^[You'll probably need to right click on the link and select "Save link as…"] and place it in your newly-created project (but not in your data folder—put it in the main directory):
+
+    - [<i class="fab fa-r-project"></i> `your-name_problem-set-5.Rmd`](/files/your-name_problem-set-5.Rmd)
+
+4. Create a new folder in your problem set folder called "data".
+
+5. Download these three CSV files. They'll probably go into your Downloads folder.^[You'll probably need to right click on the link and select "Save link as…" or something similar—often browsers will load the CSV file like a web page, which isn't helpful.]
+
+    - [<i class="fas fa-table"></i> `all_students_math.csv`](/data/all_students_math.csv)
+    - [<i class="fas fa-table"></i> `sat_gpa.csv`](/data/sat_gpa.csv)
+    - [<i class="fas fa-table"></i> `gss2016.csv`](/data/gss2016.csv)
+
+6. Using Windows File Explorer or macOS Finder, move the newly downloaded CSV files into the "data" folder you created.
+
+In the end, your project folder should be structured like this:^[Make sure your `.Rmd` file is *not* inside the data folder.]
+
+```{r project-outline, echo=FALSE, out.width="60%"}
+knitr::include_graphics("/images/assignment/ps5-project-outline.png")
+```
+
+## Completing the assignment
+
+1. Ensure that you have your new `problem-set-5` project open in RStudio. Open the `.Rmd` file from the "Files" panel in RStudio and follow the instructions there for the rest of the problem set. A lot of the code is provided for you—there are even two fully worked out examples of how to calculate bootstrapped confidence intervals.
+
+2. Knit the `.Rmd` as a Word document^[Or PDF if you've installed tinytex.] when you're done and submit it via Learning Suite.
