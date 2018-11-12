@@ -1,0 +1,370 @@
+---
+title: "Bootstrapping and confidence intervals"
+date: "2018-11-08"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# Slides
+
+Download the slides from today's lecture:
+
+- [<i class="fas fa-file-pdf"></i> PDF (best option)](/slides/MPA-630_2018-11-08.pdf)
+- [<i class="fas fa-file-powerpoint"></i> PowerPoint](/slides/MPA-630_2018-11-08.pptx)
+
+<figure>
+[![First slide](/images/slides/slides_2018-11-08.png)](/slides/MPA-630_2018-11-08.pdf)
+</figure>
+
+
+# Bootstrap reporting form
+
+Go here to report your bootstrap median:
+
+- <i class="fas fa-question-circle"></i> [Reporting form](https://goo.gl/forms/AFQdNb49ffIa4GQ32)
+
+
+# Live code
+
+Use this link to see the code that I'm actually typing: 
+
+- <i class="fas fa-globe"></i> <https://andhs.co/live-code>
+
+I've saved the R script to Dropbox, and that link goes to a live version of that file. Refresh or re-open the link as needed to copy/paste code I type up on the screen.
+
+
+# Bootstrapping with R
+
+In class we used the rents of 20 randomly selected apartments in Manhattan to explore how bootstrapping works. Here's how to do that exploration in R. Load these packages to get started, and download these two datasets (and put them in a folder named "data"):
+
+- [<i class="fas fa-table"></i> `manhattan.csv`](/data/manhattan.csv)
+- [<i class="fas fa-table"></i> `class_rent_boot.csv`](/data/class_rent_boot.csv)
+
+```{r load-libraries, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(moderndive)
+library(infer)
+library(scales)
+
+# Setting a random seed ensures that every random draw will be the same each
+# time you run this (and regardless of what computer you run this on)
+set.seed(1234)
+```
+
+```{r load-data-fake, eval=FALSE}
+manhattan <- read_csv("data/manhattan.csv")
+class_rent_boot <- read_csv("data/class_rent_boot.csv")
+```
+
+```{r load-data-real, include=FALSE, warning=FALSE, message=FALSE}
+manhattan <- read_csv(here::here("static", "data", "manhattan.csv"))
+class_rent_boot <- read_csv(here::here("static", "data", "class_rent_boot.csv"))
+```
+
+## In-class results
+
+In class, we were interested in the true population-level median 1-bedroom Manhattan apartment rent. This is our unmeasurable population parameter. The only way to get close to it is through sampling and statistics—we can calculate the sample median and calculate a confidence interval for that median to determine how big of a net we have and how confident we are that our confidence interval captured the population parameter.
+
+First, we can look at the sample median. This has nothing to do with bootstrapping yet—this is just the median value of the 20 random apartments.
+
+```{r sample-median}
+sample_median <- manhattan %>% 
+  summarize(stat = median(rent))
+sample_median
+```
+
+The median rental price is `r dollar(sample_median$stat)` a month. Here's what the distribution of rents from our sample looks like, with the median price overlaid with `geom_vline()`:
+
+```{r plot-sample-dist}
+ggplot(manhattan, aes(x = rent)) +
+  geom_histogram(binwidth = 250, color = "white") +
+  geom_vline(xintercept = sample_median$stat, color = "red", size = 1) +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Rent", y = "Count",
+       caption = "Sample median in red")
+```
+
+How confident are we with this sample median? Is that really representative of the true population parameter? Some of these apartments are under \$2,000; some are above \$4,000. Is this median really typical?
+
+We can measure our confidence by building a confidence interval for our median, which will allow us to make better inference about the whole population of Manhattan apartments. We can calculate confidence intervals in two ways: math and simulation. We'll use simulation this week (bootstrapping) and math later on.
+
+In class, you all did a manual bootstrapping process. You took a single sample from our sample of 20 apartments, wrote down the number, replaced the paper, and drew another sample until you had a new bootstrapped sample with 20 observations. Some of these 20 were repeated, which is by design. 
+
+You then calculated the median of your bootstrap sample and we made a histogram on the board. Here's the ggplot version of that histogram, with the sample median marked in red again:
+
+```{r}
+ggplot(class_rent_boot, aes(x = rent)) +
+  geom_histogram(binwidth = 100, color = "white") +
+  geom_vline(xintercept = sample_median$stat, color = "red", size = 1) +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Rent", y = "Count", 
+       caption = "35 bootstrapped medians; sample median in red")
+```
+
+To find the 95% confidence interval, we need to find the middle 95% of this distribution, or the range from the 2.5% percentile to the 97.5% percentile. We can do this with the `quantile()` function:
+
+```{r}
+class_rent_ci <- class_rent_boot %>% 
+  summarize(lower = quantile(rent, 0.025),
+            upper = quantile(rent, 0.975))
+class_rent_ci
+```
+
+This range means that the 95% confidence interval of rents in Manhattan, based on 35 bootstrapped samples, is (`r dollar(round(class_rent_ci[[1]], 0))`, `r dollar(round(class_rent_ci[[2]], 0))`). We are 95% confident that this net captures the true population median.
+
+## Bootstrapping with R and `infer`
+
+That's a pretty wide interval though, and we can get a better estimate of the variation in the sample by taking more bootstrapped samples. Instead of 35 manual samples, we can take 1,000 automated samples of the original 20 Manhattan apartments using the `infer` library.
+
+The standard usage of infer is to `specify()` the column(s) we're interested in, `generate()` a bunch of simulated data based on that column, and then `calculate()` a sample statistic for the simulated data:
+
+```{r}
+boot_rent <- manhattan %>% 
+  # Specify the variable of interest
+  specify(response = rent) %>%
+  # specify(rent ~ NULL)  # This does the same thing
+  # Generate a bunch of bootstrap samples
+  generate(reps = 1000, type = "bootstrap") %>% 
+  # Find the median of each sample
+  calculate(stat = "median")
+
+# See the first few rows
+head(boot_rent)
+```
+
+We can visualize this with a histogram. This is the same as the in-class histogram above, only now this is based on the medians of 1,000 bootstrapped distributions instead of 35:
+
+```{r}
+ggplot(boot_rent, aes(x = stat)) +
+  geom_histogram(binwidth = 100, color = "white") +
+  geom_vline(xintercept = sample_median$stat, color = "red", size = 1) +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Rent", y = "Count", 
+       caption = "1,000 bootstrapped medians; sample median in red")
+```
+
+Or, instead of using regular ggplot, we can use the `visualize()` function from `infer`, which is just a fancy wrapper for ggplot:
+
+```{r}
+boot_rent %>% 
+  visualize(obs_stat = sample_median$stat, obs_stat_color = "red") +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Rent", y = "Count", 
+       caption = "1,000 bootstrapped medians; sample median in red")
+```
+
+We can then find the 95% confidence interval for this distribution with the `get_ci()` function from `infer`:
+
+```{r}
+boot_rent_ci <- boot_rent %>% 
+  get_ci(level = 0.95, type = "percentile")
+boot_rent_ci
+```
+
+This range means that the 95% confidence interval of rents in Manhattan, based on 1,000 bootstrapped samples from our original 20-apartment sample, is (`r dollar(round(boot_rent_ci[[1]], 0))`, `r dollar(round(boot_rent_ci[[2]], 0))`). We are 95% confident that this net captures the true population median. The lower part of that range is about the same as our by-hand version, but the upper part is considerably smaller.
+ 
+We can plot this confidence interval in two ways. First, the `visualize()` way:
+
+```{r}
+boot_rent %>% 
+  visualize(endpoints = boot_rent_ci, direction = "between") +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Rent", y = "Count", 
+       caption = "1,000 bootstrapped medians; 95% confidence interval in green")
+```
+
+Or the regular ggplot way:
+
+```{r}
+ggplot(boot_rent, aes(x = stat)) +
+  annotate(geom = "rect", xmin = boot_rent_ci$`2.5%`, xmax = boot_rent_ci$`97.5%`,
+           ymin = -Inf, ymax = Inf, alpha = 0.5, fill = "turquoise") +
+  geom_histogram(binwidth = 100, color = "white") +
+  geom_vline(xintercept = boot_rent_ci$`2.5%`, color = "mediumaquamarine", size = 2) +
+  geom_vline(xintercept = boot_rent_ci$`97.5%`, color = "mediumaquamarine", size = 2) +
+  geom_vline(xintercept = sample_median$stat, color = "red", size = 1) +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "Rent", y = "Count", 
+       caption = "1,000 bootstrapped medians; sample median in red; 95% confidence interval in green")
+```
+
+
+# Clearest and muddiest things
+
+Go to [this form](https://goo.gl/forms/PlPwZGhMOdU9mKfC3) and answer these three questions:
+
+1. What was the muddiest thing from class today? What are you still wondering about?
+2. What was the clearest thing from class today? 
+3. What was the most exciting thing you learned?
+
+I'll compile the questions and send out answers after class.
+
+
+```{r slide-stuff, eval=FALSE, include=FALSE}
+library(tidyverse)
+library(moderndive)
+library(infer)
+library(googlesheets)
+
+set.seed(1234)
+
+real_bootstrapped_medians <- gs_key("1SKKjyPImtEYQcmdiPgiRap2g__z12yQXqSr-XHlwRD8") %>% 
+  gs_read_csv() %>% 
+  select(person = `What is your name?`,
+         rent = `What is your bootstrap median?`)
+
+class_bootstraps <- write_csv(real_bootstrapped_medians,
+                              here::here("static", "data", "class_rent_boot.csv"))
+
+real_bootstrapped_medians %>% 
+  summarize(bootstrap_median = median(rent))
+
+ggplot(real_bootstrapped_medians, aes(x = rent)) +
+  geom_histogram()
+
+manhattan <- read_csv(here::here("static", "data", "manhattan.csv"))
+tons_of_mms <- read_csv(here::here("static", "data", "tons_of_mms.csv"))
+
+true_blue <- tons_of_mms %>% 
+  summarize(prop = sum(color == "Blue") / n())
+
+set.seed(12)
+blue_forty_fun_packs <- tons_of_mms %>% 
+  rep_sample_n(size = 19, reps = 40) %>% 
+  group_by(color, replicate) %>% 
+  summarize(prop = n() / 19) %>% 
+  filter(color == "Blue")
+
+ggplot(blue_forty_fun_packs, aes(x = prop)) + 
+  geom_histogram(binwidth = 0.05, color = "white") +
+  geom_vline(xintercept = mean(blue_forty_fun_packs$prop), color = "orange", size = 2) +
+  geom_vline(xintercept = true_blue$prop, color = "darkblue", size = 2, linetype = "21") +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  coord_cartesian(xlim = c(0, 0.6)) +
+  labs(x = "Proportion of blue M&Ms", y = "Count of samples",
+       title = "40 fun-sized bags (19 per bag)", subtitle = "True population value marked with dotted line")
+ggsave("~/Desktop/bootstrapping/blue_40.png",
+       width = 5, height = 3.5)
+
+blue_500_fun_packs <- tons_of_mms %>% 
+  rep_sample_n(size = 19, reps = 500) %>% 
+  group_by(color, replicate) %>% 
+  summarize(prop = n() / 19) %>% 
+  filter(color == "Blue")
+
+ggplot(blue_500_fun_packs, aes(x = prop)) + 
+  geom_histogram(binwidth = 0.05, color = "white") +
+  geom_vline(xintercept = mean(blue_forty_fun_packs$prop), color = "orange", size = 2) +
+  geom_vline(xintercept = true_blue$prop, color = "darkblue", size = 2, linetype = "21") +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  coord_cartesian(xlim = c(0, 0.6)) +
+  labs(x = "Proportion of blue M&Ms", y = "Count of samples",
+       title = "500 fun-sized bags (19 per bag)", subtitle = "True population value marked with dotted line")
+ggsave("~/Desktop/bootstrapping/blue_500.png",
+       width = 5, height = 3.5)
+
+blue_one_giant_bag <- tons_of_mms %>% 
+  rep_sample_n(size = 2000, reps = 5) %>% 
+  group_by(color, replicate) %>% 
+  summarize(prop = n() / 2000) %>% 
+  filter(color == "Blue")
+
+ggplot(blue_one_giant_bag, aes(x = prop)) + 
+  geom_histogram(binwidth = 0.05, color = "white") +
+  geom_vline(xintercept = mean(blue_forty_fun_packs$prop), color = "orange", size = 2) +
+  geom_vline(xintercept = true_blue$prop, color = "darkblue", size = 2, linetype = "21") +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  coord_cartesian(xlim = c(0, 0.6)) +
+  labs(x = "Proportion of blue M&Ms", y = "Count of samples",
+       title = "5 giant bags (2,000 per bag)", subtitle = "True population value marked with dotted line")
+ggsave("~/Desktop/bootstrapping/blue_big_5.png",
+       width = 5, height = 3.5)
+
+manhattan %>% 
+  summarize(sample_median = median(rent),
+            sample_mean = mean(rent))
+
+ggplot(manhattan, aes(x = rent)) +
+  geom_histogram(binwidth = 250) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(x = "Rent", y = "Count", title = "Rent for one-bedroom apartments in Manhattan")
+
+ggsave("~/Desktop/bootstrapping/sample_hist.png",
+       width = 8, height = 3.5)
+
+set.seed(1234)
+manhattan <- read_csv("http://andhs.co/rents")
+
+# Save resulting bootstrap distribution
+boot_rent <- manhattan %>% 
+  # Specify the variable of interest
+  specify(response = rent) %>%
+  # specify(rent ~ NULL)
+  # Generate a bunch of bootstrap samples
+  generate(reps = 1000, type = "bootstrap") %>% 
+  # Find the median of each sample
+  calculate(stat = "median")
+
+ggplot(boot_rent, aes(x = stat)) +
+  geom_histogram(binwidth = 50) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(x = "Median rent per bootstrap sample", y = "Count", 
+       title = "Bootstrap distribution of medians")
+ggsave("~/Desktop/bootstrapping/boot_hist.png",
+       width = 8, height = 3.5)
+
+boot_rent %>% 
+  summarize(lower = quantile(stat, 0.025),
+            upper = quantile(stat, 0.975))
+
+boot_rent %>% 
+  get_ci(level = 0.95, type = "percentile")
+
+boot_rent_ci_95 <- boot_rent %>% 
+  get_ci(level = 0.95, type = "percentile") %>% 
+  gather(key, value)
+
+boot_rent_ci_90 <- boot_rent %>% 
+  get_ci(level = 0.90, type = "percentile") %>% 
+  gather(key, value)
+
+boot_rent_ci_99 <- boot_rent %>% 
+  get_ci(level = 0.99, type = "percentile") %>% 
+  gather(key, value)
+
+
+
+ggplot(boot_rent, aes(x = stat)) +
+  geom_histogram(binwidth = 50) +
+  geom_vline(data = boot_rent_ci_95, aes(xintercept = value),
+             color = "orange", linetype = "21", size = 1) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(x = "Median rent per bootstrap sample", y = "Count", 
+       title = "Bootstrap distribution of medians",
+       subtitle = "With 95% confidence interval")
+ggsave("~/Desktop/bootstrapping/boot_hist_95.png",
+       width = 8, height = 3.5)
+
+
+ggplot(boot_rent, aes(x = stat)) +
+  geom_histogram(binwidth = 50) +
+  geom_vline(data = boot_rent_ci_90, aes(xintercept = value),
+             color = "brown", linetype = "2113", size = 1) +
+  geom_vline(data = boot_rent_ci_95, aes(xintercept = value),
+             color = "darkgreen", linetype = "31", size = 1) +
+  geom_vline(data = boot_rent_ci_99, aes(xintercept = value),
+             color = "darkblue", linetype = "dotted", size = 1) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(x = "Median rent per bootstrap sample", y = "Count", 
+       title = "Bootstrap distribution of medians",
+       subtitle = "With different confidence intervals")
+ggsave("~/Desktop/bootstrapping/boot_hist_intervals.png",
+       width = 8, height = 3.5)
+```
