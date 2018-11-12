@@ -327,7 +327,7 @@ ggplot(different_ns, aes(x = n, y = moe)) +
 
 Notice how low the margin of error is at 1,000. Given that there are roughly 1,000 M&Ms in a 42 ounce party bag, we can make a pretty good guess (with a margin of error of 2ish%) of the actual population-level distribution of colors with *just one big bag of M&Ms*. That's mindblowing.
 
-This is why presidential approval polls tend to have $n$s that seem really low (1,300; 1,500; 800, etc.). Polls with these sample sizes all have margins of error of 2–3%. Bumping up the sample size to 10,000 or something huge would lower shrink the margins of error, but not by a huge amount. If we took a sample of 10,000 M&Ms, here's what our margin of error would be:
+This is why presidential approval polls tend to have $n$s that seem really low (1,300; 1,500; 800, etc.). Polls with these sample sizes all have margins of error of 2–3%. Bumping up the sample size to 10,000 or something huge would shrink the margins of error, but not by a huge amount. If we took a sample of 10,000 M&Ms, here's what our margin of error would be:
 
 ```{r moe-10000}
 tons_of_mms %>% 
