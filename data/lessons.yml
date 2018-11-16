@@ -92,28 +92,27 @@ lessons:
     date: "November 15"
     assignment: "05-problem-set"
   
-  - title: "Inference and regression"
-    date: "November 29 (I & II)"
-    reading: "12-reading"
-  
+  - title: "No class"
+    date: "November 29"
+
   - title: "**Problem set 6**"
     date: "December 6"
     assignment: "06-problem-set"
-    
-  - title: '<i class="fas fa-star"></i> **Exam 3** [(example questions)](/exam/03-exam/)'
-    date: "December 6 (I)"
-  
+
+  - title: "Inference and regression + science communication"
+    date: "December 6 (I & II; I)"
+    reading: "13-reading"
+
   - title: '<span class="fake-header-table">Communication & beyond</span>'
     header: True
-
-  - title: "Science communication"
-    date: "December 6 (II)"
-    reading: "13-reading"
 
   - title: "**Code-through due** (*this is a Friday*)"
     date: "December 7"
     assignment: "code-through"
-  
+
+  - title: '<i class="fas fa-star"></i> **Exam 3** (take-home) [(example questions)](/exam/03-exam/)'
+    date: "December 11"
+
   - title: "Wrapping up and going beyond the basics"
     date: "December 13 (I & II)"
     reading: "14-reading"

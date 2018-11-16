@@ -569,6 +569,9 @@ I'll compile the questions and send out answers after class.
 
 
 ```{r slide-stuff, eval=FALSE, include=FALSE}
+# https://mgimond.github.io/Stats-in-R/ChiSquare_test.html
+# https://onlinecourses.science.psu.edu/stat504/node/61/
+
 # Chi squared stuff
 library(tidyverse)
 library(infer)

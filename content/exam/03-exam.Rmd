@@ -1,6 +1,6 @@
 ---
 title: "Example questions for Exam 3"
-date: "2018-12-06"
+date: "2018-12-11"
 editor_options: 
   chunk_output_type: console
 ---
