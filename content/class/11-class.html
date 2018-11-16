@@ -1,0 +1,541 @@
+---
+title: "Hypothesis testing"
+date: "2018-11-15"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- BLOGDOWN-HEAD -->
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+</style>
+<!-- /BLOGDOWN-HEAD -->
+
+<h2>Contents</h2>
+<div id="TOC">
+<ul>
+<li><a href="#slides">Slides</a></li>
+<li><a href="#live-code">Live code</a></li>
+<li><a href="#hypothesis-testing">Hypothesis testing</a><ul>
+<li><a href="#load-libraries-and-data">Load libraries and data</a></li>
+<li><a href="#difference-in-means-easy-visual-test">Difference in means (easy visual test)</a></li>
+<li><a href="#difference-in-means-i">Difference in means (I)</a></li>
+<li><a href="#difference-in-means-ii">Difference in means (II)</a></li>
+<li><a href="#difference-in-means-iii">Difference in means (III)</a></li>
+<li><a href="#difference-in-proportions-i">Difference in proportions (I)</a></li>
+<li><a href="#difference-in-proportions-ii">Difference in proportions (II)</a></li>
+<li><a href="#comparison-to-a-fixed-value">Comparison to a fixed value</a></li>
+</ul></li>
+<li><a href="#clearest-and-muddiest-things">Clearest and muddiest things</a></li>
+</ul>
+</div>
+
+<h2 id="slides">Slides</h2>
+<p>Download the slides from today’s lecture:</p>
+<ul>
+<li><a href="/slides/MPA-630_2018-11-15.pdf"><i class="fas fa-file-pdf"></i> PDF (best option)</a></li>
+<li><a href="/slides/MPA-630_2018-11-15.pptx"><i class="fas fa-file-powerpoint"></i> PowerPoint</a></li>
+</ul>
+<figure>
+<a href="/slides/MPA-630_2018-11-15.pdf"><img src="/images/slides/slides_2018-11-15.png" alt="First slide" /></a>
+</figure>
+<h2 id="live-code">Live code</h2>
+<p>Use this link to see the code that I’m actually typing:</p>
+<ul>
+<li><i class="fas fa-globe"></i> <a href="https://andhs.co/live-code" class="uri">https://andhs.co/live-code</a></li>
+</ul>
+<p>I’ve saved the R script to Dropbox, and that link goes to a live version of that file. Refresh or re-open the link as needed to copy/paste code I type up on the screen.</p>
+<h2 id="hypothesis-testing">Hypothesis testing</h2>
+<p>The magic of ModernDive’s approach to hypothesis testing is that you don’t have to memorize complicated flowcharts to determine if you should run specific statistical tests to test your hypotheses. By using the power of simulation, <a href="http://allendowney.blogspot.com/2016/06/there-is-still-only-one-test.html">there is only really one type of statistical hypothesis test</a>, which is essentially this process:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Calculate δ, or the sample statistic.</strong> This is the average, or the median, or the difference in medians, or the proportion of something, or the difference in proportions, etc. This is the thing you care about—you’re testing to see if this number is significant (i.e. if the difference between two means is greater than zero, or if the median value is greater than some other number, etc.)</li>
+<li><strong>Use simulation to invent a world where δ is null.</strong> Simulate what the world would look like if there was no difference between two groups, or no difference between proportions, or where the average value is some specific number. This is done with bootstrapping or permutations or some other system of randomly shuffling around your existing data.</li>
+<li><strong>Look at δ in the null world.</strong> Put the sample statistic in this null world and see if it fits well.</li>
+<li><strong>Calculate the probability that δ could exist in the null world.</strong> This is a p-value, which measures the probability that you’d see δ in a world where there’s no effect or no difference in means.</li>
+<li><strong>Decide if δ is significant.</strong> Choose an evidentiary standard to decide if there’s sufficient proof for rejecting the null world (i.e. see if you can convict the effect of being guilty). Standard thresholds are p-values of 0.1, 0.05, and 0.01.</li>
+</ol>
+<p>And that’s it! You can repeat this same process for any hypothesis and any δ and reject (or fail to reject) null hypotheses.</p>
+<p>Here are a bunch of examples. The more you walk through this process, the more natural and intuitive it will become, and the more you’ll actually understand what a p-value is (so you won’t have a <a href="https://fivethirtyeight.com/features/not-even-scientists-can-easily-explain-p-values/">blank stare like these fine scientists</a>).</p>
+<h3 id="load-libraries-and-data">Load libraries and data</h3>
+<p>Before the examples, we’ll load our packages and data. You can (and should) follow along by downloading these datasets, putting them in a data folder in an RStudio project, and copying/pasting the code.</p>
+<ul>
+<li><a href="/data/sat_gpa.csv"><i class="fas fa-table"></i> <code>sat_gpa.csv</code></a></li>
+<li><a href="/data/world_happiness.csv"><i class="fas fa-table"></i> <code>world_happiness.csv</code></a></li>
+<li><a href="/data/gss2016.csv"><i class="fas fa-table"></i> <code>gss2016.csv</code></a></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(infer)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">set.seed</span>(<span class="dv">1234</span>)  <span class="co"># Make these random numbers consistent</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">sat_gpa &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/sat_gpa.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">happiness &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/world_happiness.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">gss &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/gss2016.csv&quot;</span>)</a></code></pre></div>
+<p>Before we do any testing, we’ll make some subsets of our data</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Rich and poor countries only</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">high_low_income &lt;-<span class="st"> </span>happiness <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(income <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;High income&quot;</span>, <span class="st">&quot;Low income&quot;</span>))</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co"># Medium rich and medium poor countries only</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">middle_income &lt;-<span class="st"> </span>happiness <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="st">  </span><span class="kw">filter</span>(income <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Upper middle income&quot;</span>, <span class="st">&quot;Lower middle income&quot;</span>))</a></code></pre></div>
+<h3 id="difference-in-means-easy-visual-test">Difference in means (easy visual test)</h3>
+<p>Sometimes you can skip the whole hypothesis testing process if the thing you’re testing is super obvious. For instance, we want to know if the average level of national happiness is greater in rich countries than in poor countries.</p>
+<p>First, let’s calculate the difference in average happiness in rich and poor countries. We can do this a couple ways. We can use <code>group_by()</code> and <code>summarize()</code> to see the average happiness scores:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">high_low_income <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(income) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">avg_happiness =</span> <span class="kw">mean</span>(happiness_score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   income      avg_happiness
+##   &lt;chr&gt;               &lt;dbl&gt;
+## 1 High income          6.48
+## 2 Low income           4.00</code></pre>
+<p>The average score in rich countries is 6.5 and the average score in poor countries is 4. That’s a difference of roughly 2.5, which seems pretty big.</p>
+<p>We can also get the actual difference in means by using <code>specify()</code> and <code>calculate()</code>. We specify the order here so that we run <span class="math inline">\(\bar{x}_{\text{High income}} - \bar{x}_{\text{Low income}}\)</span>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">rich_poor_happiness_diff &lt;-<span class="st"> </span>high_low_income <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> happiness_score <span class="op">~</span><span class="st"> </span>income) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;High income&quot;</span>, <span class="st">&quot;Low income&quot;</span>))</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">rich_poor_happiness_diff</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##    stat
+##   &lt;dbl&gt;
+## 1  2.49</code></pre>
+<p>The difference is 2.49 points.</p>
+<p>Is that difference real though? Could it potentially be 0?</p>
+<p>Let’s look at it first. Here’s a boxplot showing the average happiness in both types of countries</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">ggplot</span>(high_low_income, <span class="kw">aes</span>(<span class="dt">x =</span> income, <span class="dt">y =</span> happiness_score)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/visualize-rich-poor-1.png" width="672" /></p>
+<p>There’s a huge difference. There’s pretty much zero chance these two things overlap. We can end our hypothesis testing here, since we have substantial evidence to convict and reject the null hypothesis that there’s no effect.</p>
+<h3 id="difference-in-means-i">Difference in means (I)</h3>
+<p>Next, let’s look at the difference in happiness is middle income countries. First, we’ll plot it to see if we can get out of more rigorous testing:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">ggplot</span>(middle_income, <span class="kw">aes</span>(<span class="dt">x =</span> income, <span class="dt">y =</span> happiness_score)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/visualize-medium-1.png" width="672" /></p>
+<p>Here we see that upper middle income countries do have a higher average happiness score, than their lower middle income counterparts, but there’s some overlap. Some lower middle income countries are happier than upper middle income countries and vice versa. We’ll need to see if the difference between the two groups is really real. Time for simulation-based hypothesis testing!</p>
+<p><strong>Step 1: Calculate δ.</strong> Our δ here is the difference in mean happiness scores, or <span class="math inline">\(\bar{x}_{\text{Upper middle income}} - \bar{x}_{\text{Lower middle income}}\)</span>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">middle_happiness_diff &lt;-<span class="st"> </span>middle_income <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> happiness_score <span class="op">~</span><span class="st"> </span>income) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;Upper middle income&quot;</span>, <span class="st">&quot;Lower middle income&quot;</span>))</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">middle_happiness_diff</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##    stat
+##   &lt;dbl&gt;
+## 1 0.783</code></pre>
+<p>Our δ is 0.78 happiness points. On average, upper middle income countries are 0.78 points happier than their lower middle income counterparts. But is that difference real? Could it maybe be zero?</p>
+<p><strong>Step 2: Invent world where δ is null.</strong> We can use simulation to generate a world where the actual difference between these two types of countries is zero.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">happiness_diff_in_null_world &lt;-<span class="st"> </span>middle_income <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(happiness_score <span class="op">~</span><span class="st"> </span>income) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">5000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;Upper middle income&quot;</span>, <span class="st">&quot;Lower middle income&quot;</span>))</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">happiness_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">visualize</span>()</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/diff-happiness-null-world-1.png" width="672" /></p>
+<p>According to this, in a world where there’s no actual difference, we’d mostly see a 0 point difference. Because of random chance, we could see a difference as low as -0.4 or as high as 0.4 points, but that’s not anything special or significant. If we saw a difference of 0.4 in our data, that could be just like seeing 6 heads in a row when flipping a coin—routine.</p>
+<p><strong>Step 3: Look at δ in the null world.</strong> Next, we put our sample statistic δ in this histogram and see if it looks out of place.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">happiness_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> middle_happiness_diff)</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/diff-happiness-null-observed-1.png" width="672" /></p>
+<p>Our sample difference of 0.78 would be pretty abnormal if there really was no difference. That’s a good sign of strong evidence in favor of rejecting the null and “convicting” the effect of being “guilty” (or really not zero).</p>
+<p><strong>Step 4: Calculate probability.</strong> We can quantify this evidence with a p-value. What is the chance that we’d see that red line in the world where there’s no difference? (Note that we use <code>direction = &quot;both</code>; for now, always do that. We’ll talk about why in a future class.)</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">happiness_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> middle_happiness_diff, <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1       0</code></pre>
+<p>The probability we’d see that red line in a world where there’s no difference is 0. Technically isn’t not quite 0—it’s something like 0.00001, but 0 is good enough for our purposes. This means there’s pretty much no chance that we’d see a difference of 0.78 in a world of “innocence,” or in a world where there’s no difference.</p>
+<p><strong>Step 5: Decide if δ is significant.</strong> If we use a regular standard of 0.05 (the probability that we make a Type I error, or make a false positive, or lock up an innocent person), we’ve definitely met that standard. 0 is less than 0.05.</p>
+<p><strong>Final step: Write this up.</strong> Here’s what we can say about this hypothesis test in a report:</p>
+<blockquote>
+<p>On average, upper middle income countries score 0.78 points higher in national happiness than lower middle income countries. This difference is statistically significant (p &lt; 0.001).</p>
+</blockquote>
+<p>Note how I don’t say “p = 0”. That’s because it’s not. When you deal with tiny tiny p-values like this, it’s normal to just say that it’s less than 0.001.</p>
+<h3 id="difference-in-means-ii">Difference in means (II)</h3>
+<p>Now we can look at the difference in school enrollment in the two types of middle income countries. I’ll be less verbose about the process here.</p>
+<p>Here are our hypotheses:</p>
+<ul>
+<li>H<sub>0</sub>: <span class="math inline">\(\mu_{\text{Upper middle income}} - \mu_{\text{Lower middle income}} = 0\)</span></li>
+<li>H<sub>A</sub>: <span class="math inline">\(\mu_{\text{Upper middle income}} - \mu_{\text{Lower middle income}} \neq 0\)</span></li>
+</ul>
+<p>We want to gather enough evidence to reject the null hypothesis and prove “guilt” (the alternative hypothesis) that the population-level difference between these two groups is not 0.</p>
+<p><strong>Step 0: Visualize to see if we can skip this testing</strong>. If we look at average school enrollment in the two types of countries, we see that upper middle income countries appear to have a higher average, but there’s a lot of overlap with lower middle income countries, so we can’t immediately assume this is a real difference.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">ggplot</span>(middle_income, <span class="kw">aes</span>(<span class="dt">x =</span> income, <span class="dt">y =</span> school_enrollment)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/visualize-medium-school-1.png" width="672" /></p>
+<p><strong>Step 1: Calculate δ.</strong> Our δ here is the difference in mean school enrollment, or <span class="math inline">\(\bar{x}_{\text{Upper middle income}} - \bar{x}_{\text{Lower middle income}}\)</span>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">middle_school_diff &lt;-<span class="st"> </span>middle_income <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> school_enrollment <span class="op">~</span><span class="st"> </span>income) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;Upper middle income&quot;</span>, <span class="st">&quot;Lower middle income&quot;</span>))</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">middle_school_diff</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##    stat
+##   &lt;dbl&gt;
+## 1  4.29</code></pre>
+<p>Our δ is 4.29% enrollment (this variable is measured in percent; a country with a score of 90 would have 90% of its kids enrolled in school). On average, upper middle income countries have more kids in school than their lower middle income counterparts. But is that difference real? Could it maybe be zero?</p>
+<p><strong>Step 2: Invent world where δ is null.</strong> We use simulation to generate a world where the actual difference between these two types of countries is zero.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">school_diff_in_null_world &lt;-<span class="st"> </span>middle_income <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(school_enrollment <span class="op">~</span><span class="st"> </span>income) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">5000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;Upper middle income&quot;</span>, <span class="st">&quot;Lower middle income&quot;</span>))</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb19-7" data-line-number="7">school_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">visualize</span>()</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/diff-school-null-world-1.png" width="672" /></p>
+<p>According to this, in a world where there’s no actual difference, we’d mostly see a 0% difference. Because of random chance, we could see a difference as low as -5% or as high as 5%. (i.e. if one country has 99% enrollment and another has 95% enrollment, that’s not anything special—that 3% difference could just be random chance)</p>
+<p><strong>Step 3: Look at δ in the null world.</strong> Next, we put our sample statistic δ in this histogram and see if it looks out of place.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">school_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> middle_school_diff)</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/diff-school-null-observed-1.png" width="672" /></p>
+<p>Our sample difference of 4.3% is kind of large for a world of no difference, but it’s not exceptionally abnormal. It’s plausible to see that kind of difference just by random chance.</p>
+<p><strong>Step 4: Calculate probability.</strong> What is the chance that we’d see that red line in the world where there’s no difference?</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">diff_school_pvalue &lt;-<span class="st"> </span>school_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> middle_school_diff, <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>)</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">diff_school_pvalue</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1  0.0622</code></pre>
+<p>The probability we’d see that red line in a world where there’s no difference is 0.0622.</p>
+<p><strong>Step 5: Decide if δ is significant.</strong> If we use a regular standard of 0.05, we actually don’t have enough evidence to “convict”, since the p-value is 0.0622.</p>
+<p><strong>Final step: Write this up.</strong> Here’s what we can say about this hypothesis test in a report:</p>
+<blockquote>
+<p>On average, upper middle income countries have 4.3% higher school enrollment than lower middle income countries, but this difference is not statistically significant (p = 0.06).</p>
+</blockquote>
+<h3 id="difference-in-means-iii">Difference in means (III)</h3>
+<p>In <a href="/assignment/04-problem-set/">problem set 4</a>, you used regression to explore the relationship between SAT scores and college GPA by sex. Interestingly, you found that women score lower on the SAT but have higher freshman GPAs than men. Let’s see if that difference is real.</p>
+<p>Our null hypothesis is that there’s no difference in freshman GPA between the sexes; our alternative hypothesis is that there <em>is</em> a difference. Here’s the mathy version of these hypotheses:</p>
+<ul>
+<li>H<sub>0</sub>: <span class="math inline">\(\mu_{\text{Male}} - \mu_{\text{Female}} = 0\)</span></li>
+<li>H<sub>A</sub>: <span class="math inline">\(\mu_{\text{Male}} - \mu_{\text{Female}} \neq 0\)</span></li>
+</ul>
+<p>We want to gather enough evidence to reject the null hypothesis and prove “guilt” (the alternative hypothesis) that the population-level difference between these two groups is not 0.</p>
+<p><strong>Step 0: Visualize to see if we can skip this testing</strong>. Let’s look at a graph to see if we can “convict” immediately with visual evidence. We can’t; these overlap too much. Women have a higher average GPA, but it’s impossible to tell if it’s different just with a graph.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">ggplot</span>(sat_gpa, <span class="kw">aes</span>(<span class="dt">x =</span> sex, <span class="dt">y =</span> gpa_fy)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/visualize-gpa-diff-1.png" width="672" /></p>
+<p><strong>Step 1: Calculate δ.</strong> Our δ here is the difference in freshman GPA, or <span class="math inline">\(\bar{x}_{\text{Male}} - \bar{x}_{\text{Female}}\)</span>.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">gpa_diff &lt;-<span class="st"> </span>sat_gpa <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> gpa_fy <span class="op">~</span><span class="st"> </span>sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))</a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">gpa_diff</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##     stat
+##    &lt;dbl&gt;
+## 1 -0.149</code></pre>
+<p>Our δ is -0.15. On average, men have have a 0.15 point lower GPA than women. But is that difference real? Could it maybe be zero?</p>
+<p><strong>Step 2: Invent world where δ is null.</strong> We use simulation to generate a world where the actual difference between these two groups is zero.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">gpa_diff_in_null_world &lt;-<span class="st"> </span>sat_gpa <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> gpa_fy <span class="op">~</span><span class="st"> </span>sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">5000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))</a>
+<a class="sourceLine" id="cb26-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb26-7" data-line-number="7">gpa_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">visualize</span>()</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/diff-gpa-null-world-1.png" width="672" /></p>
+<p>According to this, in a world where there’s no actual difference, we’d mostly see a 0 point difference. Because of random chance, we could see a difference as low as -0.1 or as high as 0.1. (i.e. if one student has a GPA of 3.5 and another has a 3.55, that’s not anything special—that 0.05 difference could just be random chance)</p>
+<p><strong>Step 3: Look at δ in the null world.</strong> Next, we put our sample statistic δ in this histogram and see if it looks out of place.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">gpa_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> gpa_diff)</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/diff-gpa-null-observed-1.png" width="672" /></p>
+<p>Our sample difference of -0.15 seems small and rare for a world of no difference.</p>
+<p><strong>Step 4: Calculate probability.</strong> What is the chance that we’d see that red line in the world where there’s no difference?</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">diff_gpa_pvalue &lt;-<span class="st"> </span>gpa_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> gpa_diff, <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>)</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">diff_gpa_pvalue</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1  0.0012</code></pre>
+<p>The probability we’d see that red line in a world where there’s no difference is 0.0012.</p>
+<p><strong>Step 5: Decide if δ is significant.</strong> If we use a regular standard of 0.05, we have enough evidence to “convict”, since the p-value is 0.0012. We could even use a standard of 0.01 and still have evidence beyond reasonable doubt. The difference is most likely real (or guilty)</p>
+<p><strong>Final step: Write this up.</strong> Here’s what we can say about this hypothesis test in a report:</p>
+<blockquote>
+<p>On average, men have a 0.15 point lower freshman GPA than women, and this difference is statistically significant (p = 0.001).</p>
+</blockquote>
+<h3 id="difference-in-proportions-i">Difference in proportions (I)</h3>
+<p>In <a href="/assignment/04-problem-set/">problem set 5</a>, you used data from the 2016 GSS to estimate the proportion of people in the US who have faced harassment at work. Let’s extend that a little to see if people not born in the US face more harassment than those who are born in the US.<span><label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">This is an actual research question; see <a href="https://www.revealnews.org/article/under-cover-of-darkness-female-janitors-face-rape-and-assault/">Under cover of darkness, female janitors face rape and assault</a>, for instance, where non-citizens are scared to report issues of sexual harassment and are more likely to work in places where they can be taken advantage of.<br />
+<br />
+</span></span></p>
+<p>Our null hypothesis is that there’s no difference in the proportion of people who have faced harassment; our alternative hypothesis is that there <em>is</em> a difference. Here’s the mathy version of these hypotheses (note that this <span class="math inline">\(p\)</span> is different from the p-value <span class="math inline">\(p\)</span>; this <span class="math inline">\(p\)</span> stands for the population proportion parameter, like <span class="math inline">\(\mu\)</span>, but for proportions):</p>
+<ul>
+<li>H<sub>0</sub>: <span class="math inline">\(p_{\text{Not born in US}} - p_{\text{Born in US}} = 0\)</span></li>
+<li>H<sub>A</sub>: <span class="math inline">\(p_{\text{Not born in US}} - p_{\text{Born in US}} \neq 0\)</span></li>
+</ul>
+<p>We want to gather enough evidence to reject the null hypothesis and prove “guilt” (the alternative hypothesis) that the population-level difference between these two groups’ proportions is not 0.</p>
+<p><strong><em>The really cool thing about this</em></strong> is that we don’t need to look at a flowchart to choose the right version of the statistical test that measures differences in proportions. We do the exactly same simulation process as before.</p>
+<p><strong>Step 0: Visualize to see if we can skip this testing</strong>. Let’s look at a graph to see if we can “convict” immediately with visual evidence. We can’t, though. 18% of those born in the US have faced harassment, compared to 15% of those not born in the US. That’s not a huge giant obvious difference, so we’ll need to simulate.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># Limit GSS data to just yes/no responses to harassment question</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">gss_harass &lt;-<span class="st"> </span>gss <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(harass5 <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>))</a>
+<a class="sourceLine" id="cb30-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="co"># Wrangle the data a little to calculate group proportions</span></a>
+<a class="sourceLine" id="cb30-6" data-line-number="6">plot_prop_harass_born &lt;-<span class="st"> </span>gss_harass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb30-7" data-line-number="7"><span class="st">  </span><span class="kw">count</span>(born, harass5) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb30-8" data-line-number="8"><span class="st">  </span><span class="kw">group_by</span>(born) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb30-9" data-line-number="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n))</a>
+<a class="sourceLine" id="cb30-10" data-line-number="10">plot_prop_harass_born</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+## # Groups:   born [2]
+##   born  harass5     n  prop
+##   &lt;chr&gt; &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;
+## 1 No    No        145 0.853
+## 2 No    Yes        25 0.147
+## 3 Yes   No        991 0.824
+## 4 Yes   Yes       212 0.176</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># Make a bar plot of just the yes proportions</span></a>
+<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">filter</span>(plot_prop_harass_born, harass5 <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>), </a>
+<a class="sourceLine" id="cb32-3" data-line-number="3">       <span class="kw">aes</span>(<span class="dt">x =</span> born, <span class="dt">y =</span> prop, <span class="dt">fill =</span> born)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb32-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_col</span>()</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/visualize-harass-born-diff-1.png" width="672" /></p>
+<p><strong>Step 1: Calculate δ.</strong> Our δ here is the difference in the proportion of US-born and non-US-born residents who have faced harassment at work, or <span class="math inline">\(\hat{p}_{\text{Not born in the US}} - \hat{p}_{\text{Born in the US}}\)</span>. We have to specify a success value (if we do “yes”, it’ll calculate the proportion of yesses; if we do “no”, it’ll calculate the proportion of nos), and we specify “No” - “Yes” in the order so we subtract those born in the US from those not born in the US.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">harass_diff_born &lt;-<span class="st"> </span>gss_harass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> harass5 <span class="op">~</span><span class="st"> </span>born, <span class="dt">success =</span> <span class="st">&quot;Yes&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in props&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>))</a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">harass_diff_born</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##      stat
+##     &lt;dbl&gt;
+## 1 -0.0292</code></pre>
+<p>Our δ is -0.03, which means there’s a 3% difference between the two groups, which we saw in the bar chart above. But is that difference real? Could it maybe be zero?</p>
+<p><strong>Step 2: Invent world where δ is null + Step 3: Look at δ in the null world.</strong> We use simulation to generate a world where the actual difference between these two groups is zero, and then we put δ there to see if it’s weird or unexpected.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">harass_born_diff_in_null_world &lt;-<span class="st"> </span>gss_harass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> harass5 <span class="op">~</span><span class="st"> </span>born, <span class="dt">success =</span> <span class="st">&quot;Yes&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">5000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in props&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>))</a>
+<a class="sourceLine" id="cb35-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb35-7" data-line-number="7">harass_born_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-8" data-line-number="8"><span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> harass_diff_born)</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/diff-harass-born-null-world-1.png" width="672" /></p>
+<p>According to this, in a world where there’s no actual difference, we’d mostly see a 0% difference, but because of random chance, we could see a differences of ±5% (or more). Our sample difference of 3% fits fairly well in this fake world where there’s no difference.</p>
+<p><strong>Step 4: Calculate probability.</strong> What is the chance that we’d see that red line in the world where there’s no difference?</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">diff_harass_born_pvalue &lt;-<span class="st"> </span>harass_born_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> harass_diff_born, <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>)</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">diff_harass_born_pvalue</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.396</code></pre>
+<p>The probability we’d see that red line in a world where there’s no difference is 0.3962.</p>
+<p><strong>Step 5: Decide if δ is significant.</strong> If we use a regular standard of 0.05, we definitely don’t have enough evidence to “convict”, since the p-value is so high.</p>
+<p><strong>Final step: Write this up.</strong> Here’s what we can say about this hypothesis test in a report:</p>
+<blockquote>
+<p>There is no significant difference between the proportion of US-born and non-US born workers that have faced harassment in the workplace (δ = 0.03, p = 0.4).</p>
+</blockquote>
+<p>All of that simulation work gets you a single sentence!</p>
+<h3 id="difference-in-proportions-ii">Difference in proportions (II)</h3>
+<p>Now let’s see if women face more harassment at work than men. Our null hypothesis is that there’s no difference in the proportion of people who have faced harassment; our alternative hypothesis is that there <em>is</em> a difference:</p>
+<ul>
+<li>H<sub>0</sub>: <span class="math inline">\(p_{\text{Female}} - p_{\text{Male}} = 0\)</span></li>
+<li>H<sub>A</sub>: <span class="math inline">\(p_{\text{Female}} - p_{\text{Male}} \neq 0\)</span></li>
+</ul>
+<p><strong>Step 0: Visualize to see if we can skip this testing</strong>. Let’s look at a graph to see if we can “convict” immediately with visual evidence. We can’t, though. 19% of females have faced harassment, compared to 15.5% of males. That’s not a huge giant obvious difference, so we’ll need to simulate.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># Wrangle the data a little to calculate group proportions</span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2">plot_prop_harass_sex &lt;-<span class="st"> </span>gss_harass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="st">  </span><span class="kw">count</span>(sex, harass5) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb38-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb38-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n))</a>
+<a class="sourceLine" id="cb38-6" data-line-number="6">plot_prop_harass_sex</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+## # Groups:   sex [2]
+##   sex    harass5     n  prop
+##   &lt;chr&gt;  &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;
+## 1 Female No        563 0.810
+## 2 Female Yes       132 0.190
+## 3 Male   No        573 0.845
+## 4 Male   Yes       105 0.155</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="co"># Make a bar plot of just the yes proportions</span></a>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="kw">ggplot</span>(<span class="kw">filter</span>(plot_prop_harass_sex, harass5 <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>), </a>
+<a class="sourceLine" id="cb40-3" data-line-number="3">       <span class="kw">aes</span>(<span class="dt">x =</span> sex, <span class="dt">y =</span> prop, <span class="dt">fill =</span> sex)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_col</span>()</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/visualize-harass-sex-diff-1.png" width="672" /></p>
+<p><strong>Step 1: Calculate δ.</strong></p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">harass_diff_sex &lt;-<span class="st"> </span>gss_harass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> harass5 <span class="op">~</span><span class="st"> </span>sex, <span class="dt">success =</span> <span class="st">&quot;Yes&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in props&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">harass_diff_sex</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##     stat
+##    &lt;dbl&gt;
+## 1 0.0351</code></pre>
+<p>Our δ is -0.035, which means there’s a 3.5% difference between the two groups, which we saw in the bar chart above. But is that difference real? Could it maybe be zero?</p>
+<p><strong>Step 2: Invent world where δ is null + Step 3: Look at δ in the null world.</strong> We use simulation to generate a world where the actual difference between these two groups is zero, and then we put δ there to see if it’s weird or unexpected.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">harass_sex_diff_in_null_world &lt;-<span class="st"> </span>gss_harass <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> harass5 <span class="op">~</span><span class="st"> </span>sex, <span class="dt">success =</span> <span class="st">&quot;Yes&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb43-4" data-line-number="4"><span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">5000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb43-5" data-line-number="5"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in props&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))</a>
+<a class="sourceLine" id="cb43-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb43-7" data-line-number="7">harass_born_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb43-8" data-line-number="8"><span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> harass_diff_sex)</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/diff-harass-sex-null-world-1.png" width="672" /></p>
+<p>According to this, in a world where there’s no actual difference, we’d mostly see a 0% difference, but because of random chance, we could see a difference of ±5% (or more). Our sample difference of 3.5% fits fairly well in this fake world where there’s no difference.</p>
+<p><strong>Step 4: Calculate probability.</strong> What is the chance that we’d see that red line in the world where there’s no difference?</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">diff_harass_sex_pvalue &lt;-<span class="st"> </span>harass_sex_diff_in_null_world <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> harass_diff_sex, <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>)</a>
+<a class="sourceLine" id="cb44-3" data-line-number="3">diff_harass_sex_pvalue</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1  0.0878</code></pre>
+<p>The probability we’d see that red line in a world where there’s no difference is 0.0878.</p>
+<p><strong>Step 5: Decide if δ is significant.</strong> If we use a regular standard of 0.05, we definitely don’t have enough evidence to “convict”, since the p-value is so high. But that doesn’t mean that the “defendant” is not guilty. If we use a lower standard of 0.10, we <em>do</em> have enough evidence to convict—we’re just a little less confident that the effect is real/guilty.</p>
+<p><strong>Final step: Write this up.</strong> Here’s what we can say about this hypothesis test in a report:</p>
+<blockquote>
+<p>In general, women face more harassment in the workplace than men. 19% of women report facing harassment, compared to 15.5% of men, and this 3.5% difference is significant at a 0.1 level (p = 0.09).</p>
+</blockquote>
+<p>There are also a bunch of caveats here. The GSS doesn’t measure what kind of harassment this means: it includes bullying, sexual harassment, sexual assault, and other forms of harassment. These limitations could be masking whatever the true population effect is. But this gets us close—it’s not overwhelming beyond-reasonable-doubt evidence, but it’s pretty good.</p>
+<h3 id="comparison-to-a-fixed-value">Comparison to a fixed value</h3>
+<p>Finally, we can compare our sample statistic δ to some fixed population parameter. This is useful in situations where you want to see if you’ve hit some standard, or to see if your country is about the same happiness as another country, or similar situations. Rather than invent a world where δ is 0, we’ll invent a world where δ is some specific number.</p>
+<p>Let’s pretend that the <code>sat_gpa</code> data is from students attending colleges in Utah, and let’s pretend that the state of Utah has imposed a new standard that says all universities should have an average GPA of 3.0 to qualify for some new state grant program. We want to know if our average GPA is close enough to the 3.0 standard.</p>
+<p>Our null hypothesis is that our average GPA is 3.0. Our alternative hypothesis is that it’s not 3.0. We’re trying to prove guilt, or that the GPA is not meeting the standard.</p>
+<ul>
+<li>H<sub>0</sub>: <span class="math inline">\(\mu_{\text{GPA}} = 3.0\)</span></li>
+<li>H<sub>A</sub>: <span class="math inline">\(\mu_{\text{GPA}} \neq 3.0\)</span></li>
+</ul>
+<p><strong>Step 1: Calculate δ.</strong></p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="co"># We can calculate this with specify() + calculate()</span></a>
+<a class="sourceLine" id="cb46-2" data-line-number="2">avg_gpa &lt;-<span class="st"> </span>sat_gpa <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb46-3" data-line-number="3"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">formula =</span> gpa_fy <span class="op">~</span><span class="st"> </span><span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb46-4" data-line-number="4"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;mean&quot;</span>)</a>
+<a class="sourceLine" id="cb46-5" data-line-number="5">avg_gpa</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##    stat
+##   &lt;dbl&gt;
+## 1  2.47</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="co"># Or with summarize()</span></a>
+<a class="sourceLine" id="cb48-2" data-line-number="2">avg_gpa &lt;-<span class="st"> </span>sat_gpa <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb48-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">stat =</span> <span class="kw">mean</span>(gpa_fy))</a>
+<a class="sourceLine" id="cb48-4" data-line-number="4">avg_gpa</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##    stat
+##   &lt;dbl&gt;
+## 1  2.47</code></pre>
+<p>Our δ, or average GPA is 2.47. That’s low—could it maybe be 3, given variation in sampling?</p>
+<p><strong>Step 2: Invent world where δ is null + Step 3: Look at δ in the null world.</strong> We use simulation to generate a world where the actual mean is 3.0, and then we put δ there to see if it’s weird or unexpected.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">null_state_standard &lt;-<span class="st"> </span>sat_gpa <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="st">  </span><span class="kw">specify</span>(gpa_fy <span class="op">~</span><span class="st"> </span><span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;point&quot;</span>, <span class="dt">mu =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-4" data-line-number="4"><span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb50-5" data-line-number="5"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;mean&quot;</span>)</a>
+<a class="sourceLine" id="cb50-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb50-7" data-line-number="7">null_state_standard <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> avg_gpa)</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/null-state-1.png" width="672" /></p>
+<p>Hahaha nope. There’s no way that 2.47 could potentially be 3.0. We have overwhelming visual evidence here that we’re not meeting the standard.</p>
+<p><strong>Step 4: Calculate probability.</strong> What is the chance that we’d see that red line in the world where there’s no difference?</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">state_standard_pvalue &lt;-<span class="st"> </span>null_state_standard <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb51-2" data-line-number="2"><span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> avg_gpa, <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>)</a>
+<a class="sourceLine" id="cb51-3" data-line-number="3">state_standard_pvalue</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1       0</code></pre>
+<p>The probability we’d see that red line in a world where there’s no difference is 0.</p>
+<p><strong>Step 5: Decide if δ is significant.</strong> It’s definitely significant. We have clear evidence at pretty much any level of significance that we can reject the null hypothesis (innocence) and say that 2.47 is definitely not 3.0.</p>
+<p><strong>Final step: Write this up.</strong> Here’s what we can say about this hypothesis test in a report:</p>
+<blockquote>
+<p>The average GPA in the state of Utah is 2.47, which is significantly lower than the recommended state standard of 3.0 (p &lt; 0.001).</p>
+</blockquote>
+<p>What if the standard was 2.5 instead of 3? Could 2.47 potentially be 2.5? Here’s a less annotated version of how to calculate that (you can do this less annotated version in real life; you don’t really need to walk through each of these steps in detail).</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># Make world where standard is 2.5</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2">null_state_standard_<span class="dv">25</span> &lt;-<span class="st"> </span>sat_gpa <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="st">  </span><span class="kw">specify</span>(gpa_fy <span class="op">~</span><span class="st"> </span><span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-4" data-line-number="4"><span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;point&quot;</span>, <span class="dt">mu =</span> <span class="fl">2.5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-5" data-line-number="5"><span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb53-6" data-line-number="6"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;mean&quot;</span>)</a>
+<a class="sourceLine" id="cb53-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb53-8" data-line-number="8"><span class="co"># Look at it</span></a>
+<a class="sourceLine" id="cb53-9" data-line-number="9">null_state_standard_<span class="dv">25</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> avg_gpa)</a></code></pre></div>
+<p><img src="/class/11-class_files/figure-html/check-25-standard-1.png" width="672" /></p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># Get p-value</span></a>
+<a class="sourceLine" id="cb54-2" data-line-number="2">state_standard_<span class="dv">25</span>_pvalue &lt;-<span class="st"> </span>null_state_standard_<span class="dv">25</span> <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb54-3" data-line-number="3"><span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> avg_gpa, <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>)</a>
+<a class="sourceLine" id="cb54-4" data-line-number="4">state_standard_<span class="dv">25</span>_pvalue</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.174</code></pre>
+<p>Our p-value here is 0.174, which means there’s a 17.4% chance that we’d see an average GPA of 2.47 in a world where it should be 2.5 (since there are issues with random chance; maybe an administrator forgot to type some grades in, or a teacher misgraded an exam, etc.).</p>
+<p>Here’s what we can say:</p>
+<blockquote>
+<p>The average GPA in the state of Utah is 2.47, which is not significantly lower than the recommended state standard of 2.5 (p = 0.174).</p>
+</blockquote>
+<h2 id="clearest-and-muddiest-things">Clearest and muddiest things</h2>
+<p>Go to <a href="https://goo.gl/forms/PlPwZGhMOdU9mKfC3">this form</a> and answer these three questions:</p>
+<ol style="list-style-type: decimal">
+<li>What was the muddiest thing from class today? What are you still wondering about?</li>
+<li>What was the clearest thing from class today?</li>
+<li>What was the most exciting thing you learned?</li>
+</ol>
+<p>I’ll compile the questions and send out answers after class.</p>
