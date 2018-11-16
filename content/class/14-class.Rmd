@@ -11,6 +11,7 @@ output:
 editor_options: 
   chunk_output_type: console
 stuff-to-add: >-
+  Logistic regression + others
   Geography
   Text
   Dashboards
