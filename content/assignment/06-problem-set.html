@@ -9,4 +9,50 @@ editor_options:
 
 
 
-<p>The instructions for this problem set will be posted one week before it is due.</p>
+<p>In this problem set, you’ll be working with data from three different sources:</p>
+<ol style="list-style-type: decimal">
+<li>Property tax data <a href="/assignment/03-problem-set/">problem set 3</a>.</li>
+<li><a href="http://gss.norc.org/">2016 GSS</a> data from <a href="/assignment/05-problem-set/">problem set 5</a>. Because there are hundreds of variables, I’ve selected a handful for you with <code>select()</code>.</li>
+<li>Data about car seat sales for a fictional company from Exam 2. See the answer key for Exam 2 on Learning Suite for a complete description of the variables in this dataset.</li>
+</ol>
+<p>Additionally, you are drowning in excellent, fully worked out and heavily annotated examples of how to do all these difference in means and difference in proportion tests. I provide two examples in this problem set, but also look here for reference:</p>
+<ul>
+<li><a href="/class/11-class/">Class 11: Hypothesis testing</a></li>
+<li><a href="https://moderndive.com/10-hypothesis-testing.html">ModernDive 10: Hypothesis testing</a></li>
+<li><a href="https://moderndive.com/11-inference-for-regression.html">ModernDive 10: Inference for regression</a></li>
+<li><a href="https://moderndive.com/B-appendixB.html">ModernDive appendix B: Inference examples</a></li>
+</ul>
+<h2 id="instructions">Instructions</h2>
+<h3 id="setting-up-your-project">Setting up your project</h3>
+<p><i class="fas fa-info-circle"></i> <em>You can copy the “Problem Set 6” project on RStudio.cloud, which has this set up for you. But remember that you really really should be off the cloud version and on your computer by now. <a href="https://statsf18.classes.andrewheiss.com/install/">Here are the instructions for installing everything on your computer.</a></em></p>
+<ol style="list-style-type: decimal">
+<li><p>Create a new RStudio project named “problem-set-6” (or whatever you want to call it) and put it somewhere on your computer.</p></li>
+<li><p>Navigate to that new project folder on your computer with File Explorer (in Windows) or Finder (in macOS) (i.e. however you look at files on your computer).</p></li>
+<li><p>Download this R Markdown file<span><label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">You’ll probably need to right click on the link and select “Save link as…”<br />
+<br />
+</span></span> and place it in your newly-created project (but not in your data folder—put it in the main directory):</p>
+<ul>
+<li><a href="/files/your-name_problem-set-6.Rmd"><i class="fab fa-r-project"></i> <code>your-name_problem-set-6.Rmd</code></a></li>
+</ul></li>
+<li><p>Create a new folder in your problem set folder called “data”.</p></li>
+<li><p>Download these three CSV files. They’ll probably go into your Downloads folder.<span><label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">You’ll probably need to right click on the link and select “Save link as…” or something similar—often browsers will load the CSV file like a web page, which isn’t helpful.<br />
+<br />
+</span></span></p>
+<ul>
+<li><a href="/data/property_taxes_2016.csv"><i class="fas fa-table"></i> <code>property_taxes_2016.csv</code></a></li>
+<li><a href="/data/gss2016.csv"><i class="fas fa-table"></i> <code>gss2016.csv</code></a></li>
+<li><a href="/data/Carseats.csv"><i class="fas fa-table"></i> <code>Carseats.csv</code></a></li>
+</ul></li>
+<li><p>Using Windows File Explorer or macOS Finder, move the newly downloaded CSV files into the “data” folder you created.</p></li>
+</ol>
+<p>In the end, your project folder should be structured like this:<span><label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Make sure your <code>.Rmd</code> file is <em>not</em> inside the data folder.<br />
+<br />
+</span></span></p>
+<p><img src="/images/assignment/ps6-project-outline.png" width="60%" /></p>
+<h3 id="completing-the-assignment">Completing the assignment</h3>
+<ol style="list-style-type: decimal">
+<li><p>Ensure that you have your new <code>problem-set-6</code> project open in RStudio. Open the <code>.Rmd</code> file from the “Files” panel in RStudio and follow the instructions there for the rest of the problem set. Once again, there are a couple fully worked out examples.</p></li>
+<li><p>Knit the <code>.Rmd</code> as a Word document<span><label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">Or PDF if you’ve installed tinytex.<br />
+<br />
+</span></span> when you’re done and submit it via Learning Suite.</p></li>
+</ol>

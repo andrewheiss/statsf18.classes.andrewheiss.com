@@ -1,0 +1,335 @@
+---
+title: "Problem set 6: Inference and significance"
+author: "Your name here"
+date: "Date here"
+---
+
+# Task 0: Load and wrangle data
+
+```{r load-libraries-data, warning=FALSE, message=FALSE}
+# Load libraries
+library(tidyverse)
+library(infer)
+library(moderndive)
+library(scales)
+
+# Set this to something so your random numbers are the same each time you run this
+set.seed(555)
+
+# Load and subset data
+taxes <- read_csv("data/property_taxes_2016.csv")
+
+taxes_nv_ut <- taxes %>% 
+  filter(state %in% c("Utah", "Nevada"))
+
+carseats <- read_csv("data/Carseats.csv") %>% 
+  # Scale these numbers up, since they're measured in 100s or 1000s
+  mutate(Sales = Sales * 100,
+         Advertising = Advertising * 100,
+         Income = Income * 1000,
+         Population = Population * 1000)
+
+# The full GSS data includes 935 variables(!!!), so here we use select() to only
+# look at a few. We also add some additional arguments to read_csv():
+#
+# - na: By default, any blank cells in the spreadsheet are considered missing. 
+#       Here we specify other values that mean missing, including blank (""), 
+#       Don't know, No answer, and Not applicable
+# - guess_max: When loading a CSV file, read_csv() looks at the first 1,000 rows
+#              to guess what kind of variable each column is (numeric, 
+#              categorical, date, etc.). Sometimes data doesn't appear in a 
+#              column until row 1,001 (or beyond), and then read_csv() doesn't 
+#              know how to treat that variable. We specify guess_max here so 
+#              that read_csv() looks at all 2,867 rows to guess the 
+#              column/variable type,
+gss_raw <- read_csv("data/gss2016.csv", 
+                na = c("", "Don't know",
+                       "No answer", "Not applicable"),
+                guess_max = 2867) %>%
+  select(marital, childs, educ, sex, race, born, income, pres12, polviews, pray)
+
+gss <- gss_raw %>% 
+  # Look for the letters "onservative". I omit the C because sometimes it's
+  # uppercase (Conservative) and sometimes it's lowercase (Slightly conservative)
+  mutate(conservative = ifelse(str_detect(polviews, "onservative"),
+                               "Conservative", "Not conservative")) %>% 
+  # Get rid of the respondents who didn't vote for Obama or Romney
+  mutate(pres12 = ifelse(!pres12 %in% c("Obama", "Romney"), NA, pres12)) %>% 
+  # case_when is like a fancy version of an if statement and it lets us collapse
+  # the different levels of pray into two
+  mutate(pray2 = case_when(
+    pray == "Several times a day" ~ "At least once a week",
+    pray == "Once a day" ~ "At least once a week",
+    pray == "Several times a week" ~ "At least once a week",
+    pray == "Once a week" ~ "At least once a week",
+    pray == "Lt once a week" ~ "Less than once a week",
+    pray == "Never" ~ "Less than once a week",
+    pray == "Don't know" ~ NA_character_,
+    pray == "No answer" ~ NA_character_,
+    pray == "Not applicable" ~ NA_character_
+  )) %>% 
+  # Make this numeric
+  mutate(childs = as.numeric(childs))
+```
+
+
+# Prelude: Process of hypothesis testing through simulation
+
+- **Step 0: Visualize to see if we can skip formal testing.** If the difference between two groups or two proportions or whatever you're testing is obvious enough visually, you can stop and say that the two groups and clearly statistically significantly different from each other.
+- **Step 1: Calculate $\delta$.** This is the thing you care about: the difference in means, the average, the median, the proportion, the difference in proportions, etc. You're testing to see if this number is significant.
+- **Step 2: Invent world where $\delta$ is null.** Simulate what the world would look like if there was no difference between two groups, or if there was no difference in proportions, or where the average value is a specific number.
+- **Step 3: Look at $\delta$ in the null world.** Put the sample statistic in the null world and see if it fits well.
+- **Step 4: Calculate probability that $\delta$ could exist in null world.** This is your p-value, or the probability that you'd see a $\delta$ at least that high in a world where there's no effect.
+- **Step 5: Decide if $\delta$ is statistically significant.** Choose some evidentiary standard or threshold for deciding if there's sufficient proof for rejecting the null world. Standard thresholds (from least to most rigorous) are 0.1, 0.05, and 0.01.
+
+
+# Task 1: Difference in means
+
+## Median home values in Utah and Nevada
+
+*(This is a complete example.)*
+
+**Main question: Are per-county median home values in Utah significantly different from median home values in Nevada?**
+
+Hypotheses:
+
+- H~0~: Per-county median home values in Utah minus per-county median home values in Nevada = 0
+- H~A~: Per-county median home values in Utah minus per-county median home values in Nevada not = 0
+
+Or, the mathy way:
+
+- H~0~: $\mu_{\text{per-county median home value in Utah}} - \mu_{\text{per-county median home value in Nevada}} = 0$
+- H~A~: $\mu_{\text{per-county median home value in Utah}} - \mu_{\text{per-county median home value in Nevada}} \neq 0$
+
+Can we disprove the null hypothesis (H~0~) at a 0.05 significance level?
+
+**Step 0: Visualize to see if we can skip formal testing.** First, we visualize the difference in county-level home values between the two states:
+
+```{r visualize-home-diffs}
+ggplot(taxes_nv_ut, aes(x = state, y = median_home_value)) +
+  geom_boxplot()
+```
+
+**Step 1: Calculate $\delta$.** Utah appears to have higher county-level home values in general, with some extreme outliers (hello Park City). Let's calculate the actual difference in average median home values:
+
+```{r calc-home-diffs}
+home_value_diff <- taxes_nv_ut %>% 
+  specify(median_home_value ~ state) %>% 
+  calculate("diff in means", order = c("Utah", "Nevada"))
+home_value_diff
+```
+
+On average, per-county median home values are `r dollar(home_value_diff$stat)` higher in Utah than in Nevada. That seems pretty high---nearly \$50,000. But is that a significant difference? Could it potentially be zero?
+
+**Step 2: Invent world where $\delta$ is null + Step 3: Look at $\delta$ in the null world.** To figure this out, we can create a simulated world where there is no difference between the two states. We then place the actual difference in means in that world and determine if that actual difference could fit comfortably in a world of no difference. If not, we have evidence to "convict" the difference of not being zero and thus be significant. If it does fit comfortably, we don't have enough evidence to convict and we cannot reject the null hypothesis that there's no difference.
+
+```{r create-null-value-diff}
+# Create imaginary world of no difference
+home_value_diff_null_world <- taxes_nv_ut %>% 
+  specify(median_home_value ~ state) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 5000) %>% 
+  calculate("diff in means", order = c("Utah", "Nevada"))
+
+# Look at actual difference in this imaginary world
+home_value_diff_null_world %>% 
+  visualize(obs_stat = home_value_diff)
+```
+
+**Step 4: Calculate probability that $\delta$ could exist in null world + Step 5: Decide if $\delta$ is statistically significant.**
+
+```{r calc-value-p-value}
+# Get p-value. This is the probability of seeing a value at least as big as
+# home_value_diff in a world where there's no difference.
+home_value_p <- home_value_diff_null_world %>% 
+  get_pvalue(obs_stat = home_value_diff, direction = "both")
+home_value_p
+```
+
+The probability that we'd see a difference of `r dollar(home_value_diff$stat)` in a world where there's no difference between the two states is `r home_value_p$p_value`, which is below a 0.05 threshold and constitutes fairly strong evidence that we can "convict" and conclude that there's a significant difference. 
+
+We can thus say that per-county median home values are significantly higher in Utah than in Nevada (p = `r home_value_p$p_value`).
+
+
+## Average per-county property taxes in Utah and Nevada
+
+**Main question: Are per-county property taxes per housing unit significantly different from property taxes in Nevada?**
+
+Hypotheses:
+
+- H~0~: put something here, either in words or with math
+- H~A~: put something here, either in words or with math
+
+*Test this hypothesis through simulation and see if there's a significant difference in county-level property taxes between the two states.*
+
+
+# Task 2: Differences in proportions
+
+## Prayer divided by 2012 presidential vote
+
+**Main question: Do Romney voters pray more than Obama voters?**
+
+Check to see if the difference in the proportion of Romney voters who pray at least once a week is difference from the proportion of Obama voters who pray at least once a week. Hint: you should use `specify(pray2 ~ pres12)`.
+
+Hypotheses:
+
+- H~0~: The proportion of Romney voters who pray at least once a week minus the proportion of Obama voters who pray at least once a week = 0
+- H~A~: The proportion of Romney voters who pray at least once a week minus the proportion of Obama voters who pray at least once a week is not = 0
+
+Mathy version (here I use $\pi$ as the population parameter symbol instead of $p$ so that it doesn't get confused the the p-value later on): 
+
+- H~0~: $\pi_{\text{Romney voters who pray at least once a week}} - \pi_{\text{Obama voters who pray at least once a week}} = 0$
+- H~A~: $\pi_{\text{Romney voters who pray at least once a week}} - \pi_{\text{Obama voters who pray at least once a week}} \neq 0$
+
+First, we calculate the proportion of Obama and Romney voters pray at least once a week or less than once a week:
+
+```{r pray-pres-props, warning=FALSE, message=FALSE, results="asis"}
+pray_pres_props <- gss %>% 
+  filter(!is.na(pres12), !is.na(pray2)) %>% 
+  count(pres12, pray2) %>% 
+  group_by(pres12) %>% 
+  mutate(prop = n / sum(n))
+pray_pres_props
+```
+
+```{r plot-pray-pres-props}
+ggplot(filter(pray_pres_props, pray2 == "At least once a week"), 
+       aes(x = pres12, y = prop, fill = pres12)) +
+  geom_col() +
+  # Turn off fill legend
+  guides(fill = FALSE) +
+  labs(x = NULL, y = "Percent that pray at least once a week") +
+  scale_y_continuous(labels = percent)
+```
+
+How big is that difference?
+
+```{r calc-pray-pres-props, message=FALSE, warning=FALSE}
+diff_pray_pres <- gss %>% 
+  specify(pray2 ~ pres12, success = "At least once a week") %>% 
+  calculate(stat = "diff in props", order = c("Romney", "Obama"))
+diff_pray_pres
+```
+
+There is a `r percent(diff_pray_pres$stat)` difference between Romney voters and Obama voters who pray at least once a week. That is, 85% of Romney voters pray that often, compared to 73% of Obama voters. Is that significantly different from 0%? Is that a plausible value in a world where there's no difference?
+
+```{r null-pray-pres-props, warning=FALSE}
+pray_pres_null_world <- gss %>% 
+  specify(pray2 ~ pres12, success = "At least once a week") %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 5000) %>% 
+  calculate(stat = "diff in props", 
+            order = c("Romney", "Obama"))
+
+pray_pres_null_world %>% 
+  visualize(obs_stat = diff_pray_pres)
+```
+
+Visually, there's no way an 11-12% difference would fit comfortably in a world of no effect. 
+
+```{r p-pray-pres-diff}
+pray_pres_null_world %>% 
+  get_pvalue(obs_stat = diff_pray_pres, direction = "both")
+```
+
+The p-value confirms it. There's a 0% chance of seeing that big of a difference by chance. There is a statistically significant difference between how frequently Romney and Obama voters pray each week (p < 0.001).
+
+
+## Prayer divided by sex
+
+**Main question: Do men pray more than women?**
+
+Hypotheses:
+
+- H~0~: put something here, either in words or with math
+- H~A~: put something here, either in words or with math
+
+*Test this hypothesis through simulation and see if there's a significant difference in the proportion of men vs. women who pray once a week. Hint: use `specify(pray2 ~ sex)`.*
+
+
+
+## Prayer divided by place of birth
+
+**Main question: Do people born in the US pray more than those born outside the US?**
+
+Hypotheses:
+
+- H~0~: put something here, either in words or with math
+- H~A~: put something here, either in words or with math
+
+*Test this hypothesis through simulation and see if there's a significant difference in the proportion of US-born vs. non-US-born residents who pray once a week. Hint: use `specify(pray2 ~ sex)`.*
+
+
+
+# Task 3: Difference in means and regression
+
+## Basic difference in means
+
+Now we'll switch to the car seat data you used in Exam 2. Each row in this dataset represents a store that sells car seats. The `Sales` column measures the number of car seats sold at that location. 
+
+**Main question: Is there a significant difference in car seat sales in urban and rural neighborhoods?** (Hint: use `specify(Sales ~ Urban)`)
+
+Hypotheses:
+
+- H~0~: put something here, either in words or with math
+- H~A~: put something here, either in words or with math
+
+*Test this hypothesis through simulation and see if there's a significant difference in car seats sold in urban and non-urban stores.*
+
+
+
+## Difference in means, controlling for other factors
+
+You should have found that there's no significant difference between car seat sales in urban and rural neighborhoods. Now we'll see if that finding holds when we control for other factors in a regression model. Recall that when you use `get_regression_table()`, you get a table with several columns. So far you've only looked at the estimate column. Notice that there's a column for p-values, as well as lower and upper bounds of a confidence interval. These work just like the p-values and confidence intervals you've been calculating with simulation and bootstrapping, only now you don't need to go through the whole 5-step hypothesis testing process each time. You have the values here---you just need to go through the process in your head. In regression, the p-value shows the probability of seeing a coefficient (or slope) that big (or small) in a world where the coefficient is actually zero. The confidence interval shows that you're 95% confident that the population-level coefficient is somewhere between the lower bound and the upper bound. If zero is in that interval, the p-value is likely insignificant, since you can't be sure that the effect (or the coefficient) is not zero.
+
+Here's our full regression model:
+
+```{r model-carseats}
+model_carseats <- lm(Sales ~ Advertising + Price + ShelveLoc + Income + 
+                       Population + Age + Education + Urban, 
+                     data = carseats)
+
+model_carseats %>% 
+  get_regression_table()
+```
+
+```{r model-carseats-details}
+model_carseats %>% 
+  get_regression_summaries()
+```
+
+
+## Urban vs. rural
+
+**Main question: If we control for advertising budget, price, shelf location, income, population, average age, and education, is there a significant difference in car seat sales in urban and rural neighborhoods?**
+
+Hypotheses:
+
+- H~0~: $\beta_{\text{Urban}} = 0$
+- H~A~: $\beta_{\text{Urban}} \neq 0$
+
+*Interpret the coefficient for urban and answer this question. You shouldn't need any code---look at the estimate column, the p-value column, and the confidence interval columns.*
+
+
+## Shelf location
+
+**Main question: If we control for advertising budget, price, income, population, average age, education, and urbanness, does shelf location have a significant effect on car seat sales?**
+
+Hypotheses:
+
+- H~0~: put something here, either in words or with math
+- H~A~: put something here, either in words or with math
+
+*Interpret the coefficients for good and medium shelf location and answer this question. You shouldn't need any code---look at the estimate column, the p-value column, and the confidence interval columns.*
+
+
+## Education
+
+**Main question: If we control for advertising budget, price, shelf location, income, population, average age, and urbanness, does a neighborhood's average education have a significant effect on car seat sales?**
+
+Hypotheses:
+
+- H~0~: put something here, either in words or with math
+- H~A~: put something here, either in words or with math
+
+*Interpret the coefficient for education and answer this question. You shouldn't need any code---look at the estimate column, the p-value column, and the confidence interval columns.*

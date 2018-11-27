@@ -7,4 +7,52 @@ editor_options:
   chunk_output_type: console
 ---
 
-The instructions for this problem set will be posted one week before it is due.
+In this problem set, you'll be working with data from three different sources: 
+
+1. Property tax data [problem set 3](/assignment/03-problem-set/).
+2. [2016 GSS](http://gss.norc.org/) data from [problem set 5](/assignment/05-problem-set/). Because there are hundreds of variables, I've selected a handful for you with `select()`. 
+3. Data about car seat sales for a fictional company from Exam 2. See the answer key for Exam 2 on Learning Suite for a complete description of the variables in this dataset.
+
+Additionally, you are drowning in excellent, fully worked out and heavily annotated examples of how to do all these difference in means and difference in proportion tests. I provide two examples in this problem set, but also look here for reference:
+
+- [Class 11: Hypothesis testing](/class/11-class/)
+- [ModernDive 10: Hypothesis testing](https://moderndive.com/10-hypothesis-testing.html)
+- [ModernDive 10: Inference for regression](https://moderndive.com/11-inference-for-regression.html)
+- [ModernDive appendix B: Inference examples](https://moderndive.com/B-appendixB.html)
+
+
+# Instructions
+
+## Setting up your project
+
+<i class="fas fa-info-circle"></i> *You can copy the "Problem Set 6" project on RStudio.cloud, which has this set up for you. But remember that you really really should be off the cloud version and on your computer by now. [Here are the instructions for installing everything on your computer.](https://statsf18.classes.andrewheiss.com/install/)*
+
+1. Create a new RStudio project named "problem-set-6" (or whatever you want to call it) and put it somewhere on your computer.
+
+2. Navigate to that new project folder on your computer with File Explorer (in Windows) or Finder (in macOS) (i.e. however you look at files on your computer). 
+
+3. Download this R Markdown file^[You'll probably need to right click on the link and select "Save link as…"] and place it in your newly-created project (but not in your data folder—put it in the main directory):
+
+    - [<i class="fab fa-r-project"></i> `your-name_problem-set-6.Rmd`](/files/your-name_problem-set-6.Rmd)
+
+4. Create a new folder in your problem set folder called "data".
+
+5. Download these three CSV files. They'll probably go into your Downloads folder.^[You'll probably need to right click on the link and select "Save link as…" or something similar—often browsers will load the CSV file like a web page, which isn't helpful.]
+
+    - [<i class="fas fa-table"></i> `property_taxes_2016.csv`](/data/property_taxes_2016.csv)
+    - [<i class="fas fa-table"></i> `gss2016.csv`](/data/gss2016.csv)
+    - [<i class="fas fa-table"></i> `Carseats.csv`](/data/Carseats.csv)
+
+6. Using Windows File Explorer or macOS Finder, move the newly downloaded CSV files into the "data" folder you created.
+
+In the end, your project folder should be structured like this:^[Make sure your `.Rmd` file is *not* inside the data folder.]
+
+```{r project-outline, echo=FALSE, out.width="60%"}
+knitr::include_graphics("/images/assignment/ps6-project-outline.png")
+```
+
+## Completing the assignment
+
+1. Ensure that you have your new `problem-set-6` project open in RStudio. Open the `.Rmd` file from the "Files" panel in RStudio and follow the instructions there for the rest of the problem set. Once again, there are a couple fully worked out examples.
+
+2. Knit the `.Rmd` as a Word document^[Or PDF if you've installed tinytex.] when you're done and submit it via Learning Suite.
