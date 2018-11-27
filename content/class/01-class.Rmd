@@ -25,7 +25,7 @@ editor_options:
 
 The introductory R script [is here](/files/super-quick-intro.R).
 
-The R Markdown file we played with [is here](/files/airport-birds.Rmd).
+The R Markdown file we played with [is here](/files/airport-birds/airport-birds.Rmd).
 
 
 # Clearest and muddiest things
