@@ -11,6 +11,10 @@ output:
 editor_options: 
   chunk_output_type: console
 stuff-to-add: >-
+  https://boingboing.net/2018/11/26/just-dont-have-a-face.html
+  https://twitter.com/becomingdatasci/status/1066005750651207681?s=12
+  https://qz.com/1427621/companies-are-on-the-hook-if-their-hiring-algorithms-are-biased/
+  ttps://www.independent.co.uk/travel/news-and-advice/airline-flights-pay-extra-to-sit-together-split-up-family-algorithm-minister-a8640771.html
   Logistic regression + others
   Geography
   Text
