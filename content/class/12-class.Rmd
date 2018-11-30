@@ -1,0 +1,206 @@
+---
+title: "Inference and regression"
+date: "2018-11-29"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# Slides
+
+No slides for today, since there's no formal class.
+
+
+# Inference and regression
+
+## Review of hypothesis testing and inference
+
+ModernDive chapter 11 isn't finished yet, but the principles it covers are relatively straightforward. When testing hypotheses with simulation, you follow this pattern (which you should probably have memorized by now):
+
+- **Step 1: Calculate $\delta$.** This is the thing you care about: the difference in means, the average, the median, the proportion, the difference in proportions, etc. You're testing to see if this number is significantly difference from zero (or from some other number).
+- **Step 2: Invent world where $\delta$ is null.** Simulate what the world would look like if there was no difference between two groups, or if there was no difference in proportions, or where the average value is a specific number.
+- **Step 3: Look at $\delta$ in the null world.** Put the sample statistic in the null world and see if it fits well.
+- **Step 4: Calculate probability that $\delta$ could exist in null world.** This is your p-value, or the probability that you'd see a $\delta$ at least that high in a world where there's no effect.
+- **Step 5: Decide if $\delta$ is statistically significant.** Choose some evidentiary standard or threshold for deciding if there's sufficient proof for rejecting the null world. Standard thresholds (from least to most rigorous) are 0.1, 0.05, and 0.01.
+
+We care about statistical significance because of sampling error. If you measure something about a sample (like the proportion of blue M&Ms in a bag), you're going to be off a little (or a lot if you have a small sample). If you see some number (i.e. if you find a small bag of M&Ms with 0 blue M&Ms in it), you want to know if that's an anomaly, or if it's something that could just happen by chance. If you had a fun-sized bag of 20 candies with 0 blue M&Ms in it, you could chalk that up to chance. If you had a giant Costco-sized bag of 2000 candies with 0 blue M&Ms in it, you'd be concerned. Such a finding would be statistically significant.
+
+The same principle applies to calculating differences between groups. This is especially important in randomized controlled trials. Imagine a treatment group of 500 people is given some sort of new cold medicine and a control group of 500 people is given a placebo. All 1000 people somehow got the cold at the same time, and all 1000 people took their medicine (either the actual medicine or the placebo). Consider these two scenarios:
+
+1. Those in the control group were sick for an average of 7 days, while those in the treatment group were sick for an average of 6.875 days. The difference between the two groups is 0.125 days (or 3 hours). The 95% confidence interval for this difference ranges from -0.5 days to 1.25 days.
+2. Those in the control group were sick for an average of 7 days, while those in the treatment group were sick for an average of 4.5 days. The difference between the two groups is 2.5 days. The 95% confidence interval for this difference ranges from 1 day to 3.5 days.
+
+There is a measurable difference between the average sickness duration of the two groups in both of these situations, but only the second group has a substantial and significant difference. 
+
+In the first situation, the confidence interval includes zero, which means the true unmeasurable difference between the two groups could potentially be zero. It could be negative. It could also be positive. We're not sure. The probability of seeing a difference of 0.125 days in a world where there's actually no difference is probably really high—that's a typical number. 
+
+In the second situation, we're very certain that the difference between the two groups is most definitely *not* zero. The probability that we'd see a difference of 2.5 days in a world where there's actually no difference is really really low—this is like finding no blue M&Ms in a big bag. 
+
+In the first situation, we cannot say that the new cold medicine has a statistically significant effect on the duration of sickness—we don't have enough evidence. In the second situation, we can.
+
+## Regression coefficients and inference
+
+Just like averages, medians, proportions, differences in averages, and so on, regression coefficients are sample statistics. They are estimates of some unmeasurable population parameter that we can only calculate by taking samples from the population. Because of this, they also have standard errors and confidence intervals associated with them. They're only estimates—they could be higher, or they could be lower. 
+
+With linear regression, what we generally care about is whether or not a coefficient is zero. If a coefficient could possibly be zero, it would mean that for every increase in X, Y might not actually change. If there's very little chance that a coefficient could be zero, we can be pretty sure that for every increase in X, Y really truly responds and changes.
+
+Here's the process for testing hypotheses about coefficients:
+
+- **Step 1: Calculate $\delta$.** This is the coefficient you care about and want to test. You calculate it with the `lm()` function.
+- **Step 4: Calculate probability that $\delta$ could exist in null world.** The `lm()` function (in conjunction with `get_regression_table()`) does this for you and provides p-values for each coefficient, or the probability that you'd see a coefficient at least that high in a world where the coefficient is actually zero.
+- **Step 5: Decide if $\delta$ is statistically significant.** Choose some evidentiary standard or threshold for deciding if there's sufficient proof for rejecting the world where the coefficient is zero. Again, the standard thresholds are 0.1, 0.05, and 0.01.
+
+Notice how steps 2 and 3 are missing here. That's because the `infer` package does not have a way to simulate a world where a coefficient is zero—there's no `coefficient` option in `specify()` or anything like that. You can essentially do these steps in your head, though.
+
+
+## Complete example
+
+Here's a full example using property tax data from Problem Set 3.
+
+First we load the libraries and data we'll need. We'll divide the median home value variable by 100 so it's a little easier to interpret (so we can say "for every \$100 increase in median home value…" instead of "for every \$1 increase in median home value)
+
+```{r load-libraries, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(moderndive)
+```
+
+```{r fake-load-data, eval=FALSE}
+taxes <- read_csv("data/property_taxes_2016.csv") %>% 
+  mutate(median_home_value = median_home_value / 100)
+```
+
+```{r actual-load-data, include=FALSE, message=FALSE, warning=FALSE}
+taxes <- read_csv(here::here("static", "data", "property_taxes_2016.csv")) %>% 
+  mutate(median_home_value = median_home_value / 100)
+```
+
+Next we build a regression model that predicts/explains per-household taxes based on median home value in each county, the proportion of households with kids in each county, and the state each county is in:
+
+```{r run-model}
+tax_model <- lm(tax_per_housing_unit ~ 
+                  median_home_value + prop_houses_with_kids + state,
+                data = taxes)
+```
+
+```{r show-model-fake, eval=FALSE}
+tax_model %>% get_regression_table()
+```
+
+```{r show-model-real, echo=FALSE, results="asis"}
+tax_model %>% get_regression_table() %>% 
+  pander::pandoc.table(justify = "lrrrrrr", split.tables = Inf)
+```
+
+```{r show-model-details-fake, eval=FALSE}
+tax_model %>% get_regression_summaries()
+```
+
+```{r show-model-details-real, echo=FALSE, results="asis"}
+tax_model %>% get_regression_summaries() %>% 
+  pander::pandoc.table(justify = "cccccccc", split.tables = Inf)
+```
+
+Up to this point in the semester, you've only looked at the estimate column. Note that there are columns named `p_value` (the probability that you'd see this coefficient in a world where it's actually zero), `lower_ci` (the lower bound of the 95% confidence interval), and `upper_ci` (the upper bound of the 95% confidence interval).
+
+Here's how we interpret all these results, now with hypothesis testing built in:
+
+- **Median home value**: Taking state and the proportion of households with kids into account (or controlling for state and households with kids), for every \$100 increase in the median home value in a county, there is an associated increase in the median per-house tax burden of \$0.40, on average. This effect is statistically significant (p < 0.001). The 95% confidence interval ranges between \$0.37 and \$0.44, which does not include \$0, and the probability of seeing a coefficient as large as \$0.40 in a world where it's actually zero is practically 0.
+
+    The shorter way of saying all of that in a report or writeup is this: 
+    
+    Controlling for state and the proportion of households with kids, for every \$100 increase in the median home value in a county, there is a statistically significant associated increase in the median per-house tax burden of \$0.40 (p < 0.001).
+    
+- **Proportion of houses with kids**: Controlling for state and median home values, for every percent increase in the proportion of households with kids, there is an associated increase in the median per-household tax burden of \$14, on average. This coefficient is also statistically significant and has little chance of really potentially being zero. The 95% confidence interval ranges between \$8.46 and \$19.73 (and does not include zero) and the probability of seeing a coefficient as large as \$14 in a world where it's actually \$0 is practically zero.
+
+- **State effects**: In Problem Set 3, we concluded that there are sizable state effects as well. This is quoted from the answer key: 
+
+    *"Controlling for households with kids and median home values, Californians see an average per-household tax burden of \$123 more than their counterparts in Arizona. Utahans pay \$213 less in taxes than Arizonans, on average. Nevadans pay \$102 more than Arizonans on average, while Idahoans pay roughly the same as Arizonans (again, controlling for households with kids and median home values). A more practical, less number-focused interpretation of these numbers is that compared to Arizonans, Califorinians and Nevadans pay a lot more in taxes per household, Idahoans pay around the same amount, and Utahans pay substantially less, on average."*
+    
+    However, this is not actually 100% accurate because of hypothesis testing and significance! The coefficient for California shows that Califorinians pay an average of \$123 more than Arizonans. But based on the confidence interval, the uncertainty in that difference means that Califorinians might pay anywhere between \$50 *less* than Arizonans to nearly \$300 *more* than Arizonans. Or maybe the difference between the states is actually \$0. We can't tell. Notice the p-value—the probability of seeing a coefficient of \$123 in a world where the true difference between the states is \$0 is 0.164. That's a little atypical, but not shocking—it's higher than our lowest evidentiary standard of 10% (0.1). We thus cannot conclude that there's a statistically significant difference in median property tax rates between California and Arizona, after controlling for home values and households with kids.
+    
+    The same applies to both Idaho and Nevada. We originally said that Idahoans pay \$9.50 more than Arizonans on average, but the probability of seeing a coefficient of 9.5 in a world where it's actually 0 is 0.908. That's a completely normal and expected number in a world where there's no difference. Also note that the confidence interval ranges from -150 to 170—that's all over the map and definitely includes zero. We can thus say that after controlling for home values and households with kids, there's no significant difference between per-household property tax rates in Arizona and Idaho.
+    
+    The regression model shows that Nevadans pay \$102.50 more in taxes than Arizonans, but this too is not statistically significant (p = 0.299). The confidence interval includes 0, and the's a 29.9% chance of seeing a difference as big as 102.5 in a world where it's actually zero. Taking home values and households with kids into account, there's no significant difference between per-household property tax rates in Arizona and Nevada.
+    
+    Finally, we *can* do something with Utah. After controlling for home values and kids, people in Utah pay \$213.20 less in property taxes than their counterparts in Arizona, and the difference is statistically significant (p = 0.021). There's a 2.1% chance of seeing a difference at least as large as 213 in a world where it's actually 0, and the confidence interval doesn't include 0. Because 2.1% is lower than our typical standard of 5% (0.05), we can declare significance.
+
+That's a lot of really verbose writing. In real life, you'd probably only really be concerned about one or two of the coefficients and only include the others to control for other effects (like, in general, you don't care about the exact nature of state effects, but they're useful for picking up some of the variation in your outcome variable).
+
+Here's how you could write up this entire model with all coefficients in a complete, concise paragraph:
+
+> We used ordinary least squares (OLS) regression to explain the variation in per-household property tax rates in five Western states, based on the median home value and the proportion of households with kids in each county. We also controlled for state effects. With these three explanatory variables, our model explains nearly 84% of the variation in tax rates in these states. Home values and proportions of households with kids both have a statistically significant association with tax rates. Controlling for all other variables in our model, on average, each \$100 increase in median home values is associated with a \$0.40 increase in property taxes (p < 0.001), while every 1% increase in the proportion of households with kids is associated with a \$14 increase in taxes (p < 0.001). With the exception of Utah, where property taxes are \$213 lower than those in Arizona, on average (0 = 0.021), none of the individual state coefficients are statistically significant.
+
+
+# Your turn!
+
+Now you get to interpret the coefficients for two regression models. You've already learned how to do the bulk of the interpretation: *for every one unit increase in X there's an associated β change in Y*. Now you just need to incorporate hypothesis testing and determine if those effects are statistically significant.
+
+Here are your basic templates:
+
+- *If statistically significant*: After controlling for blah, a one unit change|increase in X is associated with a β change|increase|decrease in Y, and the coefficient|effect|association is statistically significant (p = `p_value_here`),
+- *If not statistically significant*: After controlling for blah, X is not significantly associated with Y (p = `p_value_here`).
+
+Open a new R Markdown file or R script and run the following code on your computer. Note that `read_csv()` points to a URL on the internet. I did this so you don't need to make a new RStudio project, download data, and put the data in that folder. This simplifies things.^[In real life, though, you'd want to put these files locally on your computer—imagine if you're loading important data from some website that changes its URLs a year from now (or shuts down and stops existing!). It would be bad if your code tried to load data from dead URLs.]
+
+Interpret each of the coefficients in these two models. Go through each and determine if each is statistically significant or not. Try to write up a concise paragraph like the one above for each of the models. 
+
+The answers are at [***this page here.***](/class/12-class-answers/) Don't look at them until you've tried as a team.
+
+Good luck!
+
+## World happiness
+
+We've worked with this world happiness data before. As a reminder, here's what these different variables measure:
+
+- `happiness_score`: A composite index ranging from 1 to 8, with higher numbers indicating greater national happiness
+- `life_expectancy`: The average life expectancy, measured in years
+- `access_to_electricity`: The proportion of the population with regular access to electricity, measured on a 0-100 scale
+- `region`: Region the country is in. The base case is East Asia & Pacific, since it comes first alphabetically.
+- `income`: How rich a country is. There are four possible categories: High income, Upper middle income, Lower middle income, and Low income. High income is the base case because it's first alphabetically.
+
+```{r happiness-code, eval=FALSE}
+library(tidyverse)
+library(moderndive)
+
+happiness <- read_csv("https://statsf18.classes.andrewheiss.com/data/world_happiness.csv")
+
+# The base case for region is "East Asia & Pacific"
+# The base case for income is "High income"
+model_happiness <- lm(happiness_score ~ life_expectancy + 
+                        access_to_electricity + region + income, 
+                      data = happiness)
+
+model_happiness %>% get_regression_table()
+model_happiness %>% get_regression_summaries()
+```
+
+## Brexit results
+
+We looked at this data during [class 8](/class/08-class/). Here's what these different variables measure:
+
+- `leave_share`: The proportion of the constituency that voted to leave the EU, measured on a 0-100 scale
+- `con_2015`: The proportion of the constituency that voted for the Conservative party in 2015, measured on a 0-100 scale
+- `lab_2015`: The proportion of the constituency that voted for the Labour party in 2015, measured on a 0-100 scale
+- `ukip_2015`: The proportion of the constituency that voted for UKIP in 2015, measured on a 0-100 scale
+- `degree`: The proportion of the constituency with a university degree, measured on a 0-100 scale
+- `age_18to24`: The proportion of the constituency that is between the ages of 18-24, measured on a 0-100 scale
+- `born_in_uk`: The proportion of the constituency that was born in the UK, measured on a 0-100 scale
+- `unemployed`: The proportion of the constituency that is unemployed, measured on a 0-100 scale
+- `male`: The proportion of the constituency that is male, measured on a 0-100 scale
+
+```{r brexit-code, eval=FALSE}
+results_brexit <- read_csv("https://statsf18.classes.andrewheiss.com/data/brexit_results.csv")
+
+model_brexit <- lm(leave_share ~ con_2015 + lab_2015 + ukip_2015 +
+                     degree + age_18to24 + born_in_uk + unemployed + male, 
+                   data = results_brexit)
+
+model_brexit %>% get_regression_table()
+model_brexit %>% get_regression_summaries()
+```

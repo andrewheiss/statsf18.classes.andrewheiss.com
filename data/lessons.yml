@@ -92,8 +92,9 @@ lessons:
     date: "November 15"
     assignment: "05-problem-set"
   
-  - title: "No class"
+  - title: "No class ([**in-class activity**](/class/12-class/))"
     date: "November 29"
+    class: "12-class"
 
   - title: "**Problem set 6**"
     date: "December 6"

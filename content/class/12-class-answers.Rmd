@@ -1,0 +1,105 @@
+---
+title: "Answers to regression and inference"
+date: "2018-11-29"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+editor_options: 
+  chunk_output_type: console
+---
+
+These are the interpreted regression coefficients for the in-class activity for week 12 (since I was out of town). **Don't look at these until you've tried it on your own.**
+
+# Load libraries and data
+
+```{r load-libraries, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(moderndive)
+```
+
+```{r fake-load-data, eval=FALSE}
+happiness <- read_csv("https://statsf18.classes.andrewheiss.com/data/world_happiness.csv")
+results_brexit <- read_csv("https://statsf18.classes.andrewheiss.com/data/brexit_results.csv")
+```
+
+```{r real-load-data, include=FALSE}
+happiness <- read_csv(here::here("static/data/world_happiness.csv"))
+results_brexit <- read_csv(here::here("static/data/brexit_results.csv"))
+```
+
+
+# World happiness
+
+```{r happiness-code}
+# The base case for region is "East Asia & Pacific"
+# The base case for income is "High income"
+model_happiness <- lm(happiness_score ~ life_expectancy + 
+                        access_to_electricity + region + income, 
+                      data = happiness)
+```
+
+```{r show-happiness-fake, eval=FALSE}
+model_happiness %>% get_regression_table()
+```
+
+```{r show-happiness-real, echo=FALSE, results="asis"}
+model_happiness %>% get_regression_table() %>% 
+  pander::pandoc.table(justify = "lrrrrrr", split.tables = Inf)
+```
+
+```{r show-happiness-details-fake, eval=FALSE}
+model_happiness %>% get_regression_summaries()
+```
+
+```{r show-happiness-details-real, echo=FALSE, results="asis"}
+model_happiness %>% get_regression_summaries() %>% 
+  pander::pandoc.table(justify = "cccccccc", split.tables = Inf)
+```
+
+I'm not going to condense this down into paragraph form. I just put each important piece of information in a list here. You have to use your writing skills to craft this into something readable.
+
+- This model explains 68% of the variation in world happiness.
+- Life expectancy has a statistically significant association with happiness. Controlling for access to electricity, region, and income, a one year increase in life expectancy is associated with a 0.03 point increase in happiness (p = 0.036).
+- Access to electricity does not have a significant effect on national happiness when taking life expectancy, region, and income into account (p = 0.98).
+- Regional differences generally do not have a significant effect on national happiness when controlling for life expectancy, access to electricity, and income, with the exception of Latin America and the Caribbean, which scores 0.74 points higher than East Asia on average (p = 0.001).
+- On the other hand, differences in income do have a significant effect on happiness after controlling for life expectancy, access to electricity, and region. Upper middle income countries score 0.88 points lower than high income countries on average, while lower income countries score 1.27 points lower and low income countries score 1.72 points lower than high income countries, respectively. Each of these differences is statistically significant (p < 0.001).
+
+# Brexit
+
+```{r brexit-code}
+model_brexit <- lm(leave_share ~ con_2015 + lab_2015 + ukip_2015 +
+                     degree + age_18to24 + born_in_uk + unemployed + male, 
+                   data = results_brexit)
+```
+
+```{r show-brexit-fake, eval=FALSE}
+model_brexit %>% get_regression_table()
+```
+
+```{r show-brexit-real, echo=FALSE, results="asis"}
+model_brexit %>% get_regression_table() %>% 
+  pander::pandoc.table(justify = "lrrrrrr", split.tables = Inf)
+```
+
+```{r show-brexit-details-fake, eval=FALSE}
+model_brexit %>% get_regression_summaries()
+```
+
+```{r show-brexit-details-real, echo=FALSE, results="asis"}
+model_brexit %>% get_regression_summaries() %>% 
+  pander::pandoc.table(justify = "cccccccc", split.tables = Inf)
+```
+
+Again, I'm not going to make this a pretty paragraph. You're in charge of that.
+
+- This model explains an astounding 92% of the variation in Leave votes.
+- Conservative vote share in 2015 is significantly associated with Leave vote share. Controlling for all other variables in the model, a 1% increase in the Conservative vote share is associated with a 0.163% increase in the Leave vote share (p < 0.001).
+- Labour votes are also significantly associated with Leave votes, but the size of the effect is likely not very substantial. A 1% increase in the Labour vote share is associated with a 0.04% increase in the Leave vote share (p = 0.02).
+- UKIP votes, on the other hand, have a substantial and significant effect on Leave votes. A 1% increase in the UKIP vote share in a constituency is associated with a 0.69% increase in the Leave vote share (p < 0.001).
+- Education has a sizable and significant effect too. A 1% increase in the proportion of people with a university degree is associated with a 0.83% drop in the Leave vote share (p < 0.001), showing that the propensity to vote to Leave decreases with more education.
+- The likelihood of voting to leave also decreases as constituencies become younger. A 1% increase in the proportion of young people in a constituency is associated with a 0.26% drop in the Leave vote share, and this effect is significant (p < 0.001).
+- After controlling for all other variables in the model, immigration status actually has no statistically significant effect on the Leave vote share (p = 0.57).
+- Unemployment is associated with more Leave votes. A 1% increase in the proportion of unemployed people is associated with a 0.49% increase in the Leave vote share (p = 0.01).
+- Finally, gender played a significant role too—a 1% increase in the proportion of a constituency that is male is associated with a 0.66% increase in the Leave vote share (p = 0.002).
+
+Phew. Based on all this, older, unemployed, male UKIP voters with no university education were the most likely Brexit voters.

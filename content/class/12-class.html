@@ -1,0 +1,342 @@
+---
+title: "Inference and regression"
+date: "2018-11-29"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+output:
+  blogdown::html_page:
+    template: ../../pandoc/toc-title_html.template
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- BLOGDOWN-HEAD -->
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+</style>
+<!-- /BLOGDOWN-HEAD -->
+
+<h2>Contents</h2>
+<div id="TOC">
+<ul>
+<li><a href="#slides">Slides</a></li>
+<li><a href="#inference-and-regression">Inference and regression</a><ul>
+<li><a href="#review-of-hypothesis-testing-and-inference">Review of hypothesis testing and inference</a></li>
+<li><a href="#regression-coefficients-and-inference">Regression coefficients and inference</a></li>
+<li><a href="#complete-example">Complete example</a></li>
+</ul></li>
+<li><a href="#your-turn">Your turn!</a><ul>
+<li><a href="#world-happiness">World happiness</a></li>
+<li><a href="#brexit-results">Brexit results</a></li>
+</ul></li>
+</ul>
+</div>
+
+<h2 id="slides">Slides</h2>
+<p>No slides for today, since there’s no formal class.</p>
+<h2 id="inference-and-regression">Inference and regression</h2>
+<h3 id="review-of-hypothesis-testing-and-inference">Review of hypothesis testing and inference</h3>
+<p>ModernDive chapter 11 isn’t finished yet, but the principles it covers are relatively straightforward. When testing hypotheses with simulation, you follow this pattern (which you should probably have memorized by now):</p>
+<ul>
+<li><strong>Step 1: Calculate <span class="math inline">\(\delta\)</span>.</strong> This is the thing you care about: the difference in means, the average, the median, the proportion, the difference in proportions, etc. You’re testing to see if this number is significantly difference from zero (or from some other number).</li>
+<li><strong>Step 2: Invent world where <span class="math inline">\(\delta\)</span> is null.</strong> Simulate what the world would look like if there was no difference between two groups, or if there was no difference in proportions, or where the average value is a specific number.</li>
+<li><strong>Step 3: Look at <span class="math inline">\(\delta\)</span> in the null world.</strong> Put the sample statistic in the null world and see if it fits well.</li>
+<li><strong>Step 4: Calculate probability that <span class="math inline">\(\delta\)</span> could exist in null world.</strong> This is your p-value, or the probability that you’d see a <span class="math inline">\(\delta\)</span> at least that high in a world where there’s no effect.</li>
+<li><strong>Step 5: Decide if <span class="math inline">\(\delta\)</span> is statistically significant.</strong> Choose some evidentiary standard or threshold for deciding if there’s sufficient proof for rejecting the null world. Standard thresholds (from least to most rigorous) are 0.1, 0.05, and 0.01.</li>
+</ul>
+<p>We care about statistical significance because of sampling error. If you measure something about a sample (like the proportion of blue M&amp;Ms in a bag), you’re going to be off a little (or a lot if you have a small sample). If you see some number (i.e. if you find a small bag of M&amp;Ms with 0 blue M&amp;Ms in it), you want to know if that’s an anomaly, or if it’s something that could just happen by chance. If you had a fun-sized bag of 20 candies with 0 blue M&amp;Ms in it, you could chalk that up to chance. If you had a giant Costco-sized bag of 2000 candies with 0 blue M&amp;Ms in it, you’d be concerned. Such a finding would be statistically significant.</p>
+<p>The same principle applies to calculating differences between groups. This is especially important in randomized controlled trials. Imagine a treatment group of 500 people is given some sort of new cold medicine and a control group of 500 people is given a placebo. All 1000 people somehow got the cold at the same time, and all 1000 people took their medicine (either the actual medicine or the placebo). Consider these two scenarios:</p>
+<ol style="list-style-type: decimal">
+<li>Those in the control group were sick for an average of 7 days, while those in the treatment group were sick for an average of 6.875 days. The difference between the two groups is 0.125 days (or 3 hours). The 95% confidence interval for this difference ranges from -0.5 days to 1.25 days.</li>
+<li>Those in the control group were sick for an average of 7 days, while those in the treatment group were sick for an average of 4.5 days. The difference between the two groups is 2.5 days. The 95% confidence interval for this difference ranges from 1 day to 3.5 days.</li>
+</ol>
+<p>There is a measurable difference between the average sickness duration of the two groups in both of these situations, but only the second group has a substantial and significant difference.</p>
+<p>In the first situation, the confidence interval includes zero, which means the true unmeasurable difference between the two groups could potentially be zero. It could be negative. It could also be positive. We’re not sure. The probability of seeing a difference of 0.125 days in a world where there’s actually no difference is probably really high—that’s a typical number.</p>
+<p>In the second situation, we’re very certain that the difference between the two groups is most definitely <em>not</em> zero. The probability that we’d see a difference of 2.5 days in a world where there’s actually no difference is really really low—this is like finding no blue M&amp;Ms in a big bag.</p>
+<p>In the first situation, we cannot say that the new cold medicine has a statistically significant effect on the duration of sickness—we don’t have enough evidence. In the second situation, we can.</p>
+<h3 id="regression-coefficients-and-inference">Regression coefficients and inference</h3>
+<p>Just like averages, medians, proportions, differences in averages, and so on, regression coefficients are sample statistics. They are estimates of some unmeasurable population parameter that we can only calculate by taking samples from the population. Because of this, they also have standard errors and confidence intervals associated with them. They’re only estimates—they could be higher, or they could be lower.</p>
+<p>With linear regression, what we generally care about is whether or not a coefficient is zero. If a coefficient could possibly be zero, it would mean that for every increase in X, Y might not actually change. If there’s very little chance that a coefficient could be zero, we can be pretty sure that for every increase in X, Y really truly responds and changes.</p>
+<p>Here’s the process for testing hypotheses about coefficients:</p>
+<ul>
+<li><strong>Step 1: Calculate <span class="math inline">\(\delta\)</span>.</strong> This is the coefficient you care about and want to test. You calculate it with the <code>lm()</code> function.</li>
+<li><strong>Step 4: Calculate probability that <span class="math inline">\(\delta\)</span> could exist in null world.</strong> The <code>lm()</code> function (in conjunction with <code>get_regression_table()</code>) does this for you and provides p-values for each coefficient, or the probability that you’d see a coefficient at least that high in a world where the coefficient is actually zero.</li>
+<li><strong>Step 5: Decide if <span class="math inline">\(\delta\)</span> is statistically significant.</strong> Choose some evidentiary standard or threshold for deciding if there’s sufficient proof for rejecting the world where the coefficient is zero. Again, the standard thresholds are 0.1, 0.05, and 0.01.</li>
+</ul>
+<p>Notice how steps 2 and 3 are missing here. That’s because the <code>infer</code> package does not have a way to simulate a world where a coefficient is zero—there’s no <code>coefficient</code> option in <code>specify()</code> or anything like that. You can essentially do these steps in your head, though.</p>
+<h3 id="complete-example">Complete example</h3>
+<p>Here’s a full example using property tax data from Problem Set 3.</p>
+<p>First we load the libraries and data we’ll need. We’ll divide the median home value variable by 100 so it’s a little easier to interpret (so we can say “for every $100 increase in median home value…” instead of &quot;for every $1 increase in median home value)</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(moderndive)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">taxes &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/property_taxes_2016.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">median_home_value =</span> median_home_value <span class="op">/</span><span class="st"> </span><span class="dv">100</span>)</a></code></pre></div>
+<p>Next we build a regression model that predicts/explains per-household taxes based on median home value in each county, the proportion of households with kids in each county, and the state each county is in:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">tax_model &lt;-<span class="st"> </span><span class="kw">lm</span>(tax_per_housing_unit <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">                  </span>median_home_value <span class="op">+</span><span class="st"> </span>prop_houses_with_kids <span class="op">+</span><span class="st"> </span>state,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                <span class="dt">data =</span> taxes)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">tax_model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="12%" />
+<col width="13%" />
+<col width="13%" />
+<col width="10%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std_error</th>
+<th align="right">statistic</th>
+<th align="right">p_value</th>
+<th align="right">lower_ci</th>
+<th align="right">upper_ci</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">intercept</td>
+<td align="right">-412.5</td>
+<td align="right">118.1</td>
+<td align="right">-3.493</td>
+<td align="right">0.001</td>
+<td align="right">-645.8</td>
+<td align="right">-179.2</td>
+</tr>
+<tr class="even">
+<td align="left">median_home_value</td>
+<td align="right">0.405</td>
+<td align="right">0.018</td>
+<td align="right">21.99</td>
+<td align="right">0</td>
+<td align="right">0.369</td>
+<td align="right">0.442</td>
+</tr>
+<tr class="odd">
+<td align="left">prop_houses_with_kids</td>
+<td align="right">14.09</td>
+<td align="right">2.853</td>
+<td align="right">4.941</td>
+<td align="right">0</td>
+<td align="right">8.459</td>
+<td align="right">19.73</td>
+</tr>
+<tr class="even">
+<td align="left">stateCalifornia</td>
+<td align="right">123.3</td>
+<td align="right">88.22</td>
+<td align="right">1.397</td>
+<td align="right">0.164</td>
+<td align="right">-50.98</td>
+<td align="right">297.5</td>
+</tr>
+<tr class="odd">
+<td align="left">stateIdaho</td>
+<td align="right">9.526</td>
+<td align="right">82.74</td>
+<td align="right">0.115</td>
+<td align="right">0.908</td>
+<td align="right">-153.9</td>
+<td align="right">173</td>
+</tr>
+<tr class="even">
+<td align="left">stateNevada</td>
+<td align="right">102.5</td>
+<td align="right">98.25</td>
+<td align="right">1.043</td>
+<td align="right">0.299</td>
+<td align="right">-91.63</td>
+<td align="right">296.5</td>
+</tr>
+<tr class="odd">
+<td align="left">stateUtah</td>
+<td align="right">-213.2</td>
+<td align="right">91.21</td>
+<td align="right">-2.337</td>
+<td align="right">0.021</td>
+<td align="right">-393.3</td>
+<td align="right">-33.03</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">tax_model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<table>
+<colgroup>
+<col width="15%" />
+<col width="20%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="15%" />
+<col width="12%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">r_squared</th>
+<th align="center">adj_r_squared</th>
+<th align="center">mse</th>
+<th align="center">rmse</th>
+<th align="center">sigma</th>
+<th align="center">statistic</th>
+<th align="center">p_value</th>
+<th align="center">df</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0.845</td>
+<td align="center">0.839</td>
+<td align="center">73100</td>
+<td align="center">270.4</td>
+<td align="center">276.4</td>
+<td align="center">141.3</td>
+<td align="center">0</td>
+<td align="center">7</td>
+</tr>
+</tbody>
+</table>
+<p>Up to this point in the semester, you’ve only looked at the estimate column. Note that there are columns named <code>p_value</code> (the probability that you’d see this coefficient in a world where it’s actually zero), <code>lower_ci</code> (the lower bound of the 95% confidence interval), and <code>upper_ci</code> (the upper bound of the 95% confidence interval).</p>
+<p>Here’s how we interpret all these results, now with hypothesis testing built in:</p>
+<ul>
+<li><p><strong>Median home value</strong>: Taking state and the proportion of households with kids into account (or controlling for state and households with kids), for every $100 increase in the median home value in a county, there is an associated increase in the median per-house tax burden of $0.40, on average. This effect is statistically significant (p &lt; 0.001). The 95% confidence interval ranges between $0.37 and $0.44, which does not include $0, and the probability of seeing a coefficient as large as $0.40 in a world where it’s actually zero is practically 0.</p>
+<p>The shorter way of saying all of that in a report or writeup is this:</p>
+<p>Controlling for state and the proportion of households with kids, for every $100 increase in the median home value in a county, there is a statistically significant associated increase in the median per-house tax burden of $0.40 (p &lt; 0.001).</p></li>
+<li><p><strong>Proportion of houses with kids</strong>: Controlling for state and median home values, for every percent increase in the proportion of households with kids, there is an associated increase in the median per-household tax burden of $14, on average. This coefficient is also statistically significant and has little chance of really potentially being zero. The 95% confidence interval ranges between $8.46 and $19.73 (and does not include zero) and the probability of seeing a coefficient as large as $14 in a world where it’s actually $0 is practically zero.</p></li>
+<li><p><strong>State effects</strong>: In Problem Set 3, we concluded that there are sizable state effects as well. This is quoted from the answer key:</p>
+<p><em>“Controlling for households with kids and median home values, Californians see an average per-household tax burden of $123 more than their counterparts in Arizona. Utahans pay $213 less in taxes than Arizonans, on average. Nevadans pay $102 more than Arizonans on average, while Idahoans pay roughly the same as Arizonans (again, controlling for households with kids and median home values). A more practical, less number-focused interpretation of these numbers is that compared to Arizonans, Califorinians and Nevadans pay a lot more in taxes per household, Idahoans pay around the same amount, and Utahans pay substantially less, on average.”</em></p>
+<p>However, this is not actually 100% accurate because of hypothesis testing and significance! The coefficient for California shows that Califorinians pay an average of $123 more than Arizonans. But based on the confidence interval, the uncertainty in that difference means that Califorinians might pay anywhere between $50 <em>less</em> than Arizonans to nearly $300 <em>more</em> than Arizonans. Or maybe the difference between the states is actually $0. We can’t tell. Notice the p-value—the probability of seeing a coefficient of $123 in a world where the true difference between the states is $0 is 0.164. That’s a little atypical, but not shocking—it’s higher than our lowest evidentiary standard of 10% (0.1). We thus cannot conclude that there’s a statistically significant difference in median property tax rates between California and Arizona, after controlling for home values and households with kids.</p>
+<p>The same applies to both Idaho and Nevada. We originally said that Idahoans pay $9.50 more than Arizonans on average, but the probability of seeing a coefficient of 9.5 in a world where it’s actually 0 is 0.908. That’s a completely normal and expected number in a world where there’s no difference. Also note that the confidence interval ranges from -150 to 170—that’s all over the map and definitely includes zero. We can thus say that after controlling for home values and households with kids, there’s no significant difference between per-household property tax rates in Arizona and Idaho.</p>
+<p>The regression model shows that Nevadans pay $102.50 more in taxes than Arizonans, but this too is not statistically significant (p = 0.299). The confidence interval includes 0, and the’s a 29.9% chance of seeing a difference as big as 102.5 in a world where it’s actually zero. Taking home values and households with kids into account, there’s no significant difference between per-household property tax rates in Arizona and Nevada.</p>
+<p>Finally, we <em>can</em> do something with Utah. After controlling for home values and kids, people in Utah pay $213.20 less in property taxes than their counterparts in Arizona, and the difference is statistically significant (p = 0.021). There’s a 2.1% chance of seeing a difference at least as large as 213 in a world where it’s actually 0, and the confidence interval doesn’t include 0. Because 2.1% is lower than our typical standard of 5% (0.05), we can declare significance.</p></li>
+</ul>
+<p>That’s a lot of really verbose writing. In real life, you’d probably only really be concerned about one or two of the coefficients and only include the others to control for other effects (like, in general, you don’t care about the exact nature of state effects, but they’re useful for picking up some of the variation in your outcome variable).</p>
+<p>Here’s how you could write up this entire model with all coefficients in a complete, concise paragraph:</p>
+<blockquote>
+<p>We used ordinary least squares (OLS) regression to explain the variation in per-household property tax rates in five Western states, based on the median home value and the proportion of households with kids in each county. We also controlled for state effects. With these three explanatory variables, our model explains nearly 84% of the variation in tax rates in these states. Home values and proportions of households with kids both have a statistically significant association with tax rates. Controlling for all other variables in our model, on average, each $100 increase in median home values is associated with a $0.40 increase in property taxes (p &lt; 0.001), while every 1% increase in the proportion of households with kids is associated with a $14 increase in taxes (p &lt; 0.001). With the exception of Utah, where property taxes are $213 lower than those in Arizona, on average (0 = 0.021), none of the individual state coefficients are statistically significant.</p>
+</blockquote>
+<h2 id="your-turn">Your turn!</h2>
+<p>Now you get to interpret the coefficients for two regression models. You’ve already learned how to do the bulk of the interpretation: <em>for every one unit increase in X there’s an associated β change in Y</em>. Now you just need to incorporate hypothesis testing and determine if those effects are statistically significant.</p>
+<p>Here are your basic templates:</p>
+<ul>
+<li><em>If statistically significant</em>: After controlling for blah, a one unit change|increase in X is associated with a β change|increase|decrease in Y, and the coefficient|effect|association is statistically significant (p = <code>p_value_here</code>),</li>
+<li><em>If not statistically significant</em>: After controlling for blah, X is not significantly associated with Y (p = <code>p_value_here</code>).</li>
+</ul>
+<p>Open a new R Markdown file or R script and run the following code on your computer. Note that <code>read_csv()</code> points to a URL on the internet. I did this so you don’t need to make a new RStudio project, download data, and put the data in that folder. This simplifies things.<span><label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">In real life, though, you’d want to put these files locally on your computer—imagine if you’re loading important data from some website that changes its URLs a year from now (or shuts down and stops existing!). It would be bad if your code tried to load data from dead URLs.<br />
+<br />
+</span></span></p>
+<p>Interpret each of the coefficients in these two models. Go through each and determine if each is statistically significant or not. Try to write up a concise paragraph like the one above for each of the models.</p>
+<p>The answers are at <a href="/class/12-class-answers/"><strong><em>this page here.</em></strong></a> Don’t look at them until you’ve tried as a team.</p>
+<p>Good luck!</p>
+<h3 id="world-happiness">World happiness</h3>
+<p>We’ve worked with this world happiness data before. As a reminder, here’s what these different variables measure:</p>
+<ul>
+<li><code>happiness_score</code>: A composite index ranging from 1 to 8, with higher numbers indicating greater national happiness</li>
+<li><code>life_expectancy</code>: The average life expectancy, measured in years</li>
+<li><code>access_to_electricity</code>: The proportion of the population with regular access to electricity, measured on a 0-100 scale</li>
+<li><code>region</code>: Region the country is in. The base case is East Asia &amp; Pacific, since it comes first alphabetically.</li>
+<li><code>income</code>: How rich a country is. There are four possible categories: High income, Upper middle income, Lower middle income, and Low income. High income is the base case because it’s first alphabetically.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">library</span>(moderndive)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">happiness &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/world_happiness.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co"># The base case for region is &quot;East Asia &amp; Pacific&quot;</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co"># The base case for income is &quot;High income&quot;</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">model_happiness &lt;-<span class="st"> </span><span class="kw">lm</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">                        </span>access_to_electricity <span class="op">+</span><span class="st"> </span>region <span class="op">+</span><span class="st"> </span>income, </a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">                      <span class="dt">data =</span> happiness)</a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<h3 id="brexit-results">Brexit results</h3>
+<p>We looked at this data during <a href="/class/08-class/">class 8</a>. Here’s what these different variables measure:</p>
+<ul>
+<li><code>leave_share</code>: The proportion of the constituency that voted to leave the EU, measured on a 0-100 scale</li>
+<li><code>con_2015</code>: The proportion of the constituency that voted for the Conservative party in 2015, measured on a 0-100 scale</li>
+<li><code>lab_2015</code>: The proportion of the constituency that voted for the Labour party in 2015, measured on a 0-100 scale</li>
+<li><code>ukip_2015</code>: The proportion of the constituency that voted for UKIP in 2015, measured on a 0-100 scale</li>
+<li><code>degree</code>: The proportion of the constituency with a university degree, measured on a 0-100 scale</li>
+<li><code>age_18to24</code>: The proportion of the constituency that is between the ages of 18-24, measured on a 0-100 scale</li>
+<li><code>born_in_uk</code>: The proportion of the constituency that was born in the UK, measured on a 0-100 scale</li>
+<li><code>unemployed</code>: The proportion of the constituency that is unemployed, measured on a 0-100 scale</li>
+<li><code>male</code>: The proportion of the constituency that is male, measured on a 0-100 scale</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">results_brexit &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/brexit_results.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">model_brexit &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span> <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">                     </span>degree <span class="op">+</span><span class="st"> </span>age_18to24 <span class="op">+</span><span class="st"> </span>born_in_uk <span class="op">+</span><span class="st"> </span>unemployed <span class="op">+</span><span class="st"> </span>male, </a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">                   <span class="dt">data =</span> results_brexit)</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>

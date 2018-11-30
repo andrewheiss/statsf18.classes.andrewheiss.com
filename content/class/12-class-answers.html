@@ -1,0 +1,430 @@
+---
+title: "Answers to regression and inference"
+date: "2018-11-29"
+citeproc: false
+bibliography: ../../static/bib/references.bib
+csl: ../../static/bib/chicago-syllabus-no-bib.csl
+editor_options: 
+  chunk_output_type: console
+---
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #ffffff;
+    color: #a0a0a0;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+div.sourceCode
+  { color: #1f1c1b; background-color: #ffffff; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span. { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
+</style>
+
+
+<p>These are the interpreted regression coefficients for the in-class activity for week 12 (since I was out of town). <strong>Don’t look at these until you’ve tried it on your own.</strong></p>
+<h2 id="load-libraries-and-data">Load libraries and data</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(moderndive)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">happiness &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/world_happiness.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">results_brexit &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/brexit_results.csv&quot;</span>)</a></code></pre></div>
+<h2 id="world-happiness">World happiness</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># The base case for region is &quot;East Asia &amp; Pacific&quot;</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co"># The base case for income is &quot;High income&quot;</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">model_happiness &lt;-<span class="st"> </span><span class="kw">lm</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">                        </span>access_to_electricity <span class="op">+</span><span class="st"> </span>region <span class="op">+</span><span class="st"> </span>income, </a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">                      <span class="dt">data =</span> happiness)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<table>
+<colgroup>
+<col width="30%" />
+<col width="11%" />
+<col width="12%" />
+<col width="12%" />
+<col width="10%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std_error</th>
+<th align="right">statistic</th>
+<th align="right">p_value</th>
+<th align="right">lower_ci</th>
+<th align="right">upper_ci</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">intercept</td>
+<td align="right">3.764</td>
+<td align="right">1.242</td>
+<td align="right">3.03</td>
+<td align="right">0.003</td>
+<td align="right">1.309</td>
+<td align="right">6.22</td>
+</tr>
+<tr class="even">
+<td align="left">life_expectancy</td>
+<td align="right">0.034</td>
+<td align="right">0.016</td>
+<td align="right">2.121</td>
+<td align="right">0.036</td>
+<td align="right">0.002</td>
+<td align="right">0.066</td>
+</tr>
+<tr class="odd">
+<td align="left">access_to_electricity</td>
+<td align="right">0</td>
+<td align="right">0.005</td>
+<td align="right">-0.041</td>
+<td align="right">0.967</td>
+<td align="right">-0.01</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="even">
+<td align="left">regionEurope &amp; Central Asia</td>
+<td align="right">-0.079</td>
+<td align="right">0.195</td>
+<td align="right">-0.404</td>
+<td align="right">0.687</td>
+<td align="right">-0.465</td>
+<td align="right">0.307</td>
+</tr>
+<tr class="odd">
+<td align="left">regionLatin America &amp;
+Caribbean</td>
+<td align="right">0.736</td>
+<td align="right">0.223</td>
+<td align="right">3.301</td>
+<td align="right">0.001</td>
+<td align="right">0.295</td>
+<td align="right">1.177</td>
+</tr>
+<tr class="even">
+<td align="left">regionMiddle East &amp; North
+Africa</td>
+<td align="right">-0.201</td>
+<td align="right">0.221</td>
+<td align="right">-0.91</td>
+<td align="right">0.364</td>
+<td align="right">-0.637</td>
+<td align="right">0.235</td>
+</tr>
+<tr class="odd">
+<td align="left">regionNorth America</td>
+<td align="right">0.768</td>
+<td align="right">0.5</td>
+<td align="right">1.535</td>
+<td align="right">0.127</td>
+<td align="right">-0.221</td>
+<td align="right">1.757</td>
+</tr>
+<tr class="even">
+<td align="left">regionSouth Asia</td>
+<td align="right">-0.149</td>
+<td align="right">0.316</td>
+<td align="right">-0.47</td>
+<td align="right">0.639</td>
+<td align="right">-0.773</td>
+<td align="right">0.476</td>
+</tr>
+<tr class="odd">
+<td align="left">regionSub-Saharan Africa</td>
+<td align="right">-0.162</td>
+<td align="right">0.298</td>
+<td align="right">-0.544</td>
+<td align="right">0.587</td>
+<td align="right">-0.752</td>
+<td align="right">0.427</td>
+</tr>
+<tr class="even">
+<td align="left">incomeLow income</td>
+<td align="right">-1.718</td>
+<td align="right">0.322</td>
+<td align="right">-5.328</td>
+<td align="right">0</td>
+<td align="right">-2.355</td>
+<td align="right">-1.08</td>
+</tr>
+<tr class="odd">
+<td align="left">incomeLower middle income</td>
+<td align="right">-1.267</td>
+<td align="right">0.213</td>
+<td align="right">-5.953</td>
+<td align="right">0</td>
+<td align="right">-1.688</td>
+<td align="right">-0.846</td>
+</tr>
+<tr class="even">
+<td align="left">incomeUpper middle income</td>
+<td align="right">-0.88</td>
+<td align="right">0.173</td>
+<td align="right">-5.088</td>
+<td align="right">0</td>
+<td align="right">-1.222</td>
+<td align="right">-0.538</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="19%" />
+<col width="11%" />
+<col width="11%" />
+<col width="9%" />
+<col width="14%" />
+<col width="12%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">r_squared</th>
+<th align="center">adj_r_squared</th>
+<th align="center">mse</th>
+<th align="center">rmse</th>
+<th align="center">sigma</th>
+<th align="center">statistic</th>
+<th align="center">p_value</th>
+<th align="center">df</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0.699</td>
+<td align="center">0.676</td>
+<td align="center">0.3971</td>
+<td align="center">0.6302</td>
+<td align="center">0.656</td>
+<td align="center">30.23</td>
+<td align="center">0</td>
+<td align="center">12</td>
+</tr>
+</tbody>
+</table>
+<p>I’m not going to condense this down into paragraph form. I just put each important piece of information in a list here. You have to use your writing skills to craft this into something readable.</p>
+<ul>
+<li>This model explains 68% of the variation in world happiness.</li>
+<li>Life expectancy has a statistically significant association with happiness. Controlling for access to electricity, region, and income, a one year increase in life expectancy is associated with a 0.03 point increase in happiness (p = 0.036).</li>
+<li>Access to electricity does not have a significant effect on national happiness when taking life expectancy, region, and income into account (p = 0.98).</li>
+<li>Regional differences generally do not have a significant effect on national happiness when controlling for life expectancy, access to electricity, and income, with the exception of Latin America and the Caribbean, which scores 0.74 points higher than East Asia on average (p = 0.001).</li>
+<li>On the other hand, differences in income do have a significant effect on happiness after controlling for life expectancy, access to electricity, and region. Upper middle income countries score 0.88 points lower than high income countries on average, while lower income countries score 1.27 points lower and low income countries score 1.72 points lower than high income countries, respectively. Each of these differences is statistically significant (p &lt; 0.001).</li>
+</ul>
+<h2 id="brexit">Brexit</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">model_brexit &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span> <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">                     </span>degree <span class="op">+</span><span class="st"> </span>age_18to24 <span class="op">+</span><span class="st"> </span>born_in_uk <span class="op">+</span><span class="st"> </span>unemployed <span class="op">+</span><span class="st"> </span>male, </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">                   <span class="dt">data =</span> results_brexit)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<table>
+<colgroup>
+<col width="16%" />
+<col width="13%" />
+<col width="15%" />
+<col width="15%" />
+<col width="12%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std_error</th>
+<th align="right">statistic</th>
+<th align="right">p_value</th>
+<th align="right">lower_ci</th>
+<th align="right">upper_ci</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">intercept</td>
+<td align="right">18.95</td>
+<td align="right">11.05</td>
+<td align="right">1.715</td>
+<td align="right">0.087</td>
+<td align="right">-2.748</td>
+<td align="right">40.66</td>
+</tr>
+<tr class="even">
+<td align="left">con_2015</td>
+<td align="right">0.163</td>
+<td align="right">0.017</td>
+<td align="right">9.677</td>
+<td align="right">0</td>
+<td align="right">0.13</td>
+<td align="right">0.196</td>
+</tr>
+<tr class="odd">
+<td align="left">lab_2015</td>
+<td align="right">0.04</td>
+<td align="right">0.017</td>
+<td align="right">2.331</td>
+<td align="right">0.02</td>
+<td align="right">0.006</td>
+<td align="right">0.073</td>
+</tr>
+<tr class="even">
+<td align="left">ukip_2015</td>
+<td align="right">0.691</td>
+<td align="right">0.038</td>
+<td align="right">18.05</td>
+<td align="right">0</td>
+<td align="right">0.616</td>
+<td align="right">0.766</td>
+</tr>
+<tr class="odd">
+<td align="left">degree</td>
+<td align="right">-0.834</td>
+<td align="right">0.031</td>
+<td align="right">-26.7</td>
+<td align="right">0</td>
+<td align="right">-0.896</td>
+<td align="right">-0.773</td>
+</tr>
+<tr class="even">
+<td align="left">age_18to24</td>
+<td align="right">-0.257</td>
+<td align="right">0.048</td>
+<td align="right">-5.297</td>
+<td align="right">0</td>
+<td align="right">-0.352</td>
+<td align="right">-0.162</td>
+</tr>
+<tr class="odd">
+<td align="left">born_in_uk</td>
+<td align="right">-0.012</td>
+<td align="right">0.021</td>
+<td align="right">-0.573</td>
+<td align="right">0.567</td>
+<td align="right">-0.054</td>
+<td align="right">0.029</td>
+</tr>
+<tr class="even">
+<td align="left">unemployed</td>
+<td align="right">0.491</td>
+<td align="right">0.192</td>
+<td align="right">2.55</td>
+<td align="right">0.011</td>
+<td align="right">0.113</td>
+<td align="right">0.869</td>
+</tr>
+<tr class="odd">
+<td align="left">male</td>
+<td align="right">0.657</td>
+<td align="right">0.207</td>
+<td align="right">3.173</td>
+<td align="right">0.002</td>
+<td align="right">0.25</td>
+<td align="right">1.063</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<table>
+<colgroup>
+<col width="15%" />
+<col width="20%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="15%" />
+<col width="12%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">r_squared</th>
+<th align="center">adj_r_squared</th>
+<th align="center">mse</th>
+<th align="center">rmse</th>
+<th align="center">sigma</th>
+<th align="center">statistic</th>
+<th align="center">p_value</th>
+<th align="center">df</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0.917</td>
+<td align="center">0.916</td>
+<td align="center">9.688</td>
+<td align="center">3.113</td>
+<td align="center">3.137</td>
+<td align="center">778.6</td>
+<td align="center">0</td>
+<td align="center">9</td>
+</tr>
+</tbody>
+</table>
+<p>Again, I’m not going to make this a pretty paragraph. You’re in charge of that.</p>
+<ul>
+<li>This model explains an astounding 92% of the variation in Leave votes.</li>
+<li>Conservative vote share in 2015 is significantly associated with Leave vote share. Controlling for all other variables in the model, a 1% increase in the Conservative vote share is associated with a 0.163% increase in the Leave vote share (p &lt; 0.001).</li>
+<li>Labour votes are also significantly associated with Leave votes, but the size of the effect is likely not very substantial. A 1% increase in the Labour vote share is associated with a 0.04% increase in the Leave vote share (p = 0.02).</li>
+<li>UKIP votes, on the other hand, have a substantial and significant effect on Leave votes. A 1% increase in the UKIP vote share in a constituency is associated with a 0.69% increase in the Leave vote share (p &lt; 0.001).</li>
+<li>Education has a sizable and significant effect too. A 1% increase in the proportion of people with a university degree is associated with a 0.83% drop in the Leave vote share (p &lt; 0.001), showing that the propensity to vote to Leave decreases with more education.</li>
+<li>The likelihood of voting to leave also decreases as constituencies become younger. A 1% increase in the proportion of young people in a constituency is associated with a 0.26% drop in the Leave vote share, and this effect is significant (p &lt; 0.001).</li>
+<li>After controlling for all other variables in the model, immigration status actually has no statistically significant effect on the Leave vote share (p = 0.57).</li>
+<li>Unemployment is associated with more Leave votes. A 1% increase in the proportion of unemployed people is associated with a 0.49% increase in the Leave vote share (p = 0.01).</li>
+<li>Finally, gender played a significant role too—a 1% increase in the proportion of a constituency that is male is associated with a 0.66% increase in the Leave vote share (p = 0.002).</li>
+</ul>
+<p>Phew. Based on all this, older, unemployed, male UKIP voters with no university education were the most likely Brexit voters.</p>
