@@ -7,4 +7,181 @@ editor_options:
 
 
 
-<p>An example of the questions you’ll have in Exam 3 will go here three weeks before the exam.</p>
+<h2 id="short-answer">Short answer</h2>
+<ol style="list-style-type: decimal">
+<li>Is it better to take many small samples or a few large samples? Why?</li>
+</ol>
+<p> </p>
+<ol start="2" style="list-style-type: decimal">
+<li>What happens to confidence intervals as the sample size increases? Why?</li>
+</ol>
+<p> </p>
+<ol start="3" style="list-style-type: decimal">
+<li>What is the difference between a population parameter and a sample statistic?</li>
+</ol>
+<p> </p>
+<ol start="4" style="list-style-type: decimal">
+<li>What is a census?</li>
+</ol>
+<p> </p>
+<ol start="5" style="list-style-type: decimal">
+<li>How do we know if a sample is good?</li>
+</ol>
+<p> </p>
+<ol start="6" style="list-style-type: decimal">
+<li>Under what conditions can we use samples to generalize about the whole population?</li>
+</ol>
+<p> </p>
+<h2 id="sampling-and-confidence-intervals">Sampling and confidence intervals</h2>
+<ol style="list-style-type: decimal">
+<li>What does a confidence interval measure? Why is it useful?</li>
+</ol>
+<p> </p>
+<ol start="2" style="list-style-type: decimal">
+<li>How can you narrow the width of a confidence interval?</li>
+</ol>
+<p> </p>
+<ol start="3" style="list-style-type: decimal">
+<li><p>A nonprofit executive director wants to know the average age of the volunteers her organization has used over the past year. She takes a random sample of 300 volunteers and uses bootstrapping-based simulation to construct a 95% confidence interval around the average. The sample average is 28.5 years old, and the confidence interval ranges between 20.3 and 33.4 years old. Which of the following are true?</p>
+<ul>
+<li>There’s a 95% chance that the true mean is between 20.3 and 33.4 years.</li>
+<li>95% of the volunteers in the population are aged between 20.3 and 33.4 years.</li>
+<li>If the director took another random sample of 300 volunteers, there’s a 95% chance that the new mean would be between 20.3 and 33.4 years.</li>
+<li>She is 95% confidence that the interval between 20.3 and 33.4 years caputred the true population-level mean value.</li>
+<li>95% of the volunteers responded to the executive director’s survey.</li>
+</ul></li>
+</ol>
+<h2 id="hypothesis-testing">Hypothesis testing</h2>
+<h3 id="home-values-in-idaho-and-arizona">Home values in Idaho and Arizona</h3>
+<p>You collect data about average county-level home values in Idaho and Arizona and you want to know if houses tend to be more expensive in one of the states. You calculate that the average home value in Arizona is $22,378.48 higher than in Idaho. You want to test to make sure that difference really is positive.</p>
+<p>Through simulation, you determine that the distribution of the between-state differences in a hypothetical world where there’s no difference looks like the histogram below. The actual sample difference of $22,378.48 is marked in red. The associated p-value is 0.149.</p>
+<p><img src="/exam/03-exam_files/figure-html/plot-home-value-id-az-1.png" width="672" /></p>
+<ol style="list-style-type: decimal">
+<li>What is your null hypothesis?</li>
+<li>What is your alternative hypothesis?</li>
+<li>What can you conclude about the difference between the two groups?</li>
+</ol>
+<h3 id="conservatives-and-kids">Conservatives and kids</h3>
+<p>You use data from the 2016 General Social Survey (GSS) to investigate the relationship between political ideology and the number of children people have. Based on a sample of 2,867 people, you find that self-reported conservatives have an average of 2.03 children, while those who are not conservative (i.e. those who are neutral or liberal) have an average of 1.68 children. The difference between these two averages is -0.35.</p>
+<p>Through simulation, you determine that the distribution of the difference in the average number of kids between these two groups looks like the histogram below. The actual sample difference is marked in red. The associated p-value is 0 (or &lt; 0.001).</p>
+<p><img src="/exam/03-exam_files/figure-html/plot-kids-diff-1.png" width="672" /></p>
+<ol style="list-style-type: decimal">
+<li>What is your null hypothesis?</li>
+<li>What is your alternative hypothesis?</li>
+<li>What can you conclude about the difference between the two groups?</li>
+</ol>
+<h3 id="marital-status-and-presidential-elections">Marital status and presidential elections</h3>
+<p>You use data from the 2016 General Social Survey (GSS) to investigate the relationship between marital status and 2012 presidential election results. Based on a sample of 2,867 people, you find that 40.2% of those who voted for Barack Obama in 2012 were married, compared to 57.9% of those who voted for Mitt Romney. The difference between these two proportions is 17.7%.</p>
+<p>Through simulation, you determine that the distribution of the possible differences in the proportion of married people who voted for Obama and Romney looks like the histogram below. The actual sample difference is marked in red. The associated p-value is 0 (or &lt; 0.001).</p>
+<p><img src="/exam/03-exam_files/figure-html/plot-marital-pres-1.png" width="672" /></p>
+<ol style="list-style-type: decimal">
+<li>What is your null hypothesis?</li>
+<li>What is your alternative hypothesis?</li>
+<li>What can you conclude about the difference between the two groups?</li>
+</ol>
+<h2 id="inference-and-regression">Inference and regression</h2>
+<p>There will be 1–2 short regression tables to interpret. In the past you’ve only looked at the estimate column. This time you’ll need to interpret the estimate column and consider the coefficient’s statistical significance.</p>
+<p>We use the following multiple regression model to predict/explain property taxes in the Western United States.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\hat{\text{tax per housing unit}} =&amp; \beta_0 + \beta_1 \text{median home value} + \beta_2 \text{proportion of houses with kids } + \\
+&amp; \beta_3 \text{California} + \beta_4 \text{Idaho} + \beta_4 \text{Nevada} + \beta_6 \text{Utah} + \epsilon
+\end{aligned}
+\]</span></p>
+<p>This model provides us with the following results:</p>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="12%" />
+<col width="13%" />
+<col width="13%" />
+<col width="10%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="center">estimate</th>
+<th align="center">std_error</th>
+<th align="center">statistic</th>
+<th align="center">p_value</th>
+<th align="center">lower_ci</th>
+<th align="center">upper_ci</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">intercept</td>
+<td align="center">-412.5</td>
+<td align="center">118.1</td>
+<td align="center">-3.493</td>
+<td align="center">0.001</td>
+<td align="center">-645.8</td>
+<td align="center">-179.2</td>
+</tr>
+<tr class="even">
+<td align="left">median_home_value</td>
+<td align="center">0.004</td>
+<td align="center">0</td>
+<td align="center">21.99</td>
+<td align="center">0</td>
+<td align="center">0.004</td>
+<td align="center">0.004</td>
+</tr>
+<tr class="odd">
+<td align="left">prop_houses_with_kids</td>
+<td align="center">14.09</td>
+<td align="center">2.853</td>
+<td align="center">4.941</td>
+<td align="center">0</td>
+<td align="center">8.459</td>
+<td align="center">19.73</td>
+</tr>
+<tr class="even">
+<td align="left">stateCalifornia</td>
+<td align="center">123.3</td>
+<td align="center">88.22</td>
+<td align="center">1.397</td>
+<td align="center">0.164</td>
+<td align="center">-50.98</td>
+<td align="center">297.5</td>
+</tr>
+<tr class="odd">
+<td align="left">stateIdaho</td>
+<td align="center">9.526</td>
+<td align="center">82.74</td>
+<td align="center">0.115</td>
+<td align="center">0.908</td>
+<td align="center">-153.9</td>
+<td align="center">173</td>
+</tr>
+<tr class="even">
+<td align="left">stateNevada</td>
+<td align="center">102.5</td>
+<td align="center">98.25</td>
+<td align="center">1.043</td>
+<td align="center">0.299</td>
+<td align="center">-91.63</td>
+<td align="center">296.5</td>
+</tr>
+<tr class="odd">
+<td align="left">stateUtah</td>
+<td align="center">-213.2</td>
+<td align="center">91.21</td>
+<td align="center">-2.337</td>
+<td align="center">0.021</td>
+<td align="center">-393.3</td>
+<td align="center">-33.03</td>
+</tr>
+</tbody>
+</table>
+<p>Interpret the following coefficients and include an interpretation of the p-value and/or confidence interval. Is the coefficient significantly different from zero?</p>
+<ul>
+<li><code>median_home_value</code></li>
+<li><code>prop_houses_with_kids</code></li>
+<li><code>stateCalifornia</code></li>
+<li><code>stateIdaho</code></li>
+<li><code>stateNevada</code></li>
+<li><code>stateUtah</code></li>
+</ul>
