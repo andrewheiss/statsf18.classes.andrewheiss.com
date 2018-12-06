@@ -114,13 +114,9 @@ lessons:
   - title: '<i class="fas fa-star"></i> **Exam 3** (take-home) [(example questions)](/exam/03-exam/)'
     date: "December 13"
 
-  - title: "Wrapping up and going beyond the basics"
+  - title: "No class (but still do the readings)"
     date: "December 13 (I & II)"
     reading: "14-reading"
-  
-  - title: "**Problem set 7**"
-    date: "December 13"
-    assignment: "07-problem-set"
 
   - title: '<span class="fake-header-table">Final</span>'
     header: True
@@ -128,3 +124,6 @@ lessons:
   - title: "**Final project due** (submit online by 11:59 PM)"
     date: "December 19"
     assignment: "final-project"
+
+  - title: "Wrapping up and going beyond the basics"
+    date: "December 20"
