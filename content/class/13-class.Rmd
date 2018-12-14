@@ -1,5 +1,5 @@
 ---
-title: "Science communication"
+title: "Inference, regression, and stories"
 date: "2018-12-06"
 citeproc: false
 bibliography: ../../static/bib/references.bib
@@ -13,3 +13,108 @@ editor_options:
 stuff-to-add: >-
   https://twitter.com/jent103/status/1033481434072317957?s=12
 ---
+
+# Slides
+
+Download the slides from today's lecture:
+
+- [<i class="fas fa-file-pdf"></i> PDF (best option)](/slides/MPA-630_2018-12-06.pdf)
+- [<i class="fas fa-file-powerpoint"></i> PowerPoint](/slides/MPA-630_2018-12-06.pptx)
+
+<figure>
+[![First slide](/images/slides/slides_2018-12-06.png)](/slides/MPA-630_2018-12-06.pdf)
+</figure>
+
+
+# Clearest and muddiest things
+
+Go to [this form](https://goo.gl/forms/PlPwZGhMOdU9mKfC3) and answer these three questions:
+
+1. What was the muddiest thing from class today? What are you still wondering about?
+2. What was the clearest thing from class today? 
+3. What was the most exciting thing you learned?
+
+I'll compile the questions and send out answers after class.
+
+
+```{r class-stuff, eval=FALSE, include=FALSE}
+library(tidyverse)
+
+ggplot(data = tibble(x = c(-3, 3)), aes(x = x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) 
+
+ggsave(last_plot(), filename = "~/Desktop/qwer/normal.png",
+       width = 8, height = 4.5, units = "in", dpi = 300, type = "cairo")
+
+ggplot(data = tibble(x = c(-3, 3)), aes(x = x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1), size = 2) + 
+  theme_void()
+
+ggsave(last_plot(), filename = "~/Desktop/qwer/normal_blank.png",
+       width = 8, height = 4.5, units = "in", dpi = 300, type = "cairo", bg = "transparent")
+
+ggplot(data = tibble(x = c(-3, 3)), aes(x = x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1), size = 2) +
+  geom_vline(xintercept = qnorm(c(0.99, 1 - 0.99))) +
+  # geom_vline(xintercept = qnorm(c(0.95, 1 - 0.95))) +
+  # geom_vline(xintercept = qnorm(c(0.67, 1 - 0.67))) +
+  theme_void()
+
+ggsave(last_plot(), filename = "~/Desktop/qwer/normal_3sd.png",
+       width = 8, height = 4.5, units = "in", dpi = 300, type = "cairo")
+
+qnorm(0.975)
+qnorm(0.99)
+qnorm(0.67)
+
+pnorm(1.96)
+
+# 50 = Z * sd/sqrt(n)
+
+# Craigslist apartments
+# https://sites.nicholas.duke.edu/statsreview/files/2013/06/Confidence-Interval-Solutions.pdf
+# How big of a sample do we need if we want to be 95% confidence that we've captured the population mean within + or - $50?
+
+50 = (1.96 * 200) / sqrt(n)
+50  = 392 / sqrt(n)
+
+43.3
+
+# https://www.qualtrics.com/blog/calculating-sample-size/
+
+
+ggplot(data = tibble(x = c(-3, 3)), aes(x = x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + 
+  labs(title = "Normal distribution", subtitle = "mean = 0; sd = 1")
+
+ggplot(data = tibble(x = c(-3, 3)), aes(x = x)) +
+  stat_function(fun = dt, n = 101, args = list(df = 2)) + 
+  labs(title = "t distribution", subtitle = "df = 2")
+ggsave(last_plot(), filename = "~/Desktop/qwer/t.png",
+       width = 6, height = 4.5, units = "in", dpi = 300, type = "cairo")
+
+ggplot(data = tibble(x = c(0, 0.3)), aes(x = x)) +
+  stat_function(fun = dbeta, n = 101, args = list(shape1 = 10, shape2 = 100)) + 
+  labs(title = "Beta distribution", subtitle = "shape1 = 10; shape2 = 100")
+ggsave(last_plot(), filename = "~/Desktop/qwer/beta.png",
+       width = 6, height = 4.5, units = "in", dpi = 300, type = "cairo")
+
+ggplot(data = tibble(x = c(0, 3)), aes(x = x)) +
+  stat_function(fun = dexp, n = 101) + 
+  labs(title = "Expontential distribution", subtitle = " ")
+ggsave(last_plot(), filename = "~/Desktop/qwer/exp.png",
+       width = 6, height = 4.5, units = "in", dpi = 300, type = "cairo")
+
+ggplot(data = tibble(x = 0:10), aes(x = x)) +
+  stat_function(fun = dpois, n = 11, args = list(lambda = 1)) + 
+  labs(title = "Poisson distribution", subtitle = "lambda = 1")
+ggsave(last_plot(), filename = "~/Desktop/qwer/poisson.png",
+       width = 6, height = 4.5, units = "in", dpi = 300, type = "cairo")
+
+ggplot(data = tibble(x = c(-3, 3)), aes(x = x)) +
+  stat_function(fun = dt, n = 101, args = list(df = 52), size = 2) + 
+  geom_vline(xintercept = -2.186, color = "red", size = 1)
+ggsave(last_plot(), filename = "~/Desktop/qwer/t-test.png",
+       width = 6, height = 4.5, units = "in", dpi = 300, type = "cairo")
+
+```

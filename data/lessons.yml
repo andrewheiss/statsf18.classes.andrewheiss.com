@@ -103,6 +103,7 @@ lessons:
   - title: "Inference and regression + science communication"
     date: "December 6 (I & II; I)"
     reading: "13-reading"
+    class: "13-class"
 
   - title: '<span class="fake-header-table">Communication & beyond</span>'
     header: True
