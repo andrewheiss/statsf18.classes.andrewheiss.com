@@ -183,7 +183,7 @@ Mathy version (here I use $\pi$ as the population parameter symbol instead of $p
 
 First, we calculate the proportion of Obama and Romney voters pray at least once a week or less than once a week:
 
-```{r pray-pres-props, warning=FALSE, message=FALSE, results="asis"}
+```{r pray-pres-props, warning=FALSE, message=FALSE}
 pray_pres_props <- gss %>% 
   filter(!is.na(pres12), !is.na(pray2)) %>% 
   count(pres12, pray2) %>% 
