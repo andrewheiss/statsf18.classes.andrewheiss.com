@@ -32,7 +32,7 @@ In class we used multiple regression to explore the factors that explain the 201
 You can download these files from here if you want to follow along (make an RStudio project, put them in a data folder, and you'll be good to go):
 
 - [<i class="fas fa-table"></i> `results_2016.csv`](/data/results_2016.csv)^[This data comes from the [MIT Election Data and Science Lab](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ)]
-- [<i class="fas fa-table"></i> `brexit_results.csv`](/data/brexit_results.csv)^[This data comes from [Elliott Morris](https://www.thecrosstab.com/), who cleaned it up and made it available through his [DataCamp class](https://www.datacamp.com/courses/analyzing-election-and-polling-data-in-r) (which you should check out while you have access to the full DataCamp library!)]
+- [<i class="fas fa-table"></i> `brexit_results.csv`](/data/brexit_results.csv)^[This data comes from [Elliott Morris](https://www.thecrosstab.com/), who cleaned it up and made it available through his ~~DataCamp class (which you should check out while you have access to the full DataCamp library!)~~]
 
 ## Load and wrangle data
 
@@ -397,12 +397,12 @@ That's a lot of math and I don't want to do it by hand. Instead, we can use the 
 
 ```{r predict-brexit1}
 # Here's the imaginary constituency
-imaginary_constituency1 <- data_frame(con_2015 = 40,
-                                      lab_2015 = 30,
-                                      ukip_2015 = 15,
-                                      degree = 20,
-                                      age_18to24 = 10,
-                                      born_in_uk = 90)
+imaginary_constituency1 <- tibble(con_2015 = 40,
+                                  lab_2015 = 30,
+                                  ukip_2015 = 15,
+                                  degree = 20,
+                                  age_18to24 = 10,
+                                  born_in_uk = 90)
 
 # Here we predict leave vote share with the big model that we built, based on
 # the imaginary constituency that we invented above
@@ -415,12 +415,12 @@ What about a more Labour-heavy, younger, more educated constituency with more im
 
 ```{r predict-brexit2}
 # Here's another imaginary constituency
-imaginary_constituency2 <- data_frame(con_2015 = 20,
-                                      lab_2015 = 50,
-                                      ukip_2015 = 15,
-                                      degree = 40,
-                                      age_18to24 = 30,
-                                      born_in_uk = 80)
+imaginary_constituency2 <- tibble(con_2015 = 20,
+                                  lab_2015 = 50,
+                                  ukip_2015 = 15,
+                                  degree = 40,
+                                  age_18to24 = 30,
+                                  born_in_uk = 80)
 
 # Here we predict leave vote share with the big model that we built, based on
 # the imaginary constituency that we invented above
@@ -446,12 +446,12 @@ We can answer this by creating an `imaginary_constituency` data frame with multi
 ```{r predict-brexit3}
 # Here are six imaginary constituencies, all with the same variables except
 # education, which goes up by five in each row
-imaginary_constituency3 <- data_frame(con_2015 = 20,
-                                      lab_2015 = 50,
-                                      ukip_2015 = 15,
-                                      degree = c(5, 10, 15, 20, 25, 30),
-                                      age_18to24 = 30,
-                                      born_in_uk = 80)
+imaginary_constituency3 <- tibble(con_2015 = 20,
+                                  lab_2015 = 50,
+                                  ukip_2015 = 15,
+                                  degree = c(5, 10, 15, 20, 25, 30),
+                                  age_18to24 = 30,
+                                  born_in_uk = 80)
 imaginary_constituency3
 
 # When we plug this multi-row data frame into predict(), it'll generate a

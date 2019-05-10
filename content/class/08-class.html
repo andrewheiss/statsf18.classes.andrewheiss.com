@@ -32,7 +32,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -123,52 +123,52 @@ code span.wa { color: #bf0303; } /* Warning */
 <li><a href="/data/results_2016.csv"><i class="fas fa-table"></i> <code>results_2016.csv</code></a><span><label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">This data comes from the <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ">MIT Election Data and Science Lab</a><br />
 <br />
 </span></span></li>
-<li><a href="/data/brexit_results.csv"><i class="fas fa-table"></i> <code>brexit_results.csv</code></a><span><label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">This data comes from <a href="https://www.thecrosstab.com/">Elliott Morris</a>, who cleaned it up and made it available through his <a href="https://www.datacamp.com/courses/analyzing-election-and-polling-data-in-r">DataCamp class</a> (which you should check out while you have access to the full DataCamp library!)<br />
+<li><a href="/data/brexit_results.csv"><i class="fas fa-table"></i> <code>brexit_results.csv</code></a><span><label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">This data comes from <a href="https://www.thecrosstab.com/">Elliott Morris</a>, who cleaned it up and made it available through his <del>DataCamp class (which you should check out while you have access to the full DataCamp library!)</del><br />
 <br />
 </span></span></li>
 </ul>
 <h3 id="load-and-wrangle-data">Load and wrangle data</h3>
 <p>First we load the necessary packages:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(moderndive)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># The broom package lets us manipulate model objects and makes it easier to</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co"># generate predictions and plot them</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">library</span>(broom)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(moderndive)
+
+<span class="co"># The broom package lets us manipulate model objects and makes it easier to</span>
+<span class="co"># generate predictions and plot them</span>
+<span class="kw">library</span>(broom)</code></pre>
 <p>Then we load the data. The data is already precleaned and tidy and ready to use, so we don’t have to do any wrangling here.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">results_<span class="dv">2016</span> &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results_2016.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">results_brexit &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/brexit_results.csv&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">results_<span class="dv">2016</span> &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/results_2016.csv&quot;</span>)
+results_brexit &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/brexit_results.csv&quot;</span>)</code></pre>
 <h3 id="us-presidential-election">2016 US Presidential Election</h3>
 <p>Let’s explore variation in democratic party vote share in 2016. Our main outcome variable (or y) is <code>percent_dem</code>, which is the percent of presidential votes cast for the Democratic party (on a scale of 0–100). Here’s a histogram to give you a sense of the data. King County, Texas only had 3% of its presidential votes cast for Hilary Clinton, while 90% of Washington, DC voted for her.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">ggplot</span>(results_<span class="dv">2016</span>, <span class="kw">aes</span>(<span class="dt">x =</span> percent_dem)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">2.5</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(results_<span class="dv">2016</span>, <span class="kw">aes</span>(<span class="dt">x =</span> percent_dem)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">2.5</span>)</code></pre>
 <p><img src="/class/08-class_files/figure-html/dist-votes-us-1.png" width="672" /></p>
 <h4 id="percent-democratic-explained-by-age">Percent democratic explained by age</h4>
 <p>Let’s first test the old adage that people become more conservative as they get older. The correlation between a county’s median and age and the democratic vote share is moderately negative:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">results_<span class="dv">2016</span> <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="co"># There are some missing values in each of these columns, so we have to filter</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="co"># them out first before checking the correlation</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(percent_dem), <span class="op">!</span><span class="kw">is.na</span>(median_age)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">get_correlation</span>(percent_dem <span class="op">~</span><span class="st"> </span>median_age)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">results_<span class="dv">2016</span> <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># There are some missing values in each of these columns, so we have to filter</span>
+<span class="st">  </span><span class="co"># them out first before checking the correlation</span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(percent_dem), <span class="op">!</span><span class="kw">is.na</span>(median_age)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_correlation</span>(percent_dem <span class="op">~</span><span class="st"> </span>median_age)</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   correlation
 ##         &lt;dbl&gt;
 ## 1      -0.298</code></pre>
 <p>It looks negative too:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">ggplot</span>(results_<span class="dv">2016</span>, <span class="kw">aes</span>(<span class="dt">x =</span> median_age, <span class="dt">y =</span> percent_dem)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(results_<span class="dv">2016</span>, <span class="kw">aes</span>(<span class="dt">x =</span> median_age, <span class="dt">y =</span> percent_dem)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre>
 <p><img src="/class/08-class_files/figure-html/dem-votes-age-plot-1.png" width="672" /></p>
 <p>If we run a regression model, we can find the slope and <span class="math inline">\(R^2\)</span> and other information:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">us_dem_age &lt;-<span class="st"> </span><span class="kw">lm</span>(percent_dem <span class="op">~</span><span class="st"> </span>median_age, <span class="dt">data =</span> results_<span class="dv">2016</span>)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">get_regression_table</span>(us_dem_age)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">us_dem_age &lt;-<span class="st"> </span><span class="kw">lm</span>(percent_dem <span class="op">~</span><span class="st"> </span>median_age, <span class="dt">data =</span> results_<span class="dv">2016</span>)
+
+<span class="kw">get_regression_table</span>(us_dem_age)</code></pre>
 <pre><code>## # A tibble: 2 x 7
 ##   term       estimate std_error statistic p_value lower_ci upper_ci
 ##   &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 intercept    67.5       2.09       32.4       0   63.4     71.6  
 ## 2 median_age   -0.887     0.051     -17.4       0   -0.987   -0.787</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">get_regression_summaries</span>(us_dem_age)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_regression_summaries</span>(us_dem_age)</code></pre>
 <pre><code>## # A tibble: 1 x 8
 ##   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -178,17 +178,17 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>The <span class="math inline">\(R^2\)</span> is 0.089 (we use the regular <span class="math inline">\(R^2\)</span> because we only have one explanatory variable), which means that this model explains 8.9% of the variation in democratic vote share. It’s not that great of a model.</p>
 <h4 id="percent-democratic-explained-by-age-and-race">Percent democratic explained by age and race</h4>
 <p>We can improve the model by including additional explanatory variables, such as race:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">model_age_dem_race &lt;-<span class="st"> </span><span class="kw">lm</span>(percent_dem <span class="op">~</span><span class="st"> </span>median_age <span class="op">+</span><span class="st"> </span>percent_white, </a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">                         <span class="dt">data =</span> results_<span class="dv">2016</span>)</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">get_regression_table</span>(model_age_dem_race)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_age_dem_race &lt;-<span class="st"> </span><span class="kw">lm</span>(percent_dem <span class="op">~</span><span class="st"> </span>median_age <span class="op">+</span><span class="st"> </span>percent_white, 
+                         <span class="dt">data =</span> results_<span class="dv">2016</span>)
+
+<span class="kw">get_regression_table</span>(model_age_dem_race)</code></pre>
 <pre><code>## # A tibble: 3 x 7
 ##   term          estimate std_error statistic p_value lower_ci upper_ci
 ##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 intercept       70.4       1.76      39.9    0       66.9     73.8  
 ## 2 median_age      -0.094     0.049     -1.93   0.053   -0.189    0.001
 ## 3 percent_white   -0.448     0.013    -35.3    0       -0.473   -0.423</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">get_regression_summaries</span>(model_age_dem_race)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_regression_summaries</span>(model_age_dem_race)</code></pre>
 <pre><code>## # A tibble: 1 x 8
 ##   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -199,11 +199,11 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>To explain model fit, we need to look at the adjusted <span class="math inline">\(R^2\)</span> because we’re using more than one explanatory variable. This model explains 34.9% of the variation in democratic vote share. It’s getting better!</p>
 <h4 id="percent-democratic-explained-by-lots-of-things">Percent democratic explained by lots of things</h4>
 <p>Now let’s throw in a ton of explanatory variables to see what other factors might explain democratic vote share:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">model_lots_of_stuff &lt;-<span class="st"> </span><span class="kw">lm</span>(percent_dem <span class="op">~</span><span class="st"> </span>median_age <span class="op">+</span><span class="st"> </span>percent_white <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">                            </span>per_capita_income <span class="op">+</span><span class="st"> </span>median_rent <span class="op">+</span><span class="st"> </span>state,</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">                          <span class="dt">data =</span> results_<span class="dv">2016</span>)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw">get_regression_table</span>(model_lots_of_stuff)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_lots_of_stuff &lt;-<span class="st"> </span><span class="kw">lm</span>(percent_dem <span class="op">~</span><span class="st"> </span>median_age <span class="op">+</span><span class="st"> </span>percent_white <span class="op">+</span><span class="st"> </span>
+<span class="st">                            </span>per_capita_income <span class="op">+</span><span class="st"> </span>median_rent <span class="op">+</span><span class="st"> </span>state,
+                          <span class="dt">data =</span> results_<span class="dv">2016</span>)
+
+<span class="kw">get_regression_table</span>(model_lots_of_stuff)</code></pre>
 <pre><code>## # A tibble: 54 x 7
 ##    term              estimate std_error statistic p_value lower_ci upper_ci
 ##    &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -217,8 +217,8 @@ code span.wa { color: #bf0303; } /* Warning */
 ##  8 stateCalifornia     -2.45      1.50      -1.64   0.102   -5.38     0.485
 ##  9 stateColorado        1.81      1.36       1.34   0.182   -0.848    4.47 
 ## 10 stateConnecticut    11.8       2.87       4.10   0        6.12    17.4  
-## # ... with 44 more rows</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">get_regression_summaries</span>(model_lots_of_stuff)</a></code></pre></div>
+## # … with 44 more rows</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_regression_summaries</span>(model_lots_of_stuff)</code></pre>
 <pre><code>## # A tibble: 1 x 8
 ##   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -227,11 +227,11 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Interestingly, when controlling for race, income, rent prices, and state, the coefficient for age is now positive—a 1 year increase in the median age in a county is associated with a 0.166 unit increase in the share of democratic votes (e.g. moving from 40% to 40.166%), on average. This goes contrary to the old adage that people vote more conservative as they go older. They still do—that’s apparent from the scatterplot that we showed earlier—but the reason that happens isn’t necessarily because of age. The coefficient for percent white is -0.682, which means a 1% increase in the proportion of whites in a county is associated with a decrease of 0.682 in the share of democratic votes, on average (e.g. moving from 40% to 39.318%).</p>
 <p>State effects also explain what’s happening. The base case here is Alabama, so all state coefficients are compared to that. NOTICE ALSO that Alaska is missing. That’s because this dataset is missing lots of details about Alaska, like median age, percent white, etc. R drops out rows where any of the explanatory variables are missing, so Alaska disappears from this model. The interpretation of these state effects aren’t entirely useful here. Arizona had a 7.96% lower share of democratic votes than Alabama, controlling for age, race, income, and rent, on average. Arkansas had a 4.08% higher share of democratic votes than Alabama, controlling for age, race, income, and rent, on average. And so on, ad nauseum.</p>
 <p>These coefficients are helpful because they filter out and account for state-related variation in vote share, but on their own they’re not super helpful. Because of that, we can actually omit them from our regression table with <code>filter()</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">get_regression_table</span>(model_lots_of_stuff) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="co"># str_detect looks inside a column to see if a specific string of text exists</span></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="st">  </span><span class="co"># (in this case &quot;state&quot;). We negate it with ! so it&#39;ll only select rows where</span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="st">  </span><span class="co"># the phrase &quot;state&quot; isn&#39;t in it</span></a>
-<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">str_detect</span>(term, <span class="st">&quot;state&quot;</span>))</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_regression_table</span>(model_lots_of_stuff) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># str_detect looks inside a column to see if a specific string of text exists</span>
+<span class="st">  </span><span class="co"># (in this case &quot;state&quot;). We negate it with ! so it&#39;ll only select rows where</span>
+<span class="st">  </span><span class="co"># the phrase &quot;state&quot; isn&#39;t in it</span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">str_detect</span>(term, <span class="st">&quot;state&quot;</span>))</code></pre>
 <pre><code>## # A tibble: 5 x 7
 ##   term              estimate std_error statistic p_value lower_ci upper_ci
 ##   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -242,22 +242,22 @@ code span.wa { color: #bf0303; } /* Warning */
 ## 5 median_rent          0.02      0.002     12.3        0    0.017    0.023</code></pre>
 <h4 id="all-models-side-by-side">All models side-by-side</h4>
 <p>We can use the <code>huxreg()</code> function in the <code>huxtable</code> library to make a table where these models are shown in columns:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">library</span>(huxtable)</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="co"># We don&#39;t want to include state coefficients, so here we make a list of all the</span></a>
-<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="co"># state coefficient names, then we tell huxreg() to ignore them</span></a>
-<a class="sourceLine" id="cb21-5" data-line-number="5">state_coefs &lt;-<span class="st"> </span><span class="kw">tidy</span>(model_lots_of_stuff) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(term, <span class="st">&quot;state&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb21-7" data-line-number="7"><span class="st">  </span><span class="kw">pull</span>(term)</a>
-<a class="sourceLine" id="cb21-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb21-9" data-line-number="9"><span class="kw">huxreg</span>(us_dem_age, model_age_dem_race, model_lots_of_stuff,</a>
-<a class="sourceLine" id="cb21-10" data-line-number="10">       <span class="dt">omit_coefs =</span> state_coefs) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb21-11" data-line-number="11"><span class="st">  </span><span class="co"># This inserts a row named &quot;State controls&quot; at the bottom of the table marking</span></a>
-<a class="sourceLine" id="cb21-12" data-line-number="12"><span class="st">  </span><span class="co"># whether or not we&#39;ve included state as an explanatory variable. We do this</span></a>
-<a class="sourceLine" id="cb21-13" data-line-number="13"><span class="st">  </span><span class="co"># so we don&#39;t have to include 50 rows of state coefficients</span></a>
-<a class="sourceLine" id="cb21-14" data-line-number="14"><span class="st">  </span><span class="kw">add_rows</span>(<span class="kw">hux</span>(<span class="st">&quot;State controls&quot;</span>, <span class="st">&quot;No&quot;</span>, <span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>),</a>
-<a class="sourceLine" id="cb21-15" data-line-number="15">           <span class="dt">after =</span> <span class="kw">nrow</span>(.) <span class="op">-</span><span class="st"> </span><span class="dv">5</span>)</a></code></pre></div>
-<table class="huxtable" style="border-collapse: collapse; margin-bottom: 2em; margin-top: 2em; width: 50%; margin-left: 0%; margin-right: auto; ">
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(huxtable)
+
+<span class="co"># We don&#39;t want to include state coefficients, so here we make a list of all the</span>
+<span class="co"># state coefficient names, then we tell huxreg() to ignore them</span>
+state_coefs &lt;-<span class="st"> </span><span class="kw">tidy</span>(model_lots_of_stuff) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(term, <span class="st">&quot;state&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">pull</span>(term)
+
+<span class="kw">huxreg</span>(us_dem_age, model_age_dem_race, model_lots_of_stuff,
+       <span class="dt">omit_coefs =</span> state_coefs) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># This inserts a row named &quot;State controls&quot; at the bottom of the table marking</span>
+<span class="st">  </span><span class="co"># whether or not we&#39;ve included state as an explanatory variable. We do this</span>
+<span class="st">  </span><span class="co"># so we don&#39;t have to include 50 rows of state coefficients</span>
+<span class="st">  </span><span class="kw">add_rows</span>(<span class="kw">hux</span>(<span class="st">&quot;State controls&quot;</span>, <span class="st">&quot;No&quot;</span>, <span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>),
+           <span class="dt">after =</span> <span class="kw">nrow</span>(.) <span class="op">-</span><span class="st"> </span><span class="dv">5</span>)</code></pre>
+<table class="huxtable" style="border-collapse: collapse; margin-bottom: 2em; margin-top: 2em; width: 50%; margin-left: 0%; margin-right: auto;  ">
 <col>
 <col>
 <col>
@@ -488,33 +488,33 @@ AIC
 </table>
 <h3 id="brexit">Brexit</h3>
 <p>Now let’s explore variation in the 2016 Brexit vote results. Our main outcome variable (or y) is <code>leave_share</code>, which is the percent of votes cast in favor of leaving the European Union. Each row is a <a href="https://en.wikipedia.org/wiki/United_Kingdom_Parliament_constituencies">parliamentary constituency</a>. Again, to give you a sense of the spread of the data, here’s a histogram of the leave share in all constituencies:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">ggplot</span>(results_brexit, <span class="kw">aes</span>(<span class="dt">x =</span> leave_share)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">2.5</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(results_brexit, <span class="kw">aes</span>(<span class="dt">x =</span> leave_share)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">2.5</span>)</code></pre>
 <p><img src="/class/08-class_files/figure-html/dist-votes-uk-1.png" width="672" /></p>
 <h4 id="leave-share-explained-by-immigration">Leave share explained by immigration</h4>
 <p>One common explanation for the Brexit outcome is fear of immigration and the EU’s more open border policy. We can check the relationship between daily contact with immigrants and the propensity to vote to leave the EU by looking at the relationship between the proportion of native born residents in a constituency and its leave share.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">results_brexit <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="st">  </span><span class="kw">get_correlation</span>(leave_share <span class="op">~</span><span class="st"> </span>born_in_uk)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">results_brexit <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_correlation</span>(leave_share <span class="op">~</span><span class="st"> </span>born_in_uk)</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   correlation
 ##         &lt;dbl&gt;
 ## 1       0.493</code></pre>
 <p>The correlation is almost 0.5, which shows that the two are fairly well positively correlated. As the proportion of native-born residents in a constituency goes up, the share of leave vote also goes up.</p>
 <p>That’s apparent from the scatterplot too:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">ggplot</span>(results_brexit, <span class="kw">aes</span>(<span class="dt">x =</span> born_in_uk, <span class="dt">y =</span> leave_share)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(results_brexit, <span class="kw">aes</span>(<span class="dt">x =</span> born_in_uk, <span class="dt">y =</span> leave_share)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre>
 <p><img src="/class/08-class_files/figure-html/leave-immigration-plot-1.png" width="672" /></p>
 <p>A simple regression model will show us the slope, or the effect of immigrant populations on the share of leave votes:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">brexit_leave_immigration &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>born_in_uk, <span class="dt">data =</span> results_brexit)</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw">get_regression_table</span>(brexit_leave_immigration)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">brexit_leave_immigration &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>born_in_uk, <span class="dt">data =</span> results_brexit)
+
+<span class="kw">get_regression_table</span>(brexit_leave_immigration)</code></pre>
 <pre><code>## # A tibble: 2 x 7
 ##   term       estimate std_error statistic p_value lower_ci upper_ci
 ##   &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 intercept      7.98     3.12       2.56   0.011    1.85    14.1  
 ## 2 born_in_uk     0.5      0.035     14.2    0        0.431    0.569</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">get_regression_summaries</span>(brexit_leave_immigration)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_regression_summaries</span>(brexit_leave_immigration)</code></pre>
 <pre><code>## # A tibble: 1 x 8
 ##   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -525,43 +525,43 @@ AIC
 <h4 id="leave-share-explained-by-education-and-age">Leave share explained by education and age</h4>
 <p>Another common explanation for the Brexit outcome is that it was driven by older people with less education. Let’s see if that checks out by using <code>degree</code> (which measures the percent of constituency’s population with a university degree) and <code>age_18to24</code> (which measures the percent of a constituency’s population between the ages of 18 and 24).</p>
 <p>First we can check the relationships on their own. First, the correlation:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">results_brexit <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="st">  </span><span class="co"># Some of these constituencies have missing data about education, so we remove</span></a>
-<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="st">  </span><span class="co"># rows where that&#39;s missing</span></a>
-<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(degree), <span class="op">!</span><span class="kw">is.na</span>(leave_share)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="st">  </span><span class="kw">get_correlation</span>(leave_share <span class="op">~</span><span class="st"> </span>degree)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">results_brexit <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># Some of these constituencies have missing data about education, so we remove</span>
+<span class="st">  </span><span class="co"># rows where that&#39;s missing</span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(degree), <span class="op">!</span><span class="kw">is.na</span>(leave_share)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_correlation</span>(leave_share <span class="op">~</span><span class="st"> </span>degree)</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   correlation
 ##         &lt;dbl&gt;
 ## 1      -0.906</code></pre>
 <p>−0.9! That’s huge. The two are very strongly negatively correlated. As the education level of a constituency goes up, the share of leave votes goes down a ton. It’s very apparent in the plot too—all the points are very tightly clustered around the line:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">ggplot</span>(results_brexit, <span class="kw">aes</span>(<span class="dt">x =</span> degree, <span class="dt">y =</span> leave_share)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(results_brexit, <span class="kw">aes</span>(<span class="dt">x =</span> degree, <span class="dt">y =</span> leave_share)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre>
 <p><img src="/class/08-class_files/figure-html/leave-education-plot-1.png" width="672" /></p>
 <p>We can also check the correlation between leave votes and age:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">results_brexit <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="st">  </span><span class="kw">get_correlation</span>(leave_share <span class="op">~</span><span class="st"> </span>age_18to24)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">results_brexit <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_correlation</span>(leave_share <span class="op">~</span><span class="st"> </span>age_18to24)</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   correlation
 ##         &lt;dbl&gt;
 ## 1      -0.347</code></pre>
 <p>Age and leave votes are moderately negatively correlated (r = −0.35). Again, we can see this in the plot—the relationship is negative, but the points aren’t that tightly packed around the line. (Also this chart reads kind of backwards: as you go along the x-axis, constituencies are actually getting <em>younger</em>, since this is measuring the proportion of the county that is between 18 and 24. A greater proportion means more young kids.)</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">ggplot</span>(results_brexit, <span class="kw">aes</span>(<span class="dt">x =</span> age_18to24, <span class="dt">y =</span> leave_share)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(results_brexit, <span class="kw">aes</span>(<span class="dt">x =</span> age_18to24, <span class="dt">y =</span> leave_share)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre>
 <p><img src="/class/08-class_files/figure-html/leave-age-plot-1.png" width="672" /></p>
 <p>Let’s look at the effect of both of these on the leave share with a multiple regression model:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">leave_educ_age &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>degree <span class="op">+</span><span class="st"> </span>age_18to24, <span class="dt">data =</span> results_brexit)</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="kw">get_regression_table</span>(leave_educ_age)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">leave_educ_age &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>degree <span class="op">+</span><span class="st"> </span>age_18to24, <span class="dt">data =</span> results_brexit)
+
+<span class="kw">get_regression_table</span>(leave_educ_age)</code></pre>
 <pre><code>## # A tibble: 3 x 7
 ##   term       estimate std_error statistic p_value lower_ci upper_ci
 ##   &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 intercept    76.5       0.558    137.         0   75.4     77.6  
 ## 2 degree       -1.12      0.022    -50.8        0   -1.17    -1.08 
 ## 3 age_18to24   -0.456     0.052     -8.85       0   -0.557   -0.355</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">get_regression_summaries</span>(leave_educ_age)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_regression_summaries</span>(leave_educ_age)</code></pre>
 <pre><code>## # A tibble: 1 x 8
 ##   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -572,20 +572,20 @@ AIC
 <h4 id="leave-share-explained-by-political-party">Leave share explained by political party</h4>
 <p>One final common explanation for the Brexit outcome is the role that UKIP played (Boris Johnson’s party; a far-right, populist, anti-EU party). We can see the relationship between how strong of a presence UKIP has in a constituency (based on its vote share in the 2015 parliamentary elections) and leave share.</p>
 <p>Here we can see the relationship between Labour votes, Conservative votes, and UKIP votes. (To plot three political parties at the same time, I use <code>gather()</code> to make a longer data frame with a column named <code>party</code> and a column named <code>party_pct</code>).</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">brexit_parties &lt;-<span class="st"> </span>results_brexit <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(party, party_pct, <span class="kw">c</span>(con_<span class="dv">2015</span>, lab_<span class="dv">2015</span>, ukip_<span class="dv">2015</span>))</a>
-<a class="sourceLine" id="cb40-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb40-4" data-line-number="4"><span class="kw">ggplot</span>(brexit_parties, <span class="kw">aes</span>(<span class="dt">x =</span> party_pct, <span class="dt">y =</span> leave_share, <span class="dt">color =</span> party)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb40-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb40-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-7" data-line-number="7"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">brexit_parties &lt;-<span class="st"> </span>results_brexit <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gather</span>(party, party_pct, <span class="kw">c</span>(con_<span class="dv">2015</span>, lab_<span class="dv">2015</span>, ukip_<span class="dv">2015</span>))
+
+<span class="kw">ggplot</span>(brexit_parties, <span class="kw">aes</span>(<span class="dt">x =</span> party_pct, <span class="dt">y =</span> leave_share, <span class="dt">color =</span> party)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre>
 <p><img src="/class/08-class_files/figure-html/leave-party-plot-1.png" width="672" /></p>
 <p>Holy cow look at that UKIP line. The points are densely packed around the line, meaning that there’s a very strong positive correlation—the more a constituency voted for UKIP in 2015, the more it voted to leave the EU in 2016.</p>
 <p>Let’s look at the model to get the slopes (or effects):</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">leave_politics &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span>, </a>
-<a class="sourceLine" id="cb41-2" data-line-number="2">                     <span class="dt">data =</span> results_brexit)</a>
-<a class="sourceLine" id="cb41-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb41-4" data-line-number="4"><span class="kw">get_regression_table</span>(leave_politics)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">leave_politics &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span>, 
+                     <span class="dt">data =</span> results_brexit)
+
+<span class="kw">get_regression_table</span>(leave_politics)</code></pre>
 <pre><code>## # A tibble: 4 x 7
 ##   term      estimate std_error statistic p_value lower_ci upper_ci
 ##   &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -593,7 +593,7 @@ AIC
 ## 2 con_2015     0.007     0.02      0.322   0.747   -0.034    0.047
 ## 3 lab_2015    -0.026     0.019    -1.32    0.188   -0.064    0.013
 ## 4 ukip_2015    1.49      0.039    38.0     0        1.41     1.57</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">get_regression_summaries</span>(leave_politics)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_regression_summaries</span>(leave_politics)</code></pre>
 <pre><code>## # A tibble: 1 x 8
 ##   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -604,10 +604,10 @@ AIC
 <h4 id="leave-share-explained-by-lots-of-things">Leave share explained by lots of things</h4>
 <p>So far we’ve looked at immigration, education, age, and political party as explanations of the Brexit vote. How do these explanations change when we account for all these factors at once?</p>
 <p>First, let’s run a big model:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">leave_everything &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span> <span class="op">+</span></a>
-<a class="sourceLine" id="cb45-2" data-line-number="2"><span class="st">                         </span>degree <span class="op">+</span><span class="st"> </span>age_18to24 <span class="op">+</span><span class="st"> </span>born_in_uk, <span class="dt">data =</span> results_brexit)</a>
-<a class="sourceLine" id="cb45-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb45-4" data-line-number="4"><span class="kw">get_regression_table</span>(leave_everything)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">leave_everything &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span> <span class="op">+</span>
+<span class="st">                         </span>degree <span class="op">+</span><span class="st"> </span>age_18to24 <span class="op">+</span><span class="st"> </span>born_in_uk, <span class="dt">data =</span> results_brexit)
+
+<span class="kw">get_regression_table</span>(leave_everything)</code></pre>
 <pre><code>## # A tibble: 7 x 7
 ##   term       estimate std_error statistic p_value lower_ci upper_ci
 ##   &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -618,7 +618,7 @@ AIC
 ## 5 degree       -0.87      0.029    -29.6    0       -0.928   -0.813
 ## 6 age_18to24   -0.196     0.044     -4.43   0       -0.283   -0.109
 ## 7 born_in_uk   -0.054     0.018     -3.08   0.002   -0.088   -0.019</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw">get_regression_summaries</span>(leave_everything)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_regression_summaries</span>(leave_everything)</code></pre>
 <pre><code>## # A tibble: 1 x 8
 ##   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -666,33 +666,33 @@ AIC
 &amp; + (-0.87 \times 20) + (-0.196 \times 10) + (-0.054 \times 90) + \epsilon
 \end{align}
 \]</span></p>
-<p>That’s a lot of math and I don’t want to do it by hand. Instead, we can use the <code>predict()</code> function in R to plug in a bunch of values and get the predicted leave share. First, we create a data frame with columns for each of the explanatory variables, then we use <code>predict(model_name, imaginary_constituency)</code> to generate <span class="math inline">\(\hat{y}\)</span>. We use the <code>interval = &quot;prediction&quot;</code> to generate a 95% prediction interval that shows how certain we can be about the prediction.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="co"># Here&#39;s the imaginary constituency</span></a>
-<a class="sourceLine" id="cb49-2" data-line-number="2">imaginary_constituency1 &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">con_2015 =</span> <span class="dv">40</span>,</a>
-<a class="sourceLine" id="cb49-3" data-line-number="3">                                      <span class="dt">lab_2015 =</span> <span class="dv">30</span>,</a>
-<a class="sourceLine" id="cb49-4" data-line-number="4">                                      <span class="dt">ukip_2015 =</span> <span class="dv">15</span>,</a>
-<a class="sourceLine" id="cb49-5" data-line-number="5">                                      <span class="dt">degree =</span> <span class="dv">20</span>,</a>
-<a class="sourceLine" id="cb49-6" data-line-number="6">                                      <span class="dt">age_18to24 =</span> <span class="dv">10</span>,</a>
-<a class="sourceLine" id="cb49-7" data-line-number="7">                                      <span class="dt">born_in_uk =</span> <span class="dv">90</span>)</a>
-<a class="sourceLine" id="cb49-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb49-9" data-line-number="9"><span class="co"># Here we predict leave vote share with the big model that we built, based on</span></a>
-<a class="sourceLine" id="cb49-10" data-line-number="10"><span class="co"># the imaginary constituency that we invented above</span></a>
-<a class="sourceLine" id="cb49-11" data-line-number="11"><span class="kw">predict</span>(leave_everything, <span class="dt">newdata =</span> imaginary_constituency1, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</a></code></pre></div>
+<p>That’s a lot of math and I don’t want to do it by hand. Instead, we can use the <code>predict()</code> function in R to plug in a bunch of values and get the predicted leave share. First, we create a data frame with columns for each of the explanatory variables, then we use <code>predict(model_name, imaginary_constituency)</code> to generate <span class="math inline">\(\hat{y}\)</span>. We use the <code>interval = "prediction"</code> to generate a 95% prediction interval that shows how certain we can be about the prediction.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Here&#39;s the imaginary constituency</span>
+imaginary_constituency1 &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">con_2015 =</span> <span class="dv">40</span>,
+                                  <span class="dt">lab_2015 =</span> <span class="dv">30</span>,
+                                  <span class="dt">ukip_2015 =</span> <span class="dv">15</span>,
+                                  <span class="dt">degree =</span> <span class="dv">20</span>,
+                                  <span class="dt">age_18to24 =</span> <span class="dv">10</span>,
+                                  <span class="dt">born_in_uk =</span> <span class="dv">90</span>)
+
+<span class="co"># Here we predict leave vote share with the big model that we built, based on</span>
+<span class="co"># the imaginary constituency that we invented above</span>
+<span class="kw">predict</span>(leave_everything, <span class="dt">newdata =</span> imaginary_constituency1, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</code></pre>
 <pre><code>##        fit      lwr      upr
 ## 1 50.84641 44.60334 57.08948</code></pre>
 <p>A constituency that looked like that would have likely had 50.85% voting for leaving the EU (with a 95% range of 45% to 57%).</p>
 <p>What about a more Labour-heavy, younger, more educated constituency with more immigrants?</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># Here&#39;s another imaginary constituency</span></a>
-<a class="sourceLine" id="cb51-2" data-line-number="2">imaginary_constituency2 &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">con_2015 =</span> <span class="dv">20</span>,</a>
-<a class="sourceLine" id="cb51-3" data-line-number="3">                                      <span class="dt">lab_2015 =</span> <span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb51-4" data-line-number="4">                                      <span class="dt">ukip_2015 =</span> <span class="dv">15</span>,</a>
-<a class="sourceLine" id="cb51-5" data-line-number="5">                                      <span class="dt">degree =</span> <span class="dv">40</span>,</a>
-<a class="sourceLine" id="cb51-6" data-line-number="6">                                      <span class="dt">age_18to24 =</span> <span class="dv">30</span>,</a>
-<a class="sourceLine" id="cb51-7" data-line-number="7">                                      <span class="dt">born_in_uk =</span> <span class="dv">80</span>)</a>
-<a class="sourceLine" id="cb51-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb51-9" data-line-number="9"><span class="co"># Here we predict leave vote share with the big model that we built, based on</span></a>
-<a class="sourceLine" id="cb51-10" data-line-number="10"><span class="co"># the imaginary constituency that we invented above</span></a>
-<a class="sourceLine" id="cb51-11" data-line-number="11"><span class="kw">predict</span>(leave_everything, <span class="dt">newdata =</span> imaginary_constituency2, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Here&#39;s another imaginary constituency</span>
+imaginary_constituency2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">con_2015 =</span> <span class="dv">20</span>,
+                                  <span class="dt">lab_2015 =</span> <span class="dv">50</span>,
+                                  <span class="dt">ukip_2015 =</span> <span class="dv">15</span>,
+                                  <span class="dt">degree =</span> <span class="dv">40</span>,
+                                  <span class="dt">age_18to24 =</span> <span class="dv">30</span>,
+                                  <span class="dt">born_in_uk =</span> <span class="dv">80</span>)
+
+<span class="co"># Here we predict leave vote share with the big model that we built, based on</span>
+<span class="co"># the imaginary constituency that we invented above</span>
+<span class="kw">predict</span>(leave_everything, <span class="dt">newdata =</span> imaginary_constituency2, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</code></pre>
 <pre><code>##        fit      lwr      upr
 ## 1 28.13658 21.57934 34.69381</code></pre>
 <p>Only 28% would have voted to leave (with a 95% interval of 22% to 35%). That’s low, but it makes sense given the effects we saw in the regression model.</p>
@@ -707,15 +707,15 @@ AIC
 </ul>
 <p>We want to see the the effect of education. What happens if the proportion of the constituency with a university degree is 10%? 20%? 30%? 40%? etc. What happens to the leave share as we move this education up and down?</p>
 <p>We can answer this by creating an <code>imaginary_constituency</code> data frame with multiple rows, varying education in each one. We then plug that data frame into <code>predict()</code> and generate predictions for each row.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># Here are six imaginary constituencies, all with the same variables except</span></a>
-<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="co"># education, which goes up by five in each row</span></a>
-<a class="sourceLine" id="cb53-3" data-line-number="3">imaginary_constituency3 &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">con_2015 =</span> <span class="dv">20</span>,</a>
-<a class="sourceLine" id="cb53-4" data-line-number="4">                                      <span class="dt">lab_2015 =</span> <span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb53-5" data-line-number="5">                                      <span class="dt">ukip_2015 =</span> <span class="dv">15</span>,</a>
-<a class="sourceLine" id="cb53-6" data-line-number="6">                                      <span class="dt">degree =</span> <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>),</a>
-<a class="sourceLine" id="cb53-7" data-line-number="7">                                      <span class="dt">age_18to24 =</span> <span class="dv">30</span>,</a>
-<a class="sourceLine" id="cb53-8" data-line-number="8">                                      <span class="dt">born_in_uk =</span> <span class="dv">80</span>)</a>
-<a class="sourceLine" id="cb53-9" data-line-number="9">imaginary_constituency3</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Here are six imaginary constituencies, all with the same variables except</span>
+<span class="co"># education, which goes up by five in each row</span>
+imaginary_constituency3 &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">con_2015 =</span> <span class="dv">20</span>,
+                                  <span class="dt">lab_2015 =</span> <span class="dv">50</span>,
+                                  <span class="dt">ukip_2015 =</span> <span class="dv">15</span>,
+                                  <span class="dt">degree =</span> <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>),
+                                  <span class="dt">age_18to24 =</span> <span class="dv">30</span>,
+                                  <span class="dt">born_in_uk =</span> <span class="dv">80</span>)
+imaginary_constituency3</code></pre>
 <pre><code>## # A tibble: 6 x 6
 ##   con_2015 lab_2015 ukip_2015 degree age_18to24 born_in_uk
 ##      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
@@ -725,9 +725,9 @@ AIC
 ## 4       20       50        15     20         30         80
 ## 5       20       50        15     25         30         80
 ## 6       20       50        15     30         30         80</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># When we plug this multi-row data frame into predict(), it&#39;ll generate a</span></a>
-<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="co"># prediction for each row</span></a>
-<a class="sourceLine" id="cb55-3" data-line-number="3"><span class="kw">predict</span>(leave_everything, <span class="dt">newdata =</span> imaginary_constituency3, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># When we plug this multi-row data frame into predict(), it&#39;ll generate a</span>
+<span class="co"># prediction for each row</span>
+<span class="kw">predict</span>(leave_everything, <span class="dt">newdata =</span> imaginary_constituency3, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</code></pre>
 <pre><code>##        fit      lwr      upr
 ## 1 58.60227 52.09952 65.10502
 ## 2 54.25003 47.77813 60.72193
@@ -737,46 +737,46 @@ AIC
 ## 6 36.84106 30.36361 43.31852</code></pre>
 <p>When an average constituency has only 5% of people with degrees, the predicted leave share is 58.6%. As the proportion of people with degrees goes up, the predicted leave share drops quite a lot. By the time we get to 30% with degrees, the predicted leave share is 36.8%.</p>
 <p>We can visualize this change too, to make it more apparent than just looking at a table of numbers. Look how steep that slope is!</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co"># Here, instead of using predict(), I use augment() from the broom package. It&#39;s</span></a>
-<a class="sourceLine" id="cb57-2" data-line-number="2"><span class="co"># essentially the same thing as predict, but it adds the predictions and</span></a>
-<a class="sourceLine" id="cb57-3" data-line-number="3"><span class="co"># confidence intervals to the imaginary constituency data frame</span></a>
-<a class="sourceLine" id="cb57-4" data-line-number="4">model_predictions &lt;-<span class="st"> </span><span class="kw">augment</span>(leave_everything, </a>
-<a class="sourceLine" id="cb57-5" data-line-number="5">                             <span class="dt">newdata =</span> imaginary_constituency3)</a>
-<a class="sourceLine" id="cb57-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb57-7" data-line-number="7"><span class="co"># Now we have two new columns named .fitted and .se.fit: .fitted is the</span></a>
-<a class="sourceLine" id="cb57-8" data-line-number="8"><span class="co"># predicted value and .se.fit is the standard error of the predicted value</span></a>
-<a class="sourceLine" id="cb57-9" data-line-number="9">model_predictions</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Here, instead of using predict(), I use augment() from the broom package. It&#39;s</span>
+<span class="co"># essentially the same thing as predict, but it adds the predictions and</span>
+<span class="co"># confidence intervals to the imaginary constituency data frame</span>
+model_predictions &lt;-<span class="st"> </span><span class="kw">augment</span>(leave_everything, 
+                             <span class="dt">newdata =</span> imaginary_constituency3)
+
+<span class="co"># Now we have two new columns named .fitted and .se.fit: .fitted is the</span>
+<span class="co"># predicted value and .se.fit is the standard error of the predicted value</span>
+model_predictions</code></pre>
 <pre><code>## # A tibble: 6 x 8
 ##   con_2015 lab_2015 ukip_2015 degree age_18to24 born_in_uk .fitted .se.fit
-## *    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
 ## 1       20       50        15      5         30         80    58.6   0.945
 ## 2       20       50        15     10         30         80    54.3   0.888
 ## 3       20       50        15     15         30         80    49.9   0.854
 ## 4       20       50        15     20         30         80    45.5   0.844
 ## 5       20       50        15     25         30         80    41.2   0.859
 ## 6       20       50        15     30         30         80    36.8   0.899</code></pre>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="co"># We can plot this now:</span></a>
-<a class="sourceLine" id="cb59-2" data-line-number="2"><span class="kw">ggplot</span>(model_predictions, <span class="kw">aes</span>(<span class="dt">x =</span> degree, <span class="dt">y =</span> .fitted)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb59-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb59-4" data-line-number="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Predicted leave share&quot;</span>, </a>
-<a class="sourceLine" id="cb59-5" data-line-number="5">       <span class="dt">x =</span> <span class="st">&quot;Proportion of constituency with a university degree&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We can plot this now:</span>
+<span class="kw">ggplot</span>(model_predictions, <span class="kw">aes</span>(<span class="dt">x =</span> degree, <span class="dt">y =</span> .fitted)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Predicted leave share&quot;</span>, 
+       <span class="dt">x =</span> <span class="st">&quot;Proportion of constituency with a university degree&quot;</span>)</code></pre>
 <p><img src="/class/08-class_files/figure-html/plot-brexit-predict-1.png" width="672" /></p>
 <p>With one final mathy tweak, we can add 95% confidence intervals to this line. We haven’t covered confidence intervals yet, but we will.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">model_predictions_with_intervals &lt;-<span class="st"> </span>model_predictions <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">conf_low =</span> .fitted <span class="op">+</span><span class="st"> </span>(<span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>.se.fit),</a>
-<a class="sourceLine" id="cb60-3" data-line-number="3">         <span class="dt">conf_high =</span> .fitted <span class="op">-</span><span class="st"> </span>(<span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>.se.fit))</a>
-<a class="sourceLine" id="cb60-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb60-5" data-line-number="5"><span class="kw">ggplot</span>(model_predictions_with_intervals, <span class="kw">aes</span>(<span class="dt">x =</span> degree, <span class="dt">y =</span> .fitted)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> conf_low, <span class="dt">ymax =</span> conf_high), <span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-8" data-line-number="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Predicted leave share&quot;</span>, </a>
-<a class="sourceLine" id="cb60-9" data-line-number="9">       <span class="dt">x =</span> <span class="st">&quot;Proportion of constituency with a university degree&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_predictions_with_intervals &lt;-<span class="st"> </span>model_predictions <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">conf_low =</span> .fitted <span class="op">+</span><span class="st"> </span>(<span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>.se.fit),
+         <span class="dt">conf_high =</span> .fitted <span class="op">-</span><span class="st"> </span>(<span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>.se.fit))
+
+<span class="kw">ggplot</span>(model_predictions_with_intervals, <span class="kw">aes</span>(<span class="dt">x =</span> degree, <span class="dt">y =</span> .fitted)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> conf_low, <span class="dt">ymax =</span> conf_high), <span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Predicted leave share&quot;</span>, 
+       <span class="dt">x =</span> <span class="st">&quot;Proportion of constituency with a university degree&quot;</span>)</code></pre>
 <p><img src="/class/08-class_files/figure-html/plot-brexit-predict-intervalse-1.png" width="672" /></p>
 <h4 id="all-models-side-by-side-1">All models side-by-side</h4>
 <p>Like we did before, we can use <code>huxreg()</code> to view all these models side-by-side and compare the coefficients and the <span class="math inline">\(R^2\)</span> values:</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="kw">huxreg</span>(brexit_leave_immigration, leave_educ_age, </a>
-<a class="sourceLine" id="cb61-2" data-line-number="2">       leave_politics, leave_everything) </a></code></pre></div>
-<table class="huxtable" style="border-collapse: collapse; margin-bottom: 2em; margin-top: 2em; width: 50%; margin-left: 0%; margin-right: auto; ">
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">huxreg</span>(brexit_leave_immigration, leave_educ_age, 
+       leave_politics, leave_everything) </code></pre>
+<table class="huxtable" style="border-collapse: collapse; margin-bottom: 2em; margin-top: 2em; width: 50%; margin-left: 0%; margin-right: auto;  ">
 <col>
 <col>
 <col>

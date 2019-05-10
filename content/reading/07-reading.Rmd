@@ -9,7 +9,7 @@ csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
 # Required
 
 - <i class="fas fa-book"></i> [7.1–7.4 in *ModernDive*](https://moderndive.com/7-multiple-regression.html) [@IsmayKim:2018]
-- <i class="fas fa-laptop-code"></i> "Modeling with multiple regression," chapter 3 in Albert Kim's [*Modeling with Data in the Tidyverse* course on DataCamp](https://www.datacamp.com/courses/modeling-with-data-in-the-tidyverse)
+- <i class="fas fa-laptop-code"></i> ~~"Modeling with multiple regression," chapter 3 in Albert Kim's *Modeling with Data in the Tidyverse* course on DataCamp~~
 
 
 # Highly recommended

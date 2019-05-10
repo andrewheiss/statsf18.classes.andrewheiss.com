@@ -26,7 +26,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -78,17 +78,17 @@ code span.wa { color: #bf0303; } /* Warning */
 
 <p>These are the interpreted regression coefficients for the in-class activity for week 12 (since I was out of town). <strong>Don’t look at these until you’ve tried it on your own.</strong></p>
 <h2 id="load-libraries-and-data">Load libraries and data</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(moderndive)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">happiness &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/world_happiness.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">results_brexit &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/brexit_results.csv&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(moderndive)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">happiness &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/world_happiness.csv&quot;</span>)
+results_brexit &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/brexit_results.csv&quot;</span>)</code></pre>
 <h2 id="world-happiness">World happiness</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># The base case for region is &quot;East Asia &amp; Pacific&quot;</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co"># The base case for income is &quot;High income&quot;</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">model_happiness &lt;-<span class="st"> </span><span class="kw">lm</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">                        </span>access_to_electricity <span class="op">+</span><span class="st"> </span>region <span class="op">+</span><span class="st"> </span>income, </a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">                      <span class="dt">data =</span> happiness)</a></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The base case for region is &quot;East Asia &amp; Pacific&quot;</span>
+<span class="co"># The base case for income is &quot;High income&quot;</span>
+model_happiness &lt;-<span class="st"> </span><span class="kw">lm</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy <span class="op">+</span><span class="st"> </span>
+<span class="st">                        </span>access_to_electricity <span class="op">+</span><span class="st"> </span>region <span class="op">+</span><span class="st"> </span>income, 
+                      <span class="dt">data =</span> happiness)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</code></pre>
 <table>
 <colgroup>
 <col width="30%" />
@@ -223,7 +223,7 @@ Africa</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</code></pre>
 <table>
 <colgroup>
 <col width="14%" />
@@ -269,10 +269,10 @@ Africa</td>
 <li>On the other hand, differences in income do have a significant effect on happiness after controlling for life expectancy, access to electricity, and region. Upper middle income countries score 0.88 points lower than high income countries on average, while lower income countries score 1.27 points lower and low income countries score 1.72 points lower than high income countries, respectively. Each of these differences is statistically significant (p &lt; 0.001).</li>
 </ul>
 <h2 id="brexit">Brexit</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">model_brexit &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span> <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">                     </span>degree <span class="op">+</span><span class="st"> </span>age_18to24 <span class="op">+</span><span class="st"> </span>born_in_uk <span class="op">+</span><span class="st"> </span>unemployed <span class="op">+</span><span class="st"> </span>male, </a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">                   <span class="dt">data =</span> results_brexit)</a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_brexit &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span> <span class="op">+</span>
+<span class="st">                     </span>degree <span class="op">+</span><span class="st"> </span>age_18to24 <span class="op">+</span><span class="st"> </span>born_in_uk <span class="op">+</span><span class="st"> </span>unemployed <span class="op">+</span><span class="st"> </span>male, 
+                   <span class="dt">data =</span> results_brexit)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</code></pre>
 <table>
 <colgroup>
 <col width="16%" />
@@ -378,7 +378,7 @@ Africa</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</code></pre>
 <table>
 <colgroup>
 <col width="15%" />

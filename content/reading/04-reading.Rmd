@@ -9,4 +9,4 @@ csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
 # Required
 
 - <i class="fas fa-book"></i> [5.1–5.3 in *ModernDive*](https://moderndive.com/5-wrangling.html) [@IsmayKim:2018]
-- <i class="fas fa-laptop-code"></i> "Data wrangling," chapter 1 in David Robinson's [*Introduction to the Tidyverse* course on DataCamp](https://www.datacamp.com/courses/introduction-to-the-tidyverse)
+- <i class="fas fa-laptop-code"></i> ~~"Data wrangling," chapter 1 in David Robinson's *Introduction to the Tidyverse* course on DataCamp~~

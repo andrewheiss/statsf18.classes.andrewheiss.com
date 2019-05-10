@@ -31,7 +31,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -131,16 +131,16 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>Notice how steps 2 and 3 are missing here. That’s because the <code>infer</code> package does not have a way to simulate a world where a coefficient is zero—there’s no <code>coefficient</code> option in <code>specify()</code> or anything like that. You can essentially do these steps in your head, though.</p>
 <h3 id="complete-example">Complete example</h3>
 <p>Here’s a full example using property tax data from Problem Set 3.</p>
-<p>First we load the libraries and data we’ll need. We’ll divide the median home value variable by 100 so it’s a little easier to interpret (so we can say “for every $100 increase in median home value…” instead of &quot;for every $1 increase in median home value)</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(moderndive)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">taxes &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/property_taxes_2016.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">median_home_value =</span> median_home_value <span class="op">/</span><span class="st"> </span><span class="dv">100</span>)</a></code></pre></div>
+<p>First we load the libraries and data we’ll need. We’ll divide the median home value variable by 100 so it’s a little easier to interpret (so we can say “for every $100 increase in median home value…” instead of "for every $1 increase in median home value)</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(moderndive)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">taxes &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/property_taxes_2016.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">median_home_value =</span> median_home_value <span class="op">/</span><span class="st"> </span><span class="dv">100</span>)</code></pre>
 <p>Next we build a regression model that predicts/explains per-household taxes based on median home value in each county, the proportion of households with kids in each county, and the state each county is in:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">tax_model &lt;-<span class="st"> </span><span class="kw">lm</span>(tax_per_housing_unit <span class="op">~</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">                  </span>median_home_value <span class="op">+</span><span class="st"> </span>prop_houses_with_kids <span class="op">+</span><span class="st"> </span>state,</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">                <span class="dt">data =</span> taxes)</a></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">tax_model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">tax_model &lt;-<span class="st"> </span><span class="kw">lm</span>(tax_per_housing_unit <span class="op">~</span><span class="st"> </span>
+<span class="st">                  </span>median_home_value <span class="op">+</span><span class="st"> </span>prop_houses_with_kids <span class="op">+</span><span class="st"> </span>state,
+                <span class="dt">data =</span> taxes)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">tax_model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</code></pre>
 <table>
 <colgroup>
 <col width="26%" />
@@ -228,7 +228,7 @@ code span.wa { color: #bf0303; } /* Warning */
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">tax_model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">tax_model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</code></pre>
 <table>
 <colgroup>
 <col width="15%" />
@@ -306,19 +306,19 @@ code span.wa { color: #bf0303; } /* Warning */
 <li><code>region</code>: Region the country is in. The base case is East Asia &amp; Pacific, since it comes first alphabetically.</li>
 <li><code>income</code>: How rich a country is. There are four possible categories: High income, Upper middle income, Lower middle income, and Low income. High income is the base case because it’s first alphabetically.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">library</span>(moderndive)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">happiness &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/world_happiness.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co"># The base case for region is &quot;East Asia &amp; Pacific&quot;</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co"># The base case for income is &quot;High income&quot;</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">model_happiness &lt;-<span class="st"> </span><span class="kw">lm</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">                        </span>access_to_electricity <span class="op">+</span><span class="st"> </span>region <span class="op">+</span><span class="st"> </span>income, </a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">                      <span class="dt">data =</span> happiness)</a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a>
-<a class="sourceLine" id="cb6-13" data-line-number="13">model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(moderndive)
+
+happiness &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/world_happiness.csv&quot;</span>)
+
+<span class="co"># The base case for region is &quot;East Asia &amp; Pacific&quot;</span>
+<span class="co"># The base case for income is &quot;High income&quot;</span>
+model_happiness &lt;-<span class="st"> </span><span class="kw">lm</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy <span class="op">+</span><span class="st"> </span>
+<span class="st">                        </span>access_to_electricity <span class="op">+</span><span class="st"> </span>region <span class="op">+</span><span class="st"> </span>income, 
+                      <span class="dt">data =</span> happiness)
+
+model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()
+model_happiness <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</code></pre>
 <h3 id="brexit-results">Brexit results</h3>
 <p>We looked at this data during <a href="/class/08-class/">class 8</a>. Here’s what these different variables measure:</p>
 <ul>
@@ -332,11 +332,11 @@ code span.wa { color: #bf0303; } /* Warning */
 <li><code>unemployed</code>: The proportion of the constituency that is unemployed, measured on a 0-100 scale</li>
 <li><code>male</code>: The proportion of the constituency that is male, measured on a 0-100 scale</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">results_brexit &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/brexit_results.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">model_brexit &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span> <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">                     </span>degree <span class="op">+</span><span class="st"> </span>age_18to24 <span class="op">+</span><span class="st"> </span>born_in_uk <span class="op">+</span><span class="st"> </span>unemployed <span class="op">+</span><span class="st"> </span>male, </a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">                   <span class="dt">data =</span> results_brexit)</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()</a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">results_brexit &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/brexit_results.csv&quot;</span>)
+
+model_brexit &lt;-<span class="st"> </span><span class="kw">lm</span>(leave_share <span class="op">~</span><span class="st"> </span>con_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>lab_<span class="dv">2015</span> <span class="op">+</span><span class="st"> </span>ukip_<span class="dv">2015</span> <span class="op">+</span>
+<span class="st">                     </span>degree <span class="op">+</span><span class="st"> </span>age_18to24 <span class="op">+</span><span class="st"> </span>born_in_uk <span class="op">+</span><span class="st"> </span>unemployed <span class="op">+</span><span class="st"> </span>male, 
+                   <span class="dt">data =</span> results_brexit)
+
+model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_table</span>()
+model_brexit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_regression_summaries</span>()</code></pre>

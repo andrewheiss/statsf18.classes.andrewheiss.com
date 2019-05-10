@@ -371,8 +371,9 @@ Our δ is -0.03, which means there's a 3% difference between the two groups, whi
 
 **Step 2: Invent world where δ is null + Step 3: Look at δ in the null world.** We use simulation to generate a world where the actual difference between these two groups is zero, and then we put δ there to see if it's weird or unexpected.
 
-```{r diff-harass-born-null-world, warning=FALSE}
+```{r diff-harass-born-null-world, warning=FALSE, cache=TRUE}
 harass_born_diff_in_null_world <- gss_harass %>% 
+  select(harass5, born) %>% 
   specify(formula = harass5 ~ born, success = "Yes") %>% 
   hypothesize(null = "independence") %>% 
   generate(reps = 5000) %>% 
@@ -440,8 +441,9 @@ Our δ is -0.035, which means there's a 3.5% difference between the two groups, 
 
 **Step 2: Invent world where δ is null + Step 3: Look at δ in the null world.** We use simulation to generate a world where the actual difference between these two groups is zero, and then we put δ there to see if it's weird or unexpected.
 
-```{r diff-harass-sex-null-world, warning=FALSE}
+```{r diff-harass-sex-null-world, warning=FALSE, cache=TRUE}
 harass_sex_diff_in_null_world <- gss_harass %>% 
+  select(harass5, sex) %>% 
   specify(formula = harass5 ~ sex, success = "Yes") %>% 
   hypothesize(null = "independence") %>% 
   generate(reps = 5000) %>% 
@@ -580,8 +582,8 @@ set.seed(1234)
 # Here are 60 rolls of a die and how often each number showed up. We want to
 # determine if this die is weighted funny and cheating, of if the fact that
 # there were 24 3s is normal
-dice_table <- data_frame(Number = 1:6,
-                         Frequency = c(8, 8, 24, 4, 6, 10)) 
+dice_table <- tibble(Number = 1:6,
+                     Frequency = c(8, 8, 24, 4, 6, 10)) 
 
 # Make this long so it works with infer
 dice_long <- dice_table %>% 

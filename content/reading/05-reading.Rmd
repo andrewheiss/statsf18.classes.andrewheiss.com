@@ -10,4 +10,4 @@ csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
 
 - <i class="fas fa-book"></i> [5.4–5.10 in *ModernDive*](https://moderndive.com/5-wrangling.html#summarize) [@IsmayKim:2018]
 - <i class="fas fa-book"></i> ["Data transformation," chapter 5 in *R for Data Science*](http://r4ds.had.co.nz/transform.html) [@WickhamGrolemund:2017]
-- <i class="fas fa-laptop-code"></i> "Grouping and summarizing," chapter 3 in David Robinson's [*Introduction to the Tidyverse* course on DataCamp](https://www.datacamp.com/courses/introduction-to-the-tidyverse)
+- <i class="fas fa-laptop-code"></i> ~~"Grouping and summarizing," chapter 3 in David Robinson's *Introduction to the Tidyverse* course on DataCamp~~

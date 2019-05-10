@@ -98,6 +98,9 @@ gss <- gss_raw %>%
   mutate(childs = as.numeric(childs))
 ```
 
+```{r include=FALSE}
+saveRDS(gss, here::here("static", "data", "gss.rds"))
+```
 
 We'll use this data to find the factors that made people more likely to vote for Mitt Romney in 2016. Our outcome variable (or Y) is `pres12`, which has two values: Obama and Romney. Because it's not numeric, and because there are two possible categories, we'll use logistic regression. We'll explain 2012 presidential votes based on the number of children people have, marital status, conservativeness, and frequency of prayer
 

@@ -286,7 +286,7 @@ With only 10 large-ish bags of M&Ms (420 ounces, or 26.25 pounds), we can guess 
 As a final demonstration of this, here's a simulation of what happens to our $\widehat{p}$ estimates and margins of error as we increase the sample size from 5 to 1,000. The x-axis here show the sample size; the y-axis shows the $\widehat{p}$ for each color at that sample size; the orange ribbon shows the 95% confidence interval, or margin of error; the black horizontal line shows the true population average.
 
 ```{r different-ns, cache=TRUE}
-different_ns <- data_frame(n = seq(5, 1000, 1)) %>% 
+different_ns <- tibble(n = seq(5, 1000, 1)) %>% 
   mutate(draw = n %>% map(~ rep_sample_n(tons_of_mms, size = .x, reps = 1))) %>% 
   unnest(draw) %>% 
   group_by(n, color) %>% 

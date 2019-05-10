@@ -17,4 +17,4 @@ stuff-to-add: >-
 
 # Highly recommened
 
-- <i class="fas fa-laptop-code"></i> "Model Assessment and Selection," chapter 4 in Albert Kim's [*Modeling with Data in the Tidyverse* course on DataCamp](https://www.datacamp.com/courses/modeling-with-data-in-the-tidyverse)
+- <i class="fas fa-laptop-code"></i> ~~"Model Assessment and Selection," chapter 4 in Albert Kim's *Modeling with Data in the Tidyverse* course on DataCamp~~

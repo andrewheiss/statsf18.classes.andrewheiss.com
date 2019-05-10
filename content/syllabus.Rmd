@@ -87,13 +87,15 @@ There will also occasionally be additional articles and videos to read and watch
 
 I also highly recommend subscribing to the [R Weekly newsletter](https://rweekly.org/). This e-mail is sent every Monday and is full of helpful tutorials about how to do stuff with R.
 
-## DataCamp
+## ~~DataCamp~~
 
-We will use [DataCamp](https://www.datacamp.com/home)—a collection of fantatstic interactive videos and tutorials and coding exercises available online—to supplement your readings. These exercises will give you additional practice with R and will be essential to understanding the material (especially in the first half of the course). 
+**Update**: This text is still here for historical reasons, but all links to DataCamp have been removed, and future versions of this class will not use DataCamp content due to the organization's [horrible handling of sexual harassment claims](https://www.datacamp.com/community/blog/note-to-our-community) and its deeper issues with organizational culture.
 
-I will assign specific chapters from DataCamp courses as part of your readings, but by being in this class, you have access to the entire DataCamp course library for the next six months. If you ever feel bored, adventurous, or both, check out other courses and learn even more!^[For real, this is an incredible opportunity!] Importantly, you do not have to purchase any services or classes from DataCamp.
+~~We will use DataCamp—a collection of fantatstic interactive videos and tutorials and coding exercises available online—to supplement your readings. These exercises will give you additional practice with R and will be essential to understanding the material (especially in the first half of the course).~~
 
-I will enroll you in our class DataCamp group using the e-mail address you have registered with BYU. You will then receive an e-mail from DataCamp with a link to register on their site.
+~~I will assign specific chapters from DataCamp courses as part of your readings, but by being in this class, you have access to the entire DataCamp course library for the next six months. If you ever feel bored, adventurous, or both, check out other courses and learn even more!^[For real, this is an incredible opportunity!] Importantly, you do not have to purchase any services or classes from DataCamp.~~
+
+~~I will enroll you in our class DataCamp group using the e-mail address you have registered with BYU. You will then receive an e-mail from DataCamp with a link to register on their site.~~
 
 ## R and RStudio
 
@@ -179,9 +181,9 @@ grading <- tribble(
 ```
 
 ```{r show-assignments-table, echo=FALSE, results="asis"}
-assignments_total <- data_frame(Assignment = "Total",
-                                Points = sum(assignments$Points),
-                                Percent = NA)
+assignments_total <- tibble(Assignment = "Total",
+                            Points = sum(assignments$Points),
+                            Percent = NA)
 
 bind_rows(assignments, assignments_total) %>% 
   select(Assignment, Points, Percent) %>% 

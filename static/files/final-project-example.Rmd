@@ -44,9 +44,9 @@ library(pander)  # For making nice markdown tables with pandoc.table
 # Delete this, obviously
 # rnorm() chooses 1000 random numbers from a normal distribution
 # sample() chooses a random letter from the list of four letters I gave it, 1000 times
-fake_data <- data_frame(x = rnorm(1000),
-                        y = rnorm(1000, mean = 50, sd = 5),
-                        z = sample(c("A", "B", "C", "D"), 1000, replace = TRUE))
+fake_data <- tibble(x = rnorm(1000),
+                    y = rnorm(1000, mean = 50, sd = 5),
+                    z = sample(c("A", "B", "C", "D"), 1000, replace = TRUE))
 ```
 
 \newpage

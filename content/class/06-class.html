@@ -31,7 +31,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -120,35 +120,35 @@ code span.wa { color: #bf0303; } /* Warning */
 </ul>
 <h3 id="explore-the-data-and-plot-x-and-y">1. Explore the data and plot X and Y</h3>
 <p>First we load the packages we’ll be using and load the data. Here I assume that the <code>world_happiness.csv</code> file is in a folder named data, but it could be anywhere—adjust the path in <code>read_csv()</code> accordingly.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Load data and packages</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(moderndive)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(skimr)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">world_happiness &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/world_happiness.csv&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load data and packages</span>
+<span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(moderndive)
+<span class="kw">library</span>(skimr)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">world_happiness &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/world_happiness.csv&quot;</span>)</code></pre>
 <p>This data includes a lot of variables. We can see a quick summary of all of them with the <code>glimpse()</code> function, introduced in your ModernDive reading. There are 11 variables and 217 rows:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">glimpse</span>(world_happiness)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(world_happiness)</code></pre>
 <pre><code>## Observations: 217
 ## Variables: 11
-## $ iso2c                 &lt;chr&gt; &quot;AD&quot;, &quot;AE&quot;, &quot;AF&quot;, &quot;AG&quot;, &quot;AL&quot;, &quot;AM&quot;, &quot;AO&quot;...
-## $ happiness_score       &lt;dbl&gt; NA, 6.901, 3.575, NA, 4.959, 4.350, 4.03...
-## $ happiness_se          &lt;dbl&gt; NA, 0.03729, 0.03084, NA, 0.05013, 0.047...
-## $ country               &lt;chr&gt; &quot;Andorra&quot;, &quot;United Arab Emirates&quot;, &quot;Afgh...
-## $ year                  &lt;int&gt; 2015, 2015, 2015, 2015, 2015, 2015, 2015...
-## $ school_enrollment     &lt;dbl&gt; NA, 93.38943, NA, 78.57764, 95.19960, 92...
-## $ life_expectancy       &lt;dbl&gt; NA, 77.10100, 63.28800, 76.20700, 78.174...
-## $ access_to_electricity &lt;dbl&gt; 100.00000, 100.00000, 71.50000, 96.82629...
-## $ gdp_per_cap           &lt;dbl&gt; 41765.9204, 40753.8863, 620.0565, 12771....
-## $ region                &lt;chr&gt; &quot;Europe &amp; Central Asia&quot;, &quot;Middle East &amp; ...
-## $ income                &lt;chr&gt; &quot;High income&quot;, &quot;High income&quot;, &quot;Low incom...</code></pre>
+## $ iso2c                 &lt;chr&gt; &quot;AD&quot;, &quot;AE&quot;, &quot;AF&quot;, &quot;AG&quot;, &quot;AL&quot;, &quot;AM&quot;, &quot;AO&quot;, …
+## $ happiness_score       &lt;dbl&gt; NA, 6.901, 3.575, NA, 4.959, 4.350, 4.033,…
+## $ happiness_se          &lt;dbl&gt; NA, 0.03729, 0.03084, NA, 0.05013, 0.04763…
+## $ country               &lt;chr&gt; &quot;Andorra&quot;, &quot;United Arab Emirates&quot;, &quot;Afghan…
+## $ year                  &lt;dbl&gt; 2015, 2015, 2015, 2015, 2015, 2015, 2015, …
+## $ school_enrollment     &lt;dbl&gt; NA, 93.38943, NA, 78.57764, 95.19960, 92.4…
+## $ life_expectancy       &lt;dbl&gt; NA, 77.10100, 63.28800, 76.20700, 78.17400…
+## $ access_to_electricity &lt;dbl&gt; 100.00000, 100.00000, 71.50000, 96.82629, …
+## $ gdp_per_cap           &lt;dbl&gt; 41765.9204, 40753.8863, 620.0565, 12771.76…
+## $ region                &lt;chr&gt; &quot;Europe &amp; Central Asia&quot;, &quot;Middle East &amp; No…
+## $ income                &lt;chr&gt; &quot;High income&quot;, &quot;High income&quot;, &quot;Low income&quot;…</code></pre>
 <p>For this example, we care most about <code>happiness_score</code> and <code>life_expectancy</code>. We can find summary statistics for both using the <code>skim()</code> function (also introduced in ModernDive):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">world_happiness <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(happiness_score, life_expectancy) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw">skim</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">world_happiness <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(happiness_score, life_expectancy) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">skim</span>()</code></pre>
 <pre><code>## Skim summary statistics
 ##  n obs: 217 
 ##  n variables: 2 
 ## 
-## Variable type: numeric 
+## ── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────────
 ##         variable missing complete   n  mean   sd    p0   p25   p50   p75
 ##  happiness_score      62      155 217  5.37 1.15  2.84  4.52  5.21  6.22
 ##  life_expectancy      19      198 217 72.07 7.88 51.41 66.5  74.19 77.42
@@ -157,25 +157,25 @@ code span.wa { color: #bf0303; } /* Warning */
 ##  84.28 ▁▂▃▃▅▇▆▆</code></pre>
 <p>We can learn a lot just from this table. The smallest value of happiness (<code>p0</code>) is 2.84, while the highest (<code>p100</code>) is 7.59, while the average is 5.37. Life expectancy ranges from 51.41 to 84.28, with an average of 72.07. The histogram column shows the distribution of each variable.</p>
 <p>We can also find the correlation between these two variables, which shows how closely the two are related, and in which direction. <em>HOWEVER</em>, using the fancy <code>get_correlation()</code> function won’t work because there are missing values, and as we learned with calculating means and sums, R doesn’t know what to do when it encounters missing values, so it just returns <code>NA</code></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># so sad</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">world_happiness <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw">get_correlation</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># so sad</span>
+world_happiness <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_correlation</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy)</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   correlation
 ##         &lt;dbl&gt;
 ## 1          NA</code></pre>
 <p>There are two ways to fix this. First, we can filter out all the rows where happiness or life expectancy is missing, and then use <code>get_correlation()</code>. The <code>is.na()</code> function determines if something is missing. Negating it with <code>!</code> like <code>!is.na()</code> means “check if the value is not missing”.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">world_happiness <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(happiness_score), <span class="op">!</span><span class="kw">is.na</span>(life_expectancy)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw">get_correlation</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">world_happiness <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(happiness_score), <span class="op">!</span><span class="kw">is.na</span>(life_expectancy)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_correlation</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy)</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   correlation
 ##         &lt;dbl&gt;
 ## 1       0.743</code></pre>
 <p>Alternatively, you can not use the <code>get_correlation()</code> function and instead use <code>cor()</code>, which is R’s actual function for finding correlation. If you look at the help file for <code>cor()</code>, you’ll see that there’s an argument that tells R what to do with missing data, similar to the <code>na.rm = TRUE</code> concept that we saw with <code>mean()</code> and <code>sum()</code>. By default, <code>cor()</code> will use all rows from both of the variables you’re correlating, which means it chokes when there is missing data. Instead of using everything, you can use only the rows with complete observations (i.e. where there’s data for both happiness and life expectancy). Here’s how you use the <code>use</code> argument to tell R to only look at complete rows:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">world_happiness <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">happy_life_correlation =</span> <span class="kw">cor</span>(happiness_score, life_expectancy, </a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">                                         <span class="dt">use =</span> <span class="st">&quot;complete.obs&quot;</span>))</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">world_happiness <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">happy_life_correlation =</span> <span class="kw">cor</span>(happiness_score, life_expectancy, 
+                                         <span class="dt">use =</span> <span class="st">&quot;complete.obs&quot;</span>))</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   happy_life_correlation
 ##                    &lt;dbl&gt;
@@ -185,16 +185,16 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>National happiness and life expectancy are positively and strongly correlated. As life expectancy increases, happiness also tends to improve (r = 0.743).</p>
 </blockquote>
 <p>Finally, let’s make a scatterplot of the two variables (it will warn you that it couldn’t plot some of the points—that’s fine. We knew from looking at the <code>skim</code> table above that some of these countries have missing data):</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">ggplot</span>(world_happiness, <span class="kw">aes</span>(<span class="dt">x =</span> life_expectancy, <span class="dt">y =</span> happiness_score)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(world_happiness, <span class="kw">aes</span>(<span class="dt">x =</span> life_expectancy, <span class="dt">y =</span> happiness_score)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre>
 <pre><code>## Warning: Removed 62 rows containing missing values (geom_point).</code></pre>
 <p><img src="/class/06-class_files/figure-html/plot-correlation-1.png" width="672" /></p>
 <p>That looks like a good positive relationship!</p>
 <h3 id="draw-a-line-that-approximates-the-relationship-between-x-and-y">2. Draw a line that approximates the relationship between X and Y</h3>
-<p>Next, we want to draw a straight line that captures the relationship between the two. As we discussed in class (and as you read in ModernDive), the line should minimize the (squared) distance between each point and the line. R does this for you—you’ll never have to do this by hand. Use <code>geom_smooth(method = &quot;lm&quot;)</code> to add a straight line.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">ggplot</span>(world_happiness, <span class="kw">aes</span>(<span class="dt">x =</span> life_expectancy, <span class="dt">y =</span> happiness_score)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<p>Next, we want to draw a straight line that captures the relationship between the two. As we discussed in class (and as you read in ModernDive), the line should minimize the (squared) distance between each point and the line. R does this for you—you’ll never have to do this by hand. Use <code>geom_smooth(method = "lm")</code> to add a straight line.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(world_happiness, <span class="kw">aes</span>(<span class="dt">x =</span> life_expectancy, <span class="dt">y =</span> happiness_score)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre>
 <pre><code>## Warning: Removed 62 rows containing non-finite values (stat_smooth).</code></pre>
 <pre><code>## Warning: Removed 62 rows containing missing values (geom_point).</code></pre>
 <p><img src="/class/06-class_files/figure-html/plot-correlation-smooth-1.png" width="672" /></p>
@@ -214,10 +214,10 @@ y = b + mx
 \]</span></p>
 <p>where <span class="math inline">\(\beta_0\)</span> is the y-intercept and <span class="math inline">\(\beta_1\)</span> is the slope.</p>
 <p>We can calculate these coefficients with the <code>lm()</code> function (or linear model). We feed the function two things: a formula and a data frame. The formula follows the pattern <code>y ~ x</code> (or in English, “y is explained by x”). In this situation, happiness is our outcome variable and life expectancy is our explanatory variable, so the formula would be <code>happiness_score ~ life_expectancy</code> (or “happiness is explained by life expectancy”). Here I name the model <code>model1</code>, but that’s just a name I made up. You can call it anything (<code>happy_life_model</code> maybe):</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">model1 &lt;-<span class="st"> </span><span class="kw">lm</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy, <span class="dt">data =</span> world_happiness)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model1 &lt;-<span class="st"> </span><span class="kw">lm</span>(happiness_score <span class="op">~</span><span class="st"> </span>life_expectancy, <span class="dt">data =</span> world_happiness)</code></pre>
 <p>We can see the full model details with the <code>get_regression_table()</code> function:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">model1 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_regression_table</span>()</code></pre>
 <pre><code>## # A tibble: 2 x 7
 ##   term            estimate std_error statistic p_value lower_ci upper_ci
 ##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -229,20 +229,20 @@ y = b + mx
 \]</span></p>
 <h3 id="interpret-the-math">4. Interpret the math</h3>
 <p>Finally, we can interpet what these betas (or coefficients) actually mean. Remember that for now, all we care about are the <code>term</code> and <code>estimate</code> columns—we’ll cover what the other columns are later:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">model1 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="st">  </span><span class="kw">get_regression_table</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_regression_table</span>()</code></pre>
 <pre><code>## # A tibble: 2 x 7
 ##   term            estimate std_error statistic p_value lower_ci upper_ci
 ##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 intercept         -2.22      0.556     -3.98       0    -3.31   -1.12 
 ## 2 life_expectancy    0.105     0.008     13.7        0     0.09    0.121</code></pre>
 <p>The intercept of -2.22 means that this line crosses the y-axis at -2.22. It doesn’t look like this in the graph, though. There it looks like it crosses at 3ish. That’s because the graph is zoomed in and the x-axis starts at 50. If we zoom out and include 0 in the x-axis, we can see that the actual y-intercept is really just below -2.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">ggplot</span>(world_happiness, <span class="kw">aes</span>(<span class="dt">x =</span> life_expectancy, <span class="dt">y =</span> happiness_score)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="st">  </span><span class="co"># fullrange = TRUE means that the line will go beyond the points</span></a>
-<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">fullrange =</span> <span class="ot">TRUE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="st">  </span><span class="co"># This forces the x axis to include 0</span></a>
-<a class="sourceLine" id="cb23-6" data-line-number="6"><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">x =</span> <span class="dv">0</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(world_happiness, <span class="kw">aes</span>(<span class="dt">x =</span> life_expectancy, <span class="dt">y =</span> happiness_score)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="co"># fullrange = TRUE means that the line will go beyond the points</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">fullrange =</span> <span class="ot">TRUE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="co"># This forces the x axis to include 0</span>
+<span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">x =</span> <span class="dv">0</span>)</code></pre>
 <pre><code>## Warning: Removed 62 rows containing non-finite values (stat_smooth).</code></pre>
 <pre><code>## Warning: Removed 62 rows containing missing values (geom_point).</code></pre>
 <p><img src="/class/06-class_files/figure-html/plot-model-zoom-out-1.png" width="672" /></p>
@@ -258,18 +258,18 @@ y = b + mx
 <h3 id="final-wording-for-a-report">Final wording for a report</h3>
 <p>Does living longer make you happier? Using data from the World Bank and UN, we examined the relationship between life expectancy and national happiness. As seen in Figure 1 below, the two measures are strongly and positively correlated—as life expectancy increases, happiness also tends to improve (r = 0.743). Table 1 provides the results from an OLS regression model, with happiness as the outcome variable. The model shows that a one year increase in life expectancy is associated with a 0.105 point increase in national happiness, on average.</p>
 <p>This is most assuredly <em>not</em> decisive evidence that longer life leads to greater happiness, though. The mechanisms that cause better life expectancy (better access to healthcare, political stability, absence of violence, better access to food, etc.) also all probably improve national happiness. Moreover, there is a plausible story of reverse causality—greater happiness might make you live longer. Regardless, we can see that there is a positive relationship between the two and that on average, countries that make improvements to life expectancy can expect greater national happiness.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># Tweak the graph a little to make it more publication-worthy</span></a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="co">#</span></a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="co"># In a real, real-life report you wouldn&#39;t want to include this code. You can</span></a>
-<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="co"># make it so it doesn&#39;t show in the knitted document by adding `echo=FALSE` to</span></a>
-<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="co"># the chunk options.</span></a>
-<a class="sourceLine" id="cb26-6" data-line-number="6"><span class="kw">ggplot</span>(world_happiness, <span class="kw">aes</span>(<span class="dt">x =</span> life_expectancy, <span class="dt">y =</span> happiness_score)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb26-9" data-line-number="9"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Life expectancy&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;National happiness&quot;</span>,</a>
-<a class="sourceLine" id="cb26-10" data-line-number="10">       <span class="dt">title =</span> <span class="st">&quot;Figure 1: Relationship between life expectancy and national happiness&quot;</span>,</a>
-<a class="sourceLine" id="cb26-11" data-line-number="11">       <span class="dt">caption =</span> <span class="st">&quot;Source: UN World Happiness Report and World Bank Development Indicators&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb26-12" data-line-number="12"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Tweak the graph a little to make it more publication-worthy</span>
+<span class="co">#</span>
+<span class="co"># In a real, real-life report you wouldn&#39;t want to include this code. You can</span>
+<span class="co"># make it so it doesn&#39;t show in the knitted document by adding `echo=FALSE` to</span>
+<span class="co"># the chunk options.</span>
+<span class="kw">ggplot</span>(world_happiness, <span class="kw">aes</span>(<span class="dt">x =</span> life_expectancy, <span class="dt">y =</span> happiness_score)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Life expectancy&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;National happiness&quot;</span>,
+       <span class="dt">title =</span> <span class="st">&quot;Figure 1: Relationship between life expectancy and national happiness&quot;</span>,
+       <span class="dt">caption =</span> <span class="st">&quot;Source: UN World Happiness Report and World Bank Development Indicators&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_minimal</span>()</code></pre>
 <p><img src="/class/06-class_files/figure-html/nice-figure-1-1.png" width="672" /></p>
 <table>
 <caption>Table 1: OLS regression results</caption>

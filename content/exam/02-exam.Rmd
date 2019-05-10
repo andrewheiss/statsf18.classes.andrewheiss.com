@@ -70,12 +70,12 @@ set.seed(1234)
 
 n_sim = 100
 
-simulated_cor <- data_frame(correlation = c(-0.95, 0.01, -0.7, 0.8)) %>% 
+simulated_cor <- tibble(correlation = c(-0.95, 0.01, -0.7, 0.8)) %>% 
   mutate(simulated_matrix = correlation %>% 
            map(~ matrix(c(5, .x * sqrt(50), .x * sqrt(50), 10), 2, 2))) %>% 
   mutate(simulated = simulated_matrix %>% 
            map(~ mvtnorm::rmvnorm(n = n_sim, mean = c(20, 40), sigma = .x) %>% 
-                 as_data_frame())) %>% 
+                 as_tibble())) %>% 
   mutate(title = 1:n())
 
 simulated_cor %>% 
@@ -212,7 +212,7 @@ model3 <- lm(price ~ used + duration + num_wheels,
 This table provides the $R^2$ and adjusted $R^2$ values for the three models.
 
 ```{r diagnose-all-models, results="asis"}
-data_frame(model = list(model1, model2, model3)) %>% 
+tibble(model = list(model1, model2, model3)) %>% 
   mutate(glance = model %>% map(glance)) %>% 
   unnest(glance) %>% 
   mutate(formula = model %>% map_chr(~ as.character(.x$call)[[2]])) %>% 

@@ -16,7 +16,7 @@ editor_options:
 
 3. Rename the R Markdown file named `your-name_problem-set-1.Rmd` to something that matches your name and open it in RStudio.
 
-4. Complete the two tasks given in the R Markdown file. Fill out code in the empty chunks provided (you can definitely copy, paste, and adapt from ModernDive and DataCamp!), and replace text in ALL CAPS with your own (i.e. you'll see a lot of `TYPE YOUR ANSWER HERE`s. Type your answers there.)
+4. Complete the two tasks given in the R Markdown file. Fill out code in the empty chunks provided (you can definitely copy, paste, and adapt from ModernDive ~~and DataCamp~~!), and replace text in ALL CAPS with your own (i.e. you'll see a lot of `TYPE YOUR ANSWER HERE`s. Type your answers there.)
 
 5. When you're all done, click on the "Knit" button at the top of the editing window and create a Word document of your problem set. Upload that file to Learning Suite.
 

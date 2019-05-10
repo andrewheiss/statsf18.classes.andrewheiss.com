@@ -24,7 +24,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -105,10 +105,10 @@ code span.wa { color: #bf0303; } /* Warning */
 f(x) = \dfrac{1}{\sqrt{2\pi}} e^{-\frac12 x^2}
 \]</span></p>
 <p>And way more of this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">summary_monthly_temp &lt;-<span class="st"> </span>weather <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(temp), </a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">            <span class="dt">std_dev =</span> <span class="kw">sd</span>(temp))</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">summary_monthly_temp &lt;-<span class="st"> </span>weather <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(temp), 
+            <span class="dt">std_dev =</span> <span class="kw">sd</span>(temp))</code></pre>
 <p>Over the last decade there has been a revolution in statistical and scientific computing. Open source languages like R and Python have overtaken older (and expensive!) corporate software packages like SAS and SPSS, and there are now thousands of books and blog posts and other online resources with excellent tutorials about how to analyze pretty much any kind of data.</p>
 <p>This class will expose you to <a href="https://cran.r-project.org/">R</a>—one of the most popular, sought-after, and in-demand statistical programming languages. Armed with the foundation of R skills you’ll learn in this class, you’ll know enough to be able to find how to analyze any sort of data-based question in the future.</p>
 <h2 id="course-materials">Course materials</h2>
@@ -127,12 +127,13 @@ f(x) = \dfrac{1}{\sqrt{2\pi}} e^{-\frac12 x^2}
 </ul>
 <p>There will also occasionally be additional articles and videos to read and watch. When this happens, links to these other resources will be included on the reading page for that week.</p>
 <p>I also highly recommend subscribing to the <a href="https://rweekly.org/">R Weekly newsletter</a>. This e-mail is sent every Monday and is full of helpful tutorials about how to do stuff with R.</p>
-<h3 id="datacamp">DataCamp</h3>
-<p>We will use <a href="https://www.datacamp.com/home">DataCamp</a>—a collection of fantatstic interactive videos and tutorials and coding exercises available online—to supplement your readings. These exercises will give you additional practice with R and will be essential to understanding the material (especially in the first half of the course).</p>
-<p>I will assign specific chapters from DataCamp courses as part of your readings, but by being in this class, you have access to the entire DataCamp course library for the next six months. If you ever feel bored, adventurous, or both, check out other courses and learn even more!<span><label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">For real, this is an incredible opportunity!<br />
+<h3 id="datacamp"><del>DataCamp</del></h3>
+<p><strong>Update</strong>: This text is still here for historical reasons, but all links to DataCamp have been removed, and future versions of this class will not use DataCamp content due to the organization’s <a href="https://www.datacamp.com/community/blog/note-to-our-community">horrible handling of sexual harassment claims</a> and its deeper issues with organizational culture.</p>
+<p><del>We will use DataCamp—a collection of fantatstic interactive videos and tutorials and coding exercises available online—to supplement your readings. These exercises will give you additional practice with R and will be essential to understanding the material (especially in the first half of the course).</del></p>
+<p><del>I will assign specific chapters from DataCamp courses as part of your readings, but by being in this class, you have access to the entire DataCamp course library for the next six months. If you ever feel bored, adventurous, or both, check out other courses and learn even more!<span><label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">For real, this is an incredible opportunity!<br />
 <br />
-</span></span> Importantly, you do not have to purchase any services or classes from DataCamp.</p>
-<p>I will enroll you in our class DataCamp group using the e-mail address you have registered with BYU. You will then receive an e-mail from DataCamp with a link to register on their site.</p>
+</span></span> Importantly, you do not have to purchase any services or classes from DataCamp.</del></p>
+<p><del>I will enroll you in our class DataCamp group using the e-mail address you have registered with BYU. You will then receive an e-mail from DataCamp with a link to register on their site.</del></p>
 <h3 id="r-and-rstudio">R and RStudio</h3>
 <p>You will do all of your analysis with the open source (and free!) programming language <a href="https://cran.r-project.org/">R</a>. You will use <a href="https://www.rstudio.com/">RStudio</a> as the main program to access R. Think of R as an engine and RStudio as a car dashboard—R handles all the calculations and the actual statistics, while RStudio provides a nice interface for running R code.</p>
 <p>R is free, but it can sometimes be a pain to install and configure. To make life easier, you can (and should!) use the free <a href="http://rstudio.cloud/">RStudio.cloud</a> service, which lets you run a full instance of RStudio in your web browser. This means you won’t have to install anything on your computer to get started with R! We will have a shared class workspace in RStudio.cloud that will let you quickly copy templates for labs and problem sets.</p>

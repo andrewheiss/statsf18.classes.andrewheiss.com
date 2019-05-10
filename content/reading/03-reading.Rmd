@@ -9,4 +9,4 @@ csl: ../../static/bib/chicago-fullnote-bibliography-no-bib.csl
 # Required
 
 - <i class="fas fa-book"></i> [4.1–4.6 in *ModernDive*](https://moderndive.com/4-tidy.html) [@IsmayKim:2018]
-- <i class="fas fa-laptop-code"></i> "Data visualization," chapter 3 in Alison Hill's [*Working with Data in the Tidyverse* course on DataCamp](https://www.datacamp.com/courses/working-with-data-in-the-tidyverse)
+- <i class="fas fa-laptop-code"></i> ~~"Data visualization," chapter 3 in Alison Hill's *Working with Data in the Tidyverse* course on DataCamp~~

@@ -245,8 +245,8 @@ library(moderndive)
 library(skimr)
 
 
-cookies_data <- data_frame(happiness = c(2.5, 4, 3, 4.5, 5, 3.5, 4, 4.5, 4, 5),
-                           cookies = c(1:10)) %>% 
+cookies_data <- tibble(happiness = c(2.5, 4, 3, 4.5, 5, 3.5, 4, 4.5, 4, 5),
+                       cookies = c(1:10)) %>% 
   mutate(happiness = happiness - 2)
 
 cookies_model <- lm(happiness ~ cookies, data = cookies_data)

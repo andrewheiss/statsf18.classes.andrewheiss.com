@@ -53,8 +53,12 @@ editor_options:
 </ol>
 <h2 id="hypothesis-testing">Hypothesis testing</h2>
 <h3 id="home-values-in-idaho-and-arizona">Home values in Idaho and Arizona</h3>
+<pre><code>## Setting `type = &quot;permute&quot;` in `generate()`.</code></pre>
 <p>You collect data about average county-level home values in Idaho and Arizona and you want to know if houses tend to be more expensive in one of the states. You calculate that the average home value in Arizona is $22,378.48 higher than in Idaho. You want to test to make sure that difference really is positive.</p>
-<p>Through simulation, you determine that the distribution of the between-state differences in a hypothetical world where there’s no difference looks like the histogram below. The actual sample difference of $22,378.48 is marked in red. The associated p-value is 0.149.</p>
+<p>Through simulation, you determine that the distribution of the between-state differences in a hypothetical world where there’s no difference looks like the histogram below. The actual sample difference of $22,378.48 is marked in red. The associated p-value is 0.0976.</p>
+<pre><code>## Warning: `visualize()` shouldn&#39;t be used to plot p-value. Arguments
+## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
+## deprecated. Use `shade_p_value()` instead.</code></pre>
 <p><img src="/exam/03-exam_files/figure-html/plot-home-value-id-az-1.png" width="672" /></p>
 <ol style="list-style-type: decimal">
 <li>What is your null hypothesis?</li>
@@ -62,8 +66,12 @@ editor_options:
 <li>What can you conclude about the difference between the two groups?</li>
 </ol>
 <h3 id="conservatives-and-kids">Conservatives and kids</h3>
+<pre><code>## Setting `type = &quot;permute&quot;` in `generate()`.</code></pre>
 <p>You use data from the 2016 General Social Survey (GSS) to investigate the relationship between political ideology and the number of children people have. Based on a sample of 2,867 people, you find that self-reported conservatives have an average of 2.03 children, while those who are not conservative (i.e. those who are neutral or liberal) have an average of 1.68 children. The difference between these two averages is -0.35.</p>
 <p>Through simulation, you determine that the distribution of the difference in the average number of kids between these two groups looks like the histogram below. The actual sample difference is marked in red. The associated p-value is 0 (or &lt; 0.001).</p>
+<pre><code>## Warning: `visualize()` shouldn&#39;t be used to plot p-value. Arguments
+## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
+## deprecated. Use `shade_p_value()` instead.</code></pre>
 <p><img src="/exam/03-exam_files/figure-html/plot-kids-diff-1.png" width="672" /></p>
 <ol style="list-style-type: decimal">
 <li>What is your null hypothesis?</li>
@@ -71,8 +79,12 @@ editor_options:
 <li>What can you conclude about the difference between the two groups?</li>
 </ol>
 <h3 id="marital-status-and-presidential-elections">Marital status and presidential elections</h3>
+<pre><code>## Setting `type = &quot;permute&quot;` in `generate()`.</code></pre>
 <p>You use data from the 2016 General Social Survey (GSS) to investigate the relationship between marital status and 2012 presidential election results. Based on a sample of 2,867 people, you find that 40.2% of those who voted for Barack Obama in 2012 were married, compared to 57.9% of those who voted for Mitt Romney. The difference between these two proportions is 17.7%.</p>
 <p>Through simulation, you determine that the distribution of the possible differences in the proportion of married people who voted for Obama and Romney looks like the histogram below. The actual sample difference is marked in red. The associated p-value is 0 (or &lt; 0.001).</p>
+<pre><code>## Warning: `visualize()` shouldn&#39;t be used to plot p-value. Arguments
+## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
+## deprecated. Use `shade_p_value()` instead.</code></pre>
 <p><img src="/exam/03-exam_files/figure-html/plot-marital-pres-1.png" width="672" /></p>
 <ol style="list-style-type: decimal">
 <li>What is your null hypothesis?</li>

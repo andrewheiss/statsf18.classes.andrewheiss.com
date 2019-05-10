@@ -31,7 +31,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -121,50 +121,50 @@ code span.wa { color: #bf0303; } /* Warning */
 <li><a href="/data/manhattan.csv"><i class="fas fa-table"></i> <code>manhattan.csv</code></a></li>
 <li><a href="/data/class_rent_boot.csv"><i class="fas fa-table"></i> <code>class_rent_boot.csv</code></a></li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(moderndive)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(infer)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(scales)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co"># Setting a random seed ensures that every random draw will be the same each</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># time you run this (and regardless of what computer you run this on)</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">manhattan &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/manhattan.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">class_rent_boot &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/class_rent_boot.csv&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(moderndive)
+<span class="kw">library</span>(infer)
+<span class="kw">library</span>(scales)
+
+<span class="co"># Setting a random seed ensures that every random draw will be the same each</span>
+<span class="co"># time you run this (and regardless of what computer you run this on)</span>
+<span class="kw">set.seed</span>(<span class="dv">1234</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">manhattan &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/manhattan.csv&quot;</span>)
+class_rent_boot &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/class_rent_boot.csv&quot;</span>)</code></pre>
 <h3 id="in-class-results">In-class results</h3>
 <p>In class, we were interested in the true population-level median 1-bedroom Manhattan apartment rent. This is our unmeasurable population parameter. The only way to get close to it is through sampling and statistics—we can calculate the sample median and calculate a confidence interval for that median to determine how big of a net we have and how confident we are that our confidence interval captured the population parameter.</p>
 <p>First, we can look at the sample median. This has nothing to do with bootstrapping yet—this is just the median value of the 20 random apartments.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">sample_median &lt;-<span class="st"> </span>manhattan <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">stat =</span> <span class="kw">median</span>(rent))</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">sample_median</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">sample_median &lt;-<span class="st"> </span>manhattan <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">stat =</span> <span class="kw">median</span>(rent))
+sample_median</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##    stat
 ##   &lt;dbl&gt;
 ## 1  2350</code></pre>
 <p>The median rental price is $2,350 a month. Here’s what the distribution of rents from our sample looks like, with the median price overlaid with <code>geom_vline()</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">ggplot</span>(manhattan, <span class="kw">aes</span>(<span class="dt">x =</span> rent)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">250</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> sample_median<span class="op">$</span>stat, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>,</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">       <span class="dt">caption =</span> <span class="st">&quot;Sample median in red&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(manhattan, <span class="kw">aes</span>(<span class="dt">x =</span> rent)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">250</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> sample_median<span class="op">$</span>stat, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>,
+       <span class="dt">caption =</span> <span class="st">&quot;Sample median in red&quot;</span>)</code></pre>
 <p><img src="/class/10-class_files/figure-html/plot-sample-dist-1.png" width="672" /></p>
 <p>How confident are we with this sample median? Is that really representative of the true population parameter? Some of these apartments are under $2,000; some are above $4,000. Is this median really typical?</p>
 <p>We can measure our confidence by building a confidence interval for our median, which will allow us to make better inference about the whole population of Manhattan apartments. We can calculate confidence intervals in two ways: math and simulation. We’ll use simulation this week (bootstrapping) and math later on.</p>
 <p>In class, you all did a manual bootstrapping process. You took a single sample from our sample of 20 apartments, wrote down the number, replaced the paper, and drew another sample until you had a new bootstrapped sample with 20 observations. Some of these 20 were repeated, which is by design.</p>
 <p>You then calculated the median of your bootstrap sample and we made a histogram on the board. Here’s the ggplot version of that histogram, with the sample median marked in red again:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">ggplot</span>(class_rent_boot, <span class="kw">aes</span>(<span class="dt">x =</span> rent)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">100</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> sample_median<span class="op">$</span>stat, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, </a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">       <span class="dt">caption =</span> <span class="st">&quot;35 bootstrapped medians; sample median in red&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(class_rent_boot, <span class="kw">aes</span>(<span class="dt">x =</span> rent)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">100</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> sample_median<span class="op">$</span>stat, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, 
+       <span class="dt">caption =</span> <span class="st">&quot;35 bootstrapped medians; sample median in red&quot;</span>)</code></pre>
 <p><img src="/class/10-class_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p>To find the 95% confidence interval, we need to find the middle 95% of this distribution, or the range from the 2.5% percentile to the 97.5% percentile. We can do this with the <code>quantile()</code> function:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">class_rent_ci &lt;-<span class="st"> </span>class_rent_boot <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">lower =</span> <span class="kw">quantile</span>(rent, <span class="fl">0.025</span>),</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">            <span class="dt">upper =</span> <span class="kw">quantile</span>(rent, <span class="fl">0.975</span>))</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">class_rent_ci</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">class_rent_ci &lt;-<span class="st"> </span>class_rent_boot <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">lower =</span> <span class="kw">quantile</span>(rent, <span class="fl">0.025</span>),
+            <span class="dt">upper =</span> <span class="kw">quantile</span>(rent, <span class="fl">0.975</span>))
+class_rent_ci</code></pre>
 <pre><code>## # A tibble: 1 x 2
 ##   lower upper
 ##   &lt;dbl&gt; &lt;dbl&gt;
@@ -173,68 +173,74 @@ code span.wa { color: #bf0303; } /* Warning */
 <h3 id="bootstrapping-with-r-and-infer">Bootstrapping with R and <code>infer</code></h3>
 <p>That’s a pretty wide interval though, and we can get a better estimate of the variation in the sample by taking more bootstrapped samples. Instead of 35 manual samples, we can take 1,000 automated samples of the original 20 Manhattan apartments using the <code>infer</code> library.</p>
 <p>The standard usage of infer is to <code>specify()</code> the column(s) we’re interested in, <code>generate()</code> a bunch of simulated data based on that column, and then <code>calculate()</code> a sample statistic for the simulated data:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">boot_rent &lt;-<span class="st"> </span>manhattan <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="co"># Specify the variable of interest</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw">specify</span>(<span class="dt">response =</span> rent) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="co"># specify(rent ~ NULL)  # This does the same thing</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">  </span><span class="co"># Generate a bunch of bootstrap samples</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1000</span>, <span class="dt">type =</span> <span class="st">&quot;bootstrap&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="st">  </span><span class="co"># Find the median of each sample</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;median&quot;</span>)</a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co"># See the first few rows</span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="kw">head</span>(boot_rent)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">boot_rent &lt;-<span class="st"> </span>manhattan <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># Specify the variable of interest</span>
+<span class="st">  </span><span class="kw">specify</span>(<span class="dt">response =</span> rent) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co"># specify(rent ~ NULL)  # This does the same thing</span>
+<span class="st">  </span><span class="co"># Generate a bunch of bootstrap samples</span>
+<span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1000</span>, <span class="dt">type =</span> <span class="st">&quot;bootstrap&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># Find the median of each sample</span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;median&quot;</span>)
+
+<span class="co"># See the first few rows</span>
+<span class="kw">head</span>(boot_rent)</code></pre>
 <pre><code>## # A tibble: 6 x 2
 ##   replicate  stat
 ##       &lt;int&gt; &lt;dbl&gt;
-## 1         1 2150 
-## 2         2 2495 
-## 3         3 2238.
-## 4         4 2495 
-## 5         5 2350 
-## 6         6 2350</code></pre>
+## 1         1  2350
+## 2         2  2350
+## 3         3  2350
+## 4         4  2550
+## 5         5  2350
+## 6         6  2350</code></pre>
 <p>We can visualize this with a histogram. This is the same as the in-class histogram above, only now this is based on the medians of 1,000 bootstrapped distributions instead of 35:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">ggplot</span>(boot_rent, <span class="kw">aes</span>(<span class="dt">x =</span> stat)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">100</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> sample_median<span class="op">$</span>stat, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, </a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">       <span class="dt">caption =</span> <span class="st">&quot;1,000 bootstrapped medians; sample median in red&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(boot_rent, <span class="kw">aes</span>(<span class="dt">x =</span> stat)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">100</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> sample_median<span class="op">$</span>stat, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, 
+       <span class="dt">caption =</span> <span class="st">&quot;1,000 bootstrapped medians; sample median in red&quot;</span>)</code></pre>
 <p><img src="/class/10-class_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Or, instead of using regular ggplot, we can use the <code>visualize()</code> function from <code>infer</code>, which is just a fancy wrapper for ggplot:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">boot_rent <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> sample_median<span class="op">$</span>stat, <span class="dt">obs_stat_color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, </a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">       <span class="dt">caption =</span> <span class="st">&quot;1,000 bootstrapped medians; sample median in red&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">boot_rent <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> sample_median<span class="op">$</span>stat, <span class="dt">obs_stat_color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, 
+       <span class="dt">caption =</span> <span class="st">&quot;1,000 bootstrapped medians; sample median in red&quot;</span>)</code></pre>
+<pre><code>## Warning: `visualize()` shouldn&#39;t be used to plot p-value. Arguments
+## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
+## deprecated. Use `shade_p_value()` instead.</code></pre>
 <p><img src="/class/10-class_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>We can then find the 95% confidence interval for this distribution with the <code>get_ci()</code> function from <code>infer</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">boot_rent_ci &lt;-<span class="st"> </span>boot_rent <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">get_ci</span>(<span class="dt">level =</span> <span class="fl">0.95</span>, <span class="dt">type =</span> <span class="st">&quot;percentile&quot;</span>)</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">boot_rent_ci</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">boot_rent_ci &lt;-<span class="st"> </span>boot_rent <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_ci</span>(<span class="dt">level =</span> <span class="fl">0.95</span>, <span class="dt">type =</span> <span class="st">&quot;percentile&quot;</span>)
+boot_rent_ci</code></pre>
 <pre><code>## # A tibble: 1 x 2
 ##   `2.5%` `97.5%`
 ##    &lt;dbl&gt;   &lt;dbl&gt;
-## 1  2162.    2875</code></pre>
-<p>This range means that the 95% confidence interval of rents in Manhattan, based on 1,000 bootstrapped samples from our original 20-apartment sample, is ($2,162, $2,875). We are 95% confident that this net captures the true population median. The lower part of that range is about the same as our by-hand version, but the upper part is considerably smaller.</p>
+## 1  2160.    2875</code></pre>
+<p>This range means that the 95% confidence interval of rents in Manhattan, based on 1,000 bootstrapped samples from our original 20-apartment sample, is ($2,160, $2,875). We are 95% confident that this net captures the true population median. The lower part of that range is about the same as our by-hand version, but the upper part is considerably smaller.</p>
 <p>We can plot this confidence interval in two ways. First, the <code>visualize()</code> way:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">boot_rent <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw">visualize</span>(<span class="dt">endpoints =</span> boot_rent_ci, <span class="dt">direction =</span> <span class="st">&quot;between&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span></a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, </a>
-<a class="sourceLine" id="cb15-5" data-line-number="5">       <span class="dt">caption =</span> <span class="st">&quot;1,000 bootstrapped medians; 95% confidence interval in green&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">boot_rent <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">visualize</span>(<span class="dt">endpoints =</span> boot_rent_ci, <span class="dt">direction =</span> <span class="st">&quot;between&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, 
+       <span class="dt">caption =</span> <span class="st">&quot;1,000 bootstrapped medians; 95% confidence interval in green&quot;</span>)</code></pre>
+<pre><code>## Warning: `visualize()` shouldn&#39;t be used to plot confidence interval.
+## Arguments `endpoints`, `endpoints_color`, and `ci_fill` are deprecated. Use
+## `shade_confidence_interval()` instead.</code></pre>
 <p><img src="/class/10-class_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>Or the regular ggplot way:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">ggplot</span>(boot_rent, <span class="kw">aes</span>(<span class="dt">x =</span> stat)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw">annotate</span>(<span class="dt">geom =</span> <span class="st">&quot;rect&quot;</span>, <span class="dt">xmin =</span> boot_rent_ci<span class="op">$</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">xmax =</span> boot_rent_ci<span class="op">$</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>,</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">           <span class="dt">ymin =</span> <span class="op">-</span><span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">fill =</span> <span class="st">&quot;turquoise&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">100</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> boot_rent_ci<span class="op">$</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">color =</span> <span class="st">&quot;mediumaquamarine&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> boot_rent_ci<span class="op">$</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>, <span class="dt">color =</span> <span class="st">&quot;mediumaquamarine&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> sample_median<span class="op">$</span>stat, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, </a>
-<a class="sourceLine" id="cb16-10" data-line-number="10">       <span class="dt">caption =</span> <span class="st">&quot;1,000 bootstrapped medians; sample median in red; 95% confidence interval in green&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(boot_rent, <span class="kw">aes</span>(<span class="dt">x =</span> stat)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">annotate</span>(<span class="dt">geom =</span> <span class="st">&quot;rect&quot;</span>, <span class="dt">xmin =</span> boot_rent_ci<span class="op">$</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">xmax =</span> boot_rent_ci<span class="op">$</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>,
+           <span class="dt">ymin =</span> <span class="op">-</span><span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">fill =</span> <span class="st">&quot;turquoise&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">100</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> boot_rent_ci<span class="op">$</span><span class="st">`</span><span class="dt">2.5%</span><span class="st">`</span>, <span class="dt">color =</span> <span class="st">&quot;mediumaquamarine&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> boot_rent_ci<span class="op">$</span><span class="st">`</span><span class="dt">97.5%</span><span class="st">`</span>, <span class="dt">color =</span> <span class="st">&quot;mediumaquamarine&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> sample_median<span class="op">$</span>stat, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> dollar) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Rent&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>, 
+       <span class="dt">caption =</span> <span class="st">&quot;1,000 bootstrapped medians; sample median in red; 95% confidence interval in green&quot;</span>)</code></pre>
 <p><img src="/class/10-class_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <h2 id="clearest-and-muddiest-things">Clearest and muddiest things</h2>
 <p>Go to <a href="https://goo.gl/forms/PlPwZGhMOdU9mKfC3">this form</a> and answer these three questions:</p>

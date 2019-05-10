@@ -31,7 +31,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -103,59 +103,59 @@ code span.wa { color: #bf0303; } /* Warning */
 <h2 id="logistic-regression">Logistic regression</h2>
 <p>If you have an outcome variable that is binary (yes/no, agree/disagree, Obama/Romney, etc.), you cannot use standard linear regression. Instead, you need to use something called logistic regression. The math and mechanics of this type of regression are beyond the scope of this class, but you know enough about regression to be able to use it and interpret it.</p>
 <p>To run logistic regression in R, we use <code>glm()</code> instead of <code>lm()</code>, but the structure is the same. The only difference is that we have to specify that this is logistic regression with the <code>family</code> option:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2 <span class="op">+</span><span class="st"> </span>x3, </a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">    <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">    <span class="dt">data =</span> whatever)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2 <span class="op">+</span><span class="st"> </span>x3, 
+    <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
+    <span class="dt">data =</span> whatever)</code></pre>
 <p>The coefficients that come from this model behave a little differently than linear regression. Here’s an example using GSS data from your past problem sets.</p>
 <p>First, we load libraries and clean the data:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(broom)</a></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">gss_raw &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/gss2016.csv&quot;</span>, </a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">                <span class="dt">na =</span> <span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Don&#39;t know&quot;</span>,</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">                       <span class="st">&quot;No answer&quot;</span>, <span class="st">&quot;Not applicable&quot;</span>),</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">                <span class="dt">guess_max =</span> <span class="dv">2867</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(marital, childs, educ, sex, race, born, income, pres12, polviews, pray)</a></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">gss &lt;-<span class="st"> </span>gss_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="co"># Look for the letters &quot;onservative&quot;. I omit the C because sometimes it&#39;s</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="co"># uppercase (Conservative) and sometimes it&#39;s lowercase (Slightly conservative)</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">polviews_ordered =</span> <span class="kw">factor</span>(polviews, </a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">                                   <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Extrmly conservative&quot;</span>, <span class="st">&quot;Conservative&quot;</span>, </a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">                                              <span class="st">&quot;Slghtly conservative&quot;</span>, <span class="st">&quot;Moderate&quot;</span>,</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">                                              <span class="st">&quot;Slightly liberal&quot;</span>, <span class="st">&quot;Liberal&quot;</span>,</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">                                              <span class="st">&quot;Extremely liberal&quot;</span>),</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">                                   <span class="dt">ordered =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">conservative =</span> <span class="kw">ifelse</span>(<span class="kw">str_detect</span>(polviews, <span class="st">&quot;onservative&quot;</span>),</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">                               <span class="st">&quot;Conservative&quot;</span>, <span class="st">&quot;Not conservative&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">marital2 =</span> <span class="kw">case_when</span>(</a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">    marital <span class="op">==</span><span class="st"> &quot;Married&quot;</span> <span class="op">~</span><span class="st"> &quot;Married&quot;</span>,</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14">    <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;Not married&quot;</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15">  )) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="st">  </span><span class="co"># Get rid of the respondents who didn&#39;t vote for Obama or Romney</span></a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pres12 =</span> <span class="kw">ifelse</span>(<span class="op">!</span>pres12 <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Obama&quot;</span>, <span class="st">&quot;Romney&quot;</span>), <span class="ot">NA</span>, pres12)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pres12 =</span> <span class="kw">factor</span>(pres12)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="st">  </span><span class="co"># case_when is like a fancy version of an if statement and it lets us collapse</span></a>
-<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="st">  </span><span class="co"># the different levels of pray into two</span></a>
-<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pray2 =</span> <span class="kw">case_when</span>(</a>
-<a class="sourceLine" id="cb4-22" data-line-number="22">    pray <span class="op">==</span><span class="st"> &quot;Several times a day&quot;</span> <span class="op">~</span><span class="st"> &quot;At least once a week&quot;</span>,</a>
-<a class="sourceLine" id="cb4-23" data-line-number="23">    pray <span class="op">==</span><span class="st"> &quot;Once a day&quot;</span> <span class="op">~</span><span class="st"> &quot;At least once a week&quot;</span>,</a>
-<a class="sourceLine" id="cb4-24" data-line-number="24">    pray <span class="op">==</span><span class="st"> &quot;Several times a week&quot;</span> <span class="op">~</span><span class="st"> &quot;At least once a week&quot;</span>,</a>
-<a class="sourceLine" id="cb4-25" data-line-number="25">    pray <span class="op">==</span><span class="st"> &quot;Once a week&quot;</span> <span class="op">~</span><span class="st"> &quot;At least once a week&quot;</span>,</a>
-<a class="sourceLine" id="cb4-26" data-line-number="26">    pray <span class="op">==</span><span class="st"> &quot;Lt once a week&quot;</span> <span class="op">~</span><span class="st"> &quot;Less than once a week&quot;</span>,</a>
-<a class="sourceLine" id="cb4-27" data-line-number="27">    pray <span class="op">==</span><span class="st"> &quot;Never&quot;</span> <span class="op">~</span><span class="st"> &quot;Less than once a week&quot;</span>,</a>
-<a class="sourceLine" id="cb4-28" data-line-number="28">    pray <span class="op">==</span><span class="st"> &quot;Don&#39;t know&quot;</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_character_</span>,</a>
-<a class="sourceLine" id="cb4-29" data-line-number="29">    pray <span class="op">==</span><span class="st"> &quot;No answer&quot;</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_character_</span>,</a>
-<a class="sourceLine" id="cb4-30" data-line-number="30">    pray <span class="op">==</span><span class="st"> &quot;Not applicable&quot;</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_character_</span></a>
-<a class="sourceLine" id="cb4-31" data-line-number="31">  )) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-32" data-line-number="32"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pray2 =</span> <span class="kw">factor</span>(pray2, </a>
-<a class="sourceLine" id="cb4-33" data-line-number="33">                        <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Less than once a week&quot;</span>, <span class="st">&quot;At least once a week&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-34" data-line-number="34"><span class="st">  </span><span class="co"># Make this numeric</span></a>
-<a class="sourceLine" id="cb4-35" data-line-number="35"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">childs =</span> <span class="kw">as.numeric</span>(childs))</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(broom)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">gss_raw &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://statsf18.classes.andrewheiss.com/data/gss2016.csv&quot;</span>, 
+                <span class="dt">na =</span> <span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Don&#39;t know&quot;</span>,
+                       <span class="st">&quot;No answer&quot;</span>, <span class="st">&quot;Not applicable&quot;</span>),
+                <span class="dt">guess_max =</span> <span class="dv">2867</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(marital, childs, educ, sex, race, born, income, pres12, polviews, pray)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">gss &lt;-<span class="st"> </span>gss_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># Look for the letters &quot;onservative&quot;. I omit the C because sometimes it&#39;s</span>
+<span class="st">  </span><span class="co"># uppercase (Conservative) and sometimes it&#39;s lowercase (Slightly conservative)</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">polviews_ordered =</span> <span class="kw">factor</span>(polviews, 
+                                   <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Extrmly conservative&quot;</span>, <span class="st">&quot;Conservative&quot;</span>, 
+                                              <span class="st">&quot;Slghtly conservative&quot;</span>, <span class="st">&quot;Moderate&quot;</span>,
+                                              <span class="st">&quot;Slightly liberal&quot;</span>, <span class="st">&quot;Liberal&quot;</span>,
+                                              <span class="st">&quot;Extremely liberal&quot;</span>),
+                                   <span class="dt">ordered =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">conservative =</span> <span class="kw">ifelse</span>(<span class="kw">str_detect</span>(polviews, <span class="st">&quot;onservative&quot;</span>),
+                               <span class="st">&quot;Conservative&quot;</span>, <span class="st">&quot;Not conservative&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">marital2 =</span> <span class="kw">case_when</span>(
+    marital <span class="op">==</span><span class="st"> &quot;Married&quot;</span> <span class="op">~</span><span class="st"> &quot;Married&quot;</span>,
+    <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;Not married&quot;</span>
+  )) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># Get rid of the respondents who didn&#39;t vote for Obama or Romney</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pres12 =</span> <span class="kw">ifelse</span>(<span class="op">!</span>pres12 <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Obama&quot;</span>, <span class="st">&quot;Romney&quot;</span>), <span class="ot">NA</span>, pres12)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pres12 =</span> <span class="kw">factor</span>(pres12)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># case_when is like a fancy version of an if statement and it lets us collapse</span>
+<span class="st">  </span><span class="co"># the different levels of pray into two</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pray2 =</span> <span class="kw">case_when</span>(
+    pray <span class="op">==</span><span class="st"> &quot;Several times a day&quot;</span> <span class="op">~</span><span class="st"> &quot;At least once a week&quot;</span>,
+    pray <span class="op">==</span><span class="st"> &quot;Once a day&quot;</span> <span class="op">~</span><span class="st"> &quot;At least once a week&quot;</span>,
+    pray <span class="op">==</span><span class="st"> &quot;Several times a week&quot;</span> <span class="op">~</span><span class="st"> &quot;At least once a week&quot;</span>,
+    pray <span class="op">==</span><span class="st"> &quot;Once a week&quot;</span> <span class="op">~</span><span class="st"> &quot;At least once a week&quot;</span>,
+    pray <span class="op">==</span><span class="st"> &quot;Lt once a week&quot;</span> <span class="op">~</span><span class="st"> &quot;Less than once a week&quot;</span>,
+    pray <span class="op">==</span><span class="st"> &quot;Never&quot;</span> <span class="op">~</span><span class="st"> &quot;Less than once a week&quot;</span>,
+    pray <span class="op">==</span><span class="st"> &quot;Don&#39;t know&quot;</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_character_</span>,
+    pray <span class="op">==</span><span class="st"> &quot;No answer&quot;</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_character_</span>,
+    pray <span class="op">==</span><span class="st"> &quot;Not applicable&quot;</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_character_</span>
+  )) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pray2 =</span> <span class="kw">factor</span>(pray2, 
+                        <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Less than once a week&quot;</span>, <span class="st">&quot;At least once a week&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># Make this numeric</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">childs =</span> <span class="kw">as.numeric</span>(childs))</code></pre>
 <p>We’ll use this data to find the factors that made people more likely to vote for Mitt Romney in 2016. Our outcome variable (or Y) is <code>pres12</code>, which has two values: Obama and Romney. Because it’s not numeric, and because there are two possible categories, we’ll use logistic regression. We’ll explain 2012 presidential votes based on the number of children people have, marital status, conservativeness, and frequency of prayer</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">model_logit &lt;-<span class="st"> </span><span class="kw">glm</span>(pres12 <span class="op">~</span><span class="st"> </span>childs <span class="op">+</span><span class="st"> </span>marital <span class="op">+</span><span class="st"> </span>conservative <span class="op">+</span><span class="st"> </span>pray2, </a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">                   <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>), <span class="dt">data =</span> gss)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_logit &lt;-<span class="st"> </span><span class="kw">glm</span>(pres12 <span class="op">~</span><span class="st"> </span>childs <span class="op">+</span><span class="st"> </span>marital <span class="op">+</span><span class="st"> </span>conservative <span class="op">+</span><span class="st"> </span>pray2, 
+                   <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>), <span class="dt">data =</span> gss)</code></pre>
 <p>The <code>get_regression_table()</code> from the ModernDive package only works on linear models made with <code>lm()</code>, but we can get the same thing if we use a function named <code>tidy()</code> from <code>library(broom)</code>. Technically, <code>get_regression_table()</code> is really just <code>tidy()</code> behind the scenes—the ModernDive authors just renamed it to make it easier for you.</p>
 <p>The coefficients that come from this model are uninterpretable initially. The numbers are in a scale called “log odds”, which is a side effect of the math used to run the logistic regression:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">model_logit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tidy</span>()</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_logit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tidy</span>()</code></pre>
 <pre><code>## # A tibble: 8 x 5
 ##   term                         estimate std.error statistic  p.value
 ##   &lt;chr&gt;                           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
@@ -170,18 +170,18 @@ code span.wa { color: #bf0303; } /* Warning */
 <p>To transform these numbers to something interpretable, we have to unlog them. This will create something called an “odds ratio”, which shows the change in probability of the Y outcome happening.</p>
 <p>The coefficients were logged using a natural log (<span class="math inline">\(ln\)</span> or <span class="math inline">\(\log_e\)</span>), so to unlog them, we need to take <span class="math inline">\(e\)</span> and raise it to the power of each coefficient. If a log odds coefficient is 0.411, like the married coefficient, we can unlog it by calculating <span class="math inline">\(e^{0.411}\)</span>, which is 1.508. You can use the <code>exp()</code> function in R to do this: <code>exp(0.411)</code> is 1.508.</p>
 <p>Running <code>exp()</code> on every coefficient, though, is tedious. Fortunately, the <code>tidy()</code> function has an option that will do that for you. We can also get confidence intervals by setting the <code>conf.int</code> option:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">model_logit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tidy</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">model_logit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tidy</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)</code></pre>
 <pre><code>## # A tibble: 8 x 7
-##   term            estimate std.error statistic  p.value conf.low conf.high
-##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 (Intercept)       2.29      0.234      3.54  3.93e- 4   1.45      3.62  
-## 2 childs            0.903     0.0462    -2.22  2.66e- 2   0.824     0.988 
-## 3 maritalMarried    1.51      0.175      2.35  1.86e- 2   1.07      2.13  
-## 4 maritalNever m…   0.500     0.225     -3.08  2.08e- 3   0.321     0.776 
-## 5 maritalSeparat…   0.620     0.425     -1.12  2.62e- 1   0.263     1.40  
-## 6 maritalWidowed    1.07      0.246      0.287 7.74e- 1   0.662     1.74  
-## 7 conservativeNo…   0.0750    0.131    -19.8   1.35e-87   0.0579    0.0966
-## 8 pray2At least …   1.24      0.162      1.35  1.77e- 1   0.908     1.71</code></pre>
+##   term             estimate std.error statistic  p.value conf.low conf.high
+##   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)        2.29      0.234      3.54  3.93e- 4   1.45      3.62  
+## 2 childs             0.903     0.0462    -2.22  2.66e- 2   0.824     0.988 
+## 3 maritalMarried     1.51      0.175      2.35  1.86e- 2   1.07      2.13  
+## 4 maritalNever ma…   0.500     0.225     -3.08  2.08e- 3   0.321     0.776 
+## 5 maritalSeparated   0.620     0.425     -1.12  2.62e- 1   0.263     1.40  
+## 6 maritalWidowed     1.07      0.246      0.287 7.74e- 1   0.662     1.74  
+## 7 conservativeNot…   0.0750    0.131    -19.8   1.35e-87   0.0579    0.0966
+## 8 pray2At least o…   1.24      0.162      1.35  1.77e- 1   0.908     1.71</code></pre>
 <p>These are the actual coefficients we can interpret. The final trick is that <em>these numbers are all based around 1.</em> Values higher than 1 mean that the explanatory variables are associated with a greater probability of Romney votes; values less than 1 mean that the explanatory variables are associated with a lower probability of Romney votes.</p>
 <p>Here’s how to interpret a bunch of these coefficients:</p>
 <ul>

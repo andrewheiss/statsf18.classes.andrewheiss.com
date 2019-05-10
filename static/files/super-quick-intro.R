@@ -86,12 +86,12 @@ median(my_cool_list)
 # for you to use
 library(dplyr)
 
-# This loads a bunch of functions like data_frame(), mutate(), and filter()
+# This loads a bunch of functions like tibble(), mutate(), and filter()
 #
 # What do you think this does?
-my_data_frame <- data_frame(height = c(52, 56, 71, 62, 63),
-                            weight = c(103, 159, 181, 163, 188))
-my_data_frame
+my_tibble <- tibble(height = c(52, 56, 71, 62, 63),
+                    weight = c(103, 159, 181, 163, 188))
+my_tibble
 
 # Tidyverse = special package that loads a bunch of other packages
 library(tidyverse)
